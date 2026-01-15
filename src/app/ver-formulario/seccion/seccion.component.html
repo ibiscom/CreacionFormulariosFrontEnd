@@ -1,0 +1,23 @@
+<div class-="cont-seccion">
+  <mat-card class="card-seccion">
+    <mat-expansion-panel class="expansion-panel-filtro" [expanded]="seccion!.expandido === 'true'">
+      <mat-expansion-panel-header>
+        <mat-panel-title>{{ seccion!.titulo }}</mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-card-content>
+        <div class="tbl-componentes-seccion">
+          @if (seccion!.componentesIzq !== '') {
+            <frm-componentes [componentes]="seccion!.componentesIzq"></frm-componentes>
+          }
+          @if (seccion!.componentesCent !== '') {
+            <frm-componentes [componentes]="seccion!.componentesCent"></frm-componentes>
+          }
+          @if (seccion!.componentesDer !== '') {
+            <frm-componentes [componentes]="seccion!.componentesDer"></frm-componentes>
+          }
+        </div>
+      </mat-card-content>
+    </mat-expansion-panel>
+    <mat-card-actions class="acciones-filtro"> </mat-card-actions>
+  </mat-card>
+</div>

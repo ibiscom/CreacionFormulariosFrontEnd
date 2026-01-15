@@ -1,0 +1,11 @@
+<div [style]="searchButtonEntity!.styleContenedor">
+  <button
+    [id]="searchButtonEntity!.id"
+    matButton="elevated"
+    [disabled]="searchButtonEntity?.readOnly === 'true'"
+    (click)="click()"
+  >
+    <mat-icon>search</mat-icon>
+    Buscar
+  </button>
+</div>

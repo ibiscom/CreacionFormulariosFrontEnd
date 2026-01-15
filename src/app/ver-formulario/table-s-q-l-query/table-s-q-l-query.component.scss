@@ -1,0 +1,34 @@
+.table {
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	overflow: hidden;
+	background: #fff;
+}
+
+.row {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr; /* 3 columns */
+}
+
+.row:not(.header) {
+	border-top: 1px solid #eee;
+}
+
+.header {
+	background: #f6f8fa;
+	font-weight: 600;
+}
+
+.cell {
+	padding: 10px 12px;
+	border-right: 1px solid #eee;
+}
+
+.cell:last-child {
+	border-right: none;
+}
+
+/* Optional: zebra rows for readability */
+.row:nth-child(odd):not(.header) {
+	background: #fbfbfb;
+}

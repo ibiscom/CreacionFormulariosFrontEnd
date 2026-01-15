@@ -1,0 +1,11 @@
+<div [style]="refreshButtonEntity!.styleContenedor">
+  <button
+    [id]="refreshButtonEntity!.id"
+    matButton="elevated"
+    [disabled]="refreshButtonEntity?.readOnly === 'true'"
+    (click)="click()"
+  >
+    <mat-icon>refresh</mat-icon>
+    Actualizar
+  </button>
+</div>

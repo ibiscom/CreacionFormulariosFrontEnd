@@ -1,0 +1,28 @@
+.cont-seccion {
+  padding: 0rem;
+  display: flex;
+  justify-content: center;
+}
+
+.card-seccion {
+  width: 100%;
+}
+
+.expansion-panel-seccion {
+  width: 100%;
+  background-color: rgba(128, 128, 0, 0.2);
+}
+
+.tbl-componentes-seccion {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.campo-seccion {
+  width: 100%;
+}
+
+.campo-seccion.full-width {
+  grid-column: span 2;
+}

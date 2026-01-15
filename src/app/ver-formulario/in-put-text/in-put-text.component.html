@@ -1,0 +1,14 @@
+<div style="padding-right:1px;">
+  <mat-form-field [style]="inPutTextEntity!.styleContenedor">
+    <mat-label>{{ inPutTextEntity?.nombre }}</mat-label>
+    <input
+      matInput
+      [placeholder]="inPutTextEntity!.nombre"
+      [required]="inPutTextEntity?.obligatorio === 'true'"
+      [readonly]="inPutTextEntity?.readOnly === 'true'"
+      [style]="inPutTextEntity?.style"
+      [value]="inPutTextEntity?.valor?.['']"
+      [class]="inPutTextEntity?.columnClasses?.replaceAll(',', ' ')"
+    />
+  </mat-form-field>
+</div>

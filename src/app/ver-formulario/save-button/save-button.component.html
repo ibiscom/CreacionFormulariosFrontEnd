@@ -1,0 +1,11 @@
+<div [style]="saveButtonEntity!.styleContenedor">
+  <button
+    [id]="saveButtonEntity!.id"
+    matButton="elevated"
+    [disabled]="saveButtonEntity?.readOnly === 'true'"
+    (click)="click()"
+  >
+    <mat-icon>save</mat-icon>
+    Guardar
+  </button>
+</div>

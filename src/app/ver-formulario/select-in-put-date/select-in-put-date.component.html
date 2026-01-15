@@ -1,0 +1,15 @@
+<mat-form-field [style]="selectInPutDateEntity!.styleContenedor">
+  <mat-label>{{ selectInPutDateEntity?.nombre }}</mat-label>
+  <input
+    matInput
+    [matDatepicker]="picker"
+    [(ngModel)]="dateValue"
+    (ngModelChange)="updateDateValue($event)"
+    [disabled]="selectInPutDateEntity?.readOnly === 'true'"
+    [style]="selectInPutDateEntity?.style"
+    [class]="selectInPutDateEntity?.columnClasses?.replaceAll(',', ' ')"
+  />
+  <mat-hint>YYYY-MM-DD</mat-hint>
+  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>
