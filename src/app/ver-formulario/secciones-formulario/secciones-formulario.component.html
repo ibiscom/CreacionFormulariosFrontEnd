@@ -1,5 +1,5 @@
 @if(seccionesFormulario) {
-  @for(seccionEntry of seccionesFormulario | keyvalue : mantenerOrden; track seccionEntry.key) {
+  @for(seccionEntry of seccionesFormulario | keyvalue; track seccionEntry.key) {
     <frm-seccion
       [seccion]="seccionEntry.value"
       [verFormularioCmp]="verFormularioCmp">

@@ -4,10 +4,7 @@ import { VerFormularioService } from './ver-formulario.service';
 import { Constants } from '../utils/constants';
 import { MessageUtil } from '../utils/message.util';
 import { RouterModule } from '@angular/router';
-import {
-  FormularioJSONEntity,
-  normalizarFormularioJSON,
-} from '../entities/ver-formulario/formulario-json.entity';
+import { FormularioJSONEntity } from '../entities/ver-formulario/formulario-json.entity';
 
 @Component({
   selector: 'frm-ver-formulario',
@@ -25,8 +22,7 @@ export class VerFormularioComponent {
     let nombreFormulario = 'FormularioCompletoAngular';//'FormAyudabusquedacopia';
     this.verFormularioService.getFormulario(nombreFormulario).subscribe({
       next: (response) => {
-        const parsed = JSON.parse(response.respuesta);
-        this.formulario = normalizarFormularioJSON(parsed);
+        this.formulario = JSON.parse(response.respuesta);
         console.log('Formulario cargado:', this.formulario?.titulo);
         console.log('Secciones', this.formulario?.seccionesFormulario);
       },

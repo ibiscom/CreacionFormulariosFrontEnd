@@ -9,8 +9,8 @@ export interface ComponenteBaseEntity {
   tipoDato: string;
   tipoComponente: string;
   descripcion: string;
-  valor?: Array<Record<string, any>> | Record<string, any>;
-  valorDefecto?: Array<Record<string, any>> | Record<string, any>;
+  valor?: { class: string; [key: string]: any };
+  valorDefecto?: { class: string; [key: string]: any };
   ultimoId: string; // viene como número en string
   idColumna?: string;
   error?: string;
@@ -118,10 +118,4 @@ export interface ComponenteBaseEntity {
   textoHTMLTabla?: string;
   listValuesForSortQuery?: { [key: string]: any };
   valueSelectedSort?: string;
-
-  /**
-   * Campos adicionales devueltos por el backend que no estén declarados explícitamente.
-   * Esto evita que el tipado falle cuando el microservicio agrega nuevas propiedades.
-   */
-  [key: string]: any;
 }
