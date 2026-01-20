@@ -14,6 +14,9 @@ export class SeccionesFormularioComponent {
   @Input() public seccionesFormulario?: SeccionesFormularioEntity;
   @Input() public verFormularioCmp?: VerFormularioComponent;
 
+  // Mantiene el orden original al usar el pipe keyvalue
+  public mantenerOrden = () => 0;
+
   public constructor() {}
 
   ngOnInit(): void {
