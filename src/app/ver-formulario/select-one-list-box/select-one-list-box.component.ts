@@ -6,7 +6,7 @@ import { SelectOneListBoxEntity } from '../../entities/ver-formulario/select-one
 import { VerFormularioComponent } from '../ver-formulario.component';
 import { ValorStringEntity } from '../../entities/ver-formulario/valor-string.entity';
 import { MatSelectModule } from '@angular/material/select';
-import { KeyValuePipe } from '@angular/common';
+import { KeyValue, KeyValuePipe } from '@angular/common';
 
 @Component({
   selector: 'frm-select-one-list-box',
@@ -28,4 +28,7 @@ export class SelectOneListBoxComponent {
     const opc:boolean = (opcion?.string === this.selectOneListBoxEntity?.valor?.['']);
     return opc;
   }
+
+  // Evita que el pipe keyvalue reordene las opciones y mantiene el orden del backend
+  public keepOrder = (_a: KeyValue<string, any>, _b: KeyValue<string, any>): number => 0;
 }

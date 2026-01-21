@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { KeyValuePipe } from '@angular/common';
+import { KeyValue, KeyValuePipe } from '@angular/common';
 import { SeccionComponent } from '../seccion/seccion.component';
 import { SeccionesFormularioEntity } from '../../entities/ver-formulario/secciones-formulario.entity';
 import { VerFormularioComponent } from '../ver-formulario.component';
@@ -19,4 +19,7 @@ export class SeccionesFormularioComponent {
   ngOnInit(): void {
     console.log(this.seccionesFormulario);
   }
+
+  // Mantiene el orden original entregado por el backend
+  public keepOrder = (_a: KeyValue<string, any>, _b: KeyValue<string, any>): number => 0;
 }

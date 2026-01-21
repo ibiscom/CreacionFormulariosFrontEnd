@@ -11,7 +11,7 @@
     </div>
     <div class="table" [style.--grid-columns]="getGridColumns()">
         <div class="row header">
-        @for(colMostEntry of tableDetailsEntity?.nombresColumnas | keyvalue; track colMostEntry.key) {
+        @for(colMostEntry of tableDetailsEntity?.nombresColumnas | keyvalue: keepOrder; track colMostEntry.key) {
             @let opcion = colMostEntry.value;
             <span class="cell">{{opcion?.string_2}}</span>
         }

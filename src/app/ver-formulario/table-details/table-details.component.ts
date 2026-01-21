@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { TableDetailsEntity } from '../../entities/ver-formulario/table-details.entity';
 import { VerFormularioComponent } from '../ver-formulario.component';
-import { KeyValuePipe } from '@angular/common';
+import { KeyValue, KeyValuePipe } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
@@ -49,4 +49,7 @@ export class TableDetailsComponent {
   public editRow(_t23: { valores: string[]; }) : void {
     throw new Error('Method not implemented.');
   }
+
+  // Conserva el orden de las columnas tal como llega del backend
+  public keepOrder = (_a: KeyValue<string, any>, _b: KeyValue<string, any>): number => 0;
 }

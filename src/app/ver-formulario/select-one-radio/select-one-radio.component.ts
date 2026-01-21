@@ -5,7 +5,7 @@ import { ValorStringEntity } from '../../entities/ver-formulario/valor-string.en
 import { SelectOneRadioEntity } from '../../entities/ver-formulario/select-one-radio.entity';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { KeyValuePipe } from '@angular/common';
+import { KeyValue, KeyValuePipe } from '@angular/common';
 import { ColumnasMostrablesSeleccionadasEntry } from '../../entities/ver-formulario/columnas-mostrables-seleccionadas.type';
 
 @Component({
@@ -27,5 +27,8 @@ export class SelectOneRadioComponent {
     public selected(opcion?: ColumnasMostrablesSeleccionadasEntry): boolean {
       return this.selectOneRadioEntity?.valor[''] === opcion?.string;
     }
+
+    // Mantiene el orden de las entradas que llega del servicio
+    public keepOrder = (_a: KeyValue<string, any>, _b: KeyValue<string, any>): number => 0;
 }
 

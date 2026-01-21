@@ -1,7 +1,8 @@
 <mat-form-field [style]="selectOneListBoxEntity!.styleContenedor">
   <mat-label>{{ selectOneListBoxEntity!.nombre }}</mat-label>
   <mat-select [class]="selectOneListBoxEntity?.columnClasses?.replaceAll(',', ' ')">
-   @for(colMostEntry of selectOneListBoxEntity!.columnasMostrablesSeleccionadas | keyvalue; track colMostEntry.key) {
+    <p>columnas mostrables: {{selectOneListBoxEntity?.columnasMostrablesSeleccionadas}}</p>
+  @for(colMostEntry of selectOneListBoxEntity!.columnasMostrablesSeleccionadas | keyvalue: keepOrder; track colMostEntry.key) {
       @let opcion = colMostEntry.value;
       @if (selected(opcion)) {
         <mat-option [value]="opcion?.string" selected>{{ opcion?.string }}</mat-option>
