@@ -7,6 +7,7 @@ import { VerFormularioComponent } from '../ver-formulario.component';
 import { ValorStringEntity } from '../../entities/ver-formulario/valor-string.entity';
 import { MatSelectModule } from '@angular/material/select';
 import { KeyValue, KeyValuePipe } from '@angular/common';
+import { ColumnasMostrablesSeleccionadasEntry } from '../../entities/ver-formulario/columnas-mostrables-seleccionadas.type';
 
 @Component({
   selector: 'frm-select-one-list-box',
@@ -24,9 +25,8 @@ export class SelectOneListBoxComponent {
     console.log('SelectOneListBox:', this.selectOneListBoxEntity);
   }
 
-  public selected(opcion: any): boolean {
-    const opc:boolean = (opcion?.string === this.selectOneListBoxEntity?.valor?.['']);
-    return opc;
+  public selected(opcion?: ColumnasMostrablesSeleccionadasEntry): boolean {
+    return opcion?.string === this.selectOneListBoxEntity?.valor?.[''];
   }
 
   // Evita que el pipe keyvalue reordene las opciones y mantiene el orden del backend

@@ -11,10 +11,13 @@
     </div>
     <div class="table" [style.--grid-columns]="getGridColumns()">
         <div class="row header">
-        @for(colMostEntry of tableDetailsEntity?.nombresColumnas | keyvalue: keepOrder; track colMostEntry.key) {
-            @let opcion = colMostEntry.value;
-            <span class="cell">{{opcion?.string_2}}</span>
-        }
+            @for(colMostEntry of tableDetailsEntity?.nombresOrganizados | keyvalue: keepOrder; track colMostEntry.key) {       
+                @let opciones = colMostEntry.value;
+                @for(opc of opciones; track opc) {
+                    @let opcion = opc;
+                    <span class="cell">{{opcion}}</span>
+                }
+            }
             <span class="cell">Acciones</span>
         </div>
         @for(row of tableDetailsEntity?.columnas; track row){

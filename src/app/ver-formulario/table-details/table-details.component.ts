@@ -26,9 +26,10 @@ export class TableDetailsComponent {
   }
 
   public getGridColumns(): string {
-    if(this.tableDetailsEntity && this.tableDetailsEntity.nombresColumnas) {
+    if(this.tableDetailsEntity && this.tableDetailsEntity.nombresOrganizados) {
+      let colCount:number = 0;
       // Se cuenta las columnas que van llegando para colocar el estilo para cada columna
-      const colCount = Object.keys(this.tableDetailsEntity.nombresColumnas).length + 1;
+      colCount += this.tableDetailsEntity.nombresOrganizados['string'].length + 1;
       return Array(colCount).fill('1fr').join(' ');
     }
     return '1fr 1fr'; //  se generan minimo 2 columnas

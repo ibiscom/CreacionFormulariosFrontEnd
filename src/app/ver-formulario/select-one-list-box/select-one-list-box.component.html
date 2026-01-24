@@ -1,14 +1,19 @@
+@if (selectOneListBoxEntity?.visible === 'true') {
 <mat-form-field [style]="selectOneListBoxEntity!.styleContenedor">
   <mat-label>{{ selectOneListBoxEntity!.nombre }}</mat-label>
   <mat-select [class]="selectOneListBoxEntity?.columnClasses?.replaceAll(',', ' ')">
-    <p>columnas mostrables: {{selectOneListBoxEntity?.columnasMostrablesSeleccionadas}}</p>
-  @for(colMostEntry of selectOneListBoxEntity!.columnasMostrablesSeleccionadas | keyvalue: keepOrder; track colMostEntry.key) {
-      @let opcion = colMostEntry.value;
-      @if (selected(opcion)) {
-        <mat-option [value]="opcion?.string" selected>{{ opcion?.string }}</mat-option>
-      } @else {
-        <mat-option [value]="opcion?.string">{{ opcion?.string }}</mat-option>
+    @for (colMostEntry of selectOneListBoxEntity!.columnasMostrablesSeleccionadas | keyvalue: keepOrder; track colMostEntry.key) {
+      @let opciones = colMostEntry.value;
+      @for(opc of opciones; track opc) {
+        @let opcion = opc;
+        @if (selected(opcion)) {
+          <mat-option [value]="opcion?.string" selected>{{ opcion?.string }}</mat-option>
+        } 
+        @else {
+          <mat-option [value]="opcion?.string">{{ opcion?.string }}</mat-option>
+        }
       }
     }
   </mat-select>
 </mat-form-field>
+}
