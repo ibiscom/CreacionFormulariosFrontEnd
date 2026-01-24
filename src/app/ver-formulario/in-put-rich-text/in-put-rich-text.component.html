@@ -1,13 +1,14 @@
-<div [style]="inPutRichTextEntity!.styleContenedor">
+<div [style]="sanitizedContainerStyle()">
   <mat-label>{{ inPutRichTextEntity?.nombre }}</mat-label>
   @if (isBrowser && editor) {
     <ckeditor
+      [config]="editorConfig"
       (ready)="onReady($event)"
       (change)="onEditorChange($event)"
       [editor]="editor"
       [data]="editorData"
       [disabled]="inPutRichTextEntity?.readOnly === 'true'"
-      [style]="inPutRichTextEntity?.style"
+      [style]="sanitizedStyle()"
       [class]="inPutRichTextEntity?.columnClasses?.replaceAll(',', ' ')"
     />
   }
@@ -17,7 +18,7 @@
       [value]="editorData"
       (input)="onTextareaInput($event)"
       [disabled]="inPutRichTextEntity?.readOnly === 'true'"
-      [style]="inPutRichTextEntity?.style"
+      [style]="sanitizedStyle()"
       [class]="inPutRichTextEntity?.columnClasses?.replaceAll(',', ' ')"
       placeholder="Rich text editor loading..."
       rows="4">

@@ -19,7 +19,7 @@ export class VerFormularioComponent {
   constructor(private verFormularioService: VerFormularioService) {}
 
   ngOnInit(): void {
-    let nombreFormulario = 'FormularioCompletoAngular';//'FormAyudabusquedacopia';
+    let nombreFormulario = 'FormularioCompletoAngular2';//'FormAyudabusquedacopia';
     this.verFormularioService.getFormulario(nombreFormulario).subscribe({
       next: (response) => {
         this.formulario = JSON.parse(response.respuesta);
