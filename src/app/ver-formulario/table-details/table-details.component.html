@@ -11,12 +11,8 @@
     </div>
     <div class="table" [style.--grid-columns]="getGridColumns()">
         <div class="row header">
-            @for(colMostEntry of tableDetailsEntity?.nombresOrganizados | keyvalue: keepOrder; track colMostEntry.key) {       
-                @let opciones = colMostEntry.value;
-                @for(opc of opciones; track opc) {
-                    @let opcion = opc;
-                    <span class="cell">{{opcion}}</span>
-                }
+            @for(headerColumn of headerColumns; track headerColumn) {
+                <span class="cell">{{headerColumn}}</span>
             }
             <span class="cell">Acciones</span>
         </div>

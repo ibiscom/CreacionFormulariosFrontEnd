@@ -67,7 +67,7 @@ export interface ComponenteBaseEntity {
   listaIdentificadores?: string;
   listaLabels?: string;
   nombresLable?: { [key: string]: string };
-  items?: string;
+  items?: any[];
   condiciones?: string;
   listaAtributosResticcion?: string;
   mapaCondiciones?: string;

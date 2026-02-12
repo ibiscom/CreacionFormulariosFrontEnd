@@ -1,6 +1,8 @@
-<div class="formulario-container">
-  <frm-secciones-formulario
-    [seccionesFormulario]="formulario!.seccionesFormulario"
-    [verFormularioCmp]="verFormularioCmp"
-  ></frm-secciones-formulario>
-</div>
+@if (formulario; as frm) {
+  <div class="formulario-container">
+    <frm-secciones-formulario
+      [seccionesFormulario]="frm.seccionesFormulario"
+      [verFormularioCmp]="verFormularioCmp"
+    ></frm-secciones-formulario>
+  </div>
+}

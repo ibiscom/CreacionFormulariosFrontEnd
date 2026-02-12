@@ -2,17 +2,13 @@
 <div [style]="selectOneRadioEntity!.styleContenedor">
   <mat-label>{{ selectOneRadioEntity!.nombre }}</mat-label>
   <mat-radio-group aria-label="Seleccione una opción" [value]="selectOneRadioEntity!.valor['']" >
-  @for(colMostEntry of selectOneRadioEntity!.columnasMostrablesSeleccionadas | keyvalue: keepOrder; track colMostEntry.key) {
-      @let opciones = colMostEntry.value;
-      @for(opc of opciones; track opc) {
-        @let opcion = opc;
+      @for(opcion of radioOptions; track opcion.value) {
         @if (selected(opcion)) {
-          <mat-radio-button checked>{{ opcion?.string }}</mat-radio-button>
+          <mat-radio-button [value]="opcion.value" checked>{{ opcion.label }}</mat-radio-button>
         } @else {
-          <mat-radio-button>{{ opcion?.string }}</mat-radio-button>
+          <mat-radio-button [value]="opcion.value">{{ opcion.label }}</mat-radio-button>
         }
       }
-    }
    </mat-radio-group>
  </div>
 }
