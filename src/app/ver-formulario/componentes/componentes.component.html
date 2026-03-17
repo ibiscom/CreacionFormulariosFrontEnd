@@ -138,9 +138,9 @@
         }
       }
       @if (componentData && isComponentArray(componentData)) {
-        <div class="tbl-componentes">
+        <div class="seccion-componentes">
           @for (componente of componentData; track componente) {
-            <div class="celda-componente">
+            <div>
               @switch (componente.tipoComponente) {
                 @case ('InPutText') {
                   <frm-in-put-text
@@ -201,6 +201,12 @@
                     [tableDetailsEntity]="$any(componentData)"
                     [verFormularioCmp]="verFormularioCmp"
                   ></frm-table-details>
+                }
+                @case ('CargaMasiva') {
+                  <frm-carga-masiva
+                    [cargaMasivaEntity]="$any(componente)"
+                    [verFormularioCmp]="verFormularioCmp"
+                  ></frm-carga-masiva>
                 }
                 @default {
                   <!-- Tipo de componente desconocido: {{componente.tipoComponente}} -->

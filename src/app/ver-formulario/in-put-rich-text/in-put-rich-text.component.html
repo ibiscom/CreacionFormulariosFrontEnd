@@ -1,27 +1,29 @@
-<div [style]="sanitizedContainerStyle()">
+<div class="rich-text-container" [style]="sanitizedContainerStyle()">
   <mat-label>{{ inPutRichTextEntity?.nombre }}</mat-label>
-  @if (isBrowser && editor) {
-    <ckeditor
-      [config]="editorConfig"
-      (ready)="onReady($event)"
-      (change)="onEditorChange($event)"
-      [editor]="editor"
-      [data]="editorData"
-      [disabled]="inPutRichTextEntity?.readOnly === 'true'"
-      [style]="sanitizedStyle()"
-      [class]="inPutRichTextEntity?.columnClasses?.replaceAll(',', ' ')"
-    />
-  }
-  @if (!isBrowser || !editor) {
-    <textarea
-      matInput
-      [value]="editorData"
-      (input)="onTextareaInput($event)"
-      [disabled]="inPutRichTextEntity?.readOnly === 'true'"
-      [style]="sanitizedStyle()"
-      [class]="inPutRichTextEntity?.columnClasses?.replaceAll(',', ' ')"
-      placeholder="Rich text editor loading..."
-      rows="4">
-    </textarea>
-  }
+  <div
+    class="rich-text-field"
+    [style]="sanitizedStyle()"
+    [class]="inPutRichTextEntity?.columnClasses?.replaceAll(',', ' ')">
+    @if (isBrowser && editor) {
+      <ckeditor
+        class="rich-text-editor"
+        [config]="editorConfig"
+        (ready)="onReady($event)"
+        (change)="onEditorChange($event)"
+        [editor]="editor"
+        [data]="editorData"
+        [disabled]="inPutRichTextEntity?.readOnly === 'true'"
+      />
+    }
+    @if (!isBrowser || !editor) {
+      <textarea
+        matInput
+        class="rich-text-textarea"
+        [value]="editorData"
+        [disabled]="inPutRichTextEntity?.readOnly === 'true'"
+        placeholder="Rich text editor loading..."
+        rows="4">
+      </textarea>
+    }
+  </div>
 </div>

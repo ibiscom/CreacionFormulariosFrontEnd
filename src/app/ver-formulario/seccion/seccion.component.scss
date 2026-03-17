@@ -15,8 +15,14 @@
 
 .tbl-componentes-seccion {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
   gap: 1rem;
+  width: 100%;
+}
+
+.tbl-componentes-seccion > frm-componentes {
+  min-width: 0;
 }
 
 .campo-seccion {

@@ -6,13 +6,13 @@
       </mat-expansion-panel-header>
       <mat-card-content>
         <div class="tbl-componentes-seccion">
-          @if (seccion!.componentesIzq !== '') {
+          @if (hasComponentes(seccion!.componentesIzq)) {
             <frm-componentes [componentes]="seccion!.componentesIzq"></frm-componentes>
           }
-          @if (seccion!.componentesCent !== '') {
+          @if (hasComponentes(seccion!.componentesCent)) {
             <frm-componentes [componentes]="seccion!.componentesCent"></frm-componentes>
           }
-          @if (seccion!.componentesDer !== '') {
+          @if (hasComponentes(seccion!.componentesDer)) {
             <frm-componentes [componentes]="seccion!.componentesDer"></frm-componentes>
           }
         </div>

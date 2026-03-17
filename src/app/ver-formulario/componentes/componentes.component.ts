@@ -23,6 +23,7 @@ import { TableSQLQueryComponent } from '../table-s-q-l-query/table-s-q-l-query.c
 import { TableDetailsComponent } from '../table-details/table-details.component';
 import { OutPutLinkComponent } from '../out-put-link/out-put-link.component';
 import { SelectOneRadioComponent } from '../select-one-radio/select-one-radio.component';
+import { CargaMasivaComponent } from '../carga-masiva/carga-masiva.component';
 
 @Component({
   selector: 'frm-componentes',
@@ -48,6 +49,7 @@ import { SelectOneRadioComponent } from '../select-one-radio/select-one-radio.co
     TableDetailsComponent,
     OutPutLinkComponent,
     SelectOneRadioComponent,
+    CargaMasivaComponent,
   ],
   templateUrl: './componentes.component.html',
   styleUrl: './componentes.component.scss',

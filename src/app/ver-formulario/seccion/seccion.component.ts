@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { SeccionEntity } from '../../entities/ver-formulario/seccion.entity';
-import { MatCard, MatCardModule } from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -34,5 +34,17 @@ export class SeccionComponent {
   constructor() {}
   ngOnInit(): void {
     console.log("Sección:",this.seccion);
+  }
+
+  public hasComponentes(value: unknown): boolean {
+    if (value === '' || value === null || value === undefined) {
+      return false;
+    }
+
+    if (Array.isArray(value)) {
+      return value.length > 0;
+    }
+
+    return true;
   }
 }

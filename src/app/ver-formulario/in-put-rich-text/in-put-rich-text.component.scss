@@ -1,1 +1,18 @@
-/* (empty) */
+:host {
+	display: block;
+	width: 100%;
+}
+
+.rich-text-container {
+	width: 100%;
+}
+
+.rich-text-field {
+	display: block;
+	width: 100%;
+}
+
+.rich-text-textarea {
+	width: 100%;
+	box-sizing: border-box;
+}
