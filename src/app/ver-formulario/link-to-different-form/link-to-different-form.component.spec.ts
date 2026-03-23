@@ -8,9 +8,8 @@ describe('LinkToDifferentFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LinkToDifferentFormComponent]
-    })
-    .compileComponents();
+      imports: [LinkToDifferentFormComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(LinkToDifferentFormComponent);
     component = fixture.componentInstance;

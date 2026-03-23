@@ -1,1 +1,8 @@
-<p>carga-masiva works!</p>
+<div [style]="cargaMasivaEntity!.styleContenedor">
+  <mat-label>{{ cargaMasivaEntity?.nombre }}</mat-label>
+  <br />
+  <div>
+    <input #fileInput type="file" class="file-upload" (change)="cargarArchivos($event)" />
+    <input type="submit" value="Cargar" (click)="subirArchivos()" />
+  </div>
+</div>

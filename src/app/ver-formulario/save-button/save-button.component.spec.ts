@@ -8,9 +8,8 @@ describe('SaveButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SaveButtonComponent]
-    })
-    .compileComponents();
+      imports: [SaveButtonComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SaveButtonComponent);
     component = fixture.componentInstance;

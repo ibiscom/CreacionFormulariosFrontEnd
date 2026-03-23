@@ -1,13 +1,14 @@
 <mat-form-field [style]="fileUploadEntity!.styleContenedor">
   <mat-label>{{ fileUploadEntity?.nombre }}</mat-label>
-  <input 
-    matInput 
-    type="text" 
-    readonly 
-    [value]="selectedFileName" 
-    placeholder="No file selected" 
+  <input
+    matInput
+    type="text"
+    readonly
+    [value]="selectedFileName"
+    placeholder="No file selected"
     (click)="fileInput.click()"
-    style="cursor: pointer;" />
+    style="cursor: pointer"
+  />
   <input type="file" #fileInput style="display: none" (change)="uploadFile($event)" />
-  <mat-icon matSuffix (click)="fileInput.click()" style="cursor: pointer;">upload</mat-icon>
+  <mat-icon matSuffix (click)="fileInput.click()" style="cursor: pointer">upload</mat-icon>
 </mat-form-field>

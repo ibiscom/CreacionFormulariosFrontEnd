@@ -16,8 +16,7 @@ export class TableDetailsComponent implements OnChanges {
   public rowsPerPage: number = 5;
   public headerColumns: string[] = [];
 
-  public constructor() {
-  }
+  public constructor() {}
 
   ngOnInit(): void {
     this.headerColumns = this.resolveHeaderColumns();
@@ -82,27 +81,28 @@ export class TableDetailsComponent implements OnChanges {
         if (Array.isArray(parsed)) {
           return parsed.map((item) => String(item));
         }
-      } catch {
-      }
+      } catch {}
     }
 
-    return trimmed.split(',').map((item) => item.trim()).filter(Boolean);
+    return trimmed
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean);
   }
 
-  public addRow() : void {
+  public addRow(): void {
     throw new Error('Method not implemented.');
   }
 
-  public search() : void {
+  public search(): void {
     throw new Error('Method not implemented.');
   }
 
-  public deleteRow(_t23: { valores: string[]; }) : void {
-    throw new Error('Method not implemented.');   
-  }
-
-  public editRow(_t23: { valores: string[]; }) : void {
+  public deleteRow(_t23: { valores: string[] }): void {
     throw new Error('Method not implemented.');
   }
 
+  public editRow(_t23: { valores: string[] }): void {
+    throw new Error('Method not implemented.');
+  }
 }

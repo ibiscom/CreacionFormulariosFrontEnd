@@ -1,8 +1,6 @@
-@if(seccionesFormulario) {
-  @for(seccionEntry of seccionesFormulario | keyvalue: keepOrder; track seccionEntry.key) {
-    <frm-seccion
-      [seccion]="seccionEntry.value"
-      [verFormularioCmp]="verFormularioCmp">
+@if (seccionesFormulario) {
+  @for (seccionEntry of seccionesFormulario | keyvalue: keepOrder; track seccionEntry.key) {
+    <frm-seccion [seccion]="seccionEntry.value" [verFormularioCmp]="verFormularioCmp">
     </frm-seccion>
   }
 }

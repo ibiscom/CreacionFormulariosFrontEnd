@@ -95,7 +95,7 @@
               [verFormularioCmp]="verFormularioCmp"
             ></frm-link-to-different-form>
           }
-          @case ('LinkFormToIcefaces') {
+          @case ('LinkFormToIfaces') {
             <frm-link-form-to-icefaces
               [linkFormToIcefacesEntity]="$any(componentData)"
               [verFormularioCmp]="verFormularioCmp"
@@ -131,8 +131,20 @@
               [verFormularioCmp]="verFormularioCmp"
             ></frm-select-one-radio>
           }
+          @case ('CargaMasiva') {
+            <frm-carga-masiva
+              [cargaMasivaEntity]="$any(componentData)"
+              [verFormularioCmp]="verFormularioCmp"
+            ></frm-carga-masiva>
+          }
+          @case ('ListaCompuesta') {
+            <frm-lista-compuesta
+              [listaCompuestaEntity]="$any(componentData)"
+              [verFormularioCmp]="verFormularioCmp"
+            ></frm-lista-compuesta>
+          }
           @default {
-            <p>Tipo de componente desconocido: {{componentData.tipoComponente}} </p>
+            <p>Tipo de componente desconocido: {{ componentData.tipoComponente }}</p>
             <!-- Tipo de componente desconocido: {{componentData.tipoComponente}} -->
           }
         }
@@ -197,16 +209,28 @@
                   ></frm-select-one-list-box-customized>
                 }
                 @case ('TablaDetalles') {
-                 <frm-table-details
-                    [tableDetailsEntity]="$any(componentData)"
+                  <frm-table-details
+                    [tableDetailsEntity]="$any(componente)"
                     [verFormularioCmp]="verFormularioCmp"
                   ></frm-table-details>
+                }
+                @case ('LinkFormToIfaces') {
+                  <frm-link-form-to-icefaces
+                    [linkFormToIcefacesEntity]="$any(componente)"
+                    [verFormularioCmp]="verFormularioCmp"
+                  ></frm-link-form-to-icefaces>
                 }
                 @case ('CargaMasiva') {
                   <frm-carga-masiva
                     [cargaMasivaEntity]="$any(componente)"
                     [verFormularioCmp]="verFormularioCmp"
                   ></frm-carga-masiva>
+                }
+                @case ('ListaCompuesta') {
+                  <frm-lista-compuesta
+                    [listaCompuestaEntity]="$any(componente)"
+                    [verFormularioCmp]="verFormularioCmp"
+                  ></frm-lista-compuesta>
                 }
                 @default {
                   <!-- Tipo de componente desconocido: {{componente.tipoComponente}} -->

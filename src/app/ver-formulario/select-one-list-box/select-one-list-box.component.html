@@ -1,19 +1,17 @@
 @if (selectOneListBoxEntity?.visible === 'true') {
-<mat-form-field [style]="selectOneListBoxEntity!.styleContenedor">
-  <mat-label>{{ selectOneListBoxEntity!.nombre }}</mat-label>
-  <mat-select
-    [value]="selectOneListBoxEntity?.valor?.['']"
-    [class]="selectOneListBoxEntity?.columnClasses?.replaceAll(',', ' ')"
-  >
-    @for (opcion of options; track opcion.value ) {
+  <mat-form-field [style]="selectOneListBoxEntity!.styleContenedor">
+    <mat-label>{{ selectOneListBoxEntity!.nombre }}</mat-label>
+    <mat-select
+      [value]="selectOneListBoxEntity?.valor?.['']"
+      [class]="selectOneListBoxEntity?.columnClasses?.replaceAll(',', ' ')"
+    >
+      @for (opcion of options; track opcion.value) {
         @if (selected(opcion)) {
           <mat-option [value]="opcion?.value" selected>{{ opcion?.label }}</mat-option>
-        } 
-        @else {
+        } @else {
           <mat-option [value]="opcion?.value">{{ opcion?.label }}</mat-option>
         }
       }
-    
-  </mat-select>
-</mat-form-field>
+    </mat-select>
+  </mat-form-field>
 }

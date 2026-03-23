@@ -1,4 +1,12 @@
-import { Component, Input, Inject, PLATFORM_ID, OnInit, OnDestroy, ElementRef } from '@angular/core';
+import {
+  Component,
+  Input,
+  Inject,
+  PLATFORM_ID,
+  OnInit,
+  OnDestroy,
+  ElementRef,
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -34,7 +42,7 @@ export class InPutRichTextComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     console.log('Input Rich Text:', this.inPutRichTextEntity);
     this.editorData = this.inPutRichTextEntity?.valor?.[''] || '';
-    
+
     // Solo cargar CKEditor en el lado del navegador
     if (this.isBrowser) {
       try {
@@ -55,7 +63,7 @@ export class InPutRichTextComponent implements OnInit, OnDestroy {
   }
 
   public onEditorChange($event: any) {
-     this.capturedData = $event.editor.getData();
+    this.capturedData = $event.editor.getData();
     //console.log('Editor data changed:', this.capturedData);
   }
 
@@ -63,7 +71,6 @@ export class InPutRichTextComponent implements OnInit, OnDestroy {
     this.editorResizeObserver?.disconnect();
     this.editorResizeObserver = undefined;
   }
-
 
   public sanitizedStyle(): string | undefined {
     const raw = this.inPutRichTextEntity?.style;
@@ -88,8 +95,12 @@ export class InPutRichTextComponent implements OnInit, OnDestroy {
       const editorMainElement = editableElement?.closest('.ck-editor__main') as HTMLElement | null;
       const editorTopElement = toolbarElement?.closest('.ck-editor__top') as HTMLElement | null;
       const stickyPanelElement = toolbarElement?.closest('.ck-sticky-panel') as HTMLElement | null;
-      const stickyPanelContentElement = toolbarElement?.closest('.ck-sticky-panel__content') as HTMLElement | null;
-      const richTextFieldElement = this.hostElementRef.nativeElement.querySelector('.rich-text-field') as HTMLElement | null;
+      const stickyPanelContentElement = toolbarElement?.closest(
+        '.ck-sticky-panel__content',
+      ) as HTMLElement | null;
+      const richTextFieldElement = this.hostElementRef.nativeElement.querySelector(
+        '.rich-text-field',
+      ) as HTMLElement | null;
 
       const setElementWidth = (element: HTMLElement | null, width: string): void => {
         if (!element) {

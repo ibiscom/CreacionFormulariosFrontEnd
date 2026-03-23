@@ -8,9 +8,8 @@ describe('RefreshButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RefreshButtonComponent]
-    })
-    .compileComponents();
+      imports: [RefreshButtonComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(RefreshButtonComponent);
     component = fixture.componentInstance;

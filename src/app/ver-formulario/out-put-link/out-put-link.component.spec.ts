@@ -8,9 +8,8 @@ describe('OutPutLinkComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OutPutLinkComponent]
-    })
-    .compileComponents();
+      imports: [OutPutLinkComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(OutPutLinkComponent);
     component = fixture.componentInstance;

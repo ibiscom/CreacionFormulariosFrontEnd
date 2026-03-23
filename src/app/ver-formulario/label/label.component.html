@@ -1,3 +1,6 @@
-<div [style]="labelEntity!.styleContenedor" [class]="labelEntity?.columnClasses?.replaceAll(',', ' ')">
-    <label [style]="labelEntity?.style">{{labelEntity?.valor?.[''] || labelEntity?.nombre}}</label>
+<div
+  [style]="labelEntity!.styleContenedor"
+  [class]="labelEntity?.columnClasses?.replaceAll(',', ' ')"
+>
+  <label [style]="labelEntity?.style">{{ labelEntity?.valor?.[''] || labelEntity?.nombre }}</label>
 </div>

@@ -1,37 +1,37 @@
 :root {
-	--grid-columns: 1fr 1fr; /* 2 columnas */
+  --grid-columns: 1fr 1fr; /* 2 columnas */
 }
 
 .table {
-	border: 1px solid #ddd;
-	border-radius: 6px;
-	overflow: hidden;
-	background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
 }
 
 .row {
-	display: grid;
-	grid-template-columns: var(--grid-columns)
+  display: grid;
+  grid-template-columns: var(--grid-columns);
 }
 
 .row:not(.header) {
-	border-top: 1px solid #eee;
+  border-top: 1px solid #eee;
 }
 
 .header {
-	background: #f6f8fa;
-	font-weight: 600;
+  background: #f6f8fa;
+  font-weight: 600;
 }
 
 .cell {
-	padding: 10px 12px;
-	border-right: 1px solid #eee;
+  padding: 10px 12px;
+  border-right: 1px solid #eee;
 }
 
 .cell:last-child {
-	border-right: none;
+  border-right: none;
 }
 
 .row:nth-child(odd):not(.header) {
-	background: #fbfbfb;
+  background: #fbfbfb;
 }

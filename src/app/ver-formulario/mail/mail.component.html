@@ -1,1 +1,4 @@
-<p>mail works!</p>
+<div [style]="mailEntity!.styleContenedor">
+  <mat-label>{{ mailEntity?.nombre }}</mat-label>
+  <input type="button" [style]="mailEntity?.style" [(ngModel)]="mailEntity.valor['']" />
+</div>

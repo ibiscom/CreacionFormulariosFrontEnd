@@ -1,16 +1,16 @@
 <div class="tableSQLQueryEntity" [style]="tableSQLQueryEntity?.styleContenedor">
-    <div class="table">
-        <div class="row header">
-            @for(title of tableSQLQueryEntity?.titles; track title) {
-            <span class="cell">{{title}}</span>
-            }
-        </div>
-        @for(row of tableSQLQueryEntity?.rows; track row){
-        <div class="row">
-            @for(value of row?.values; track value) { 
-            <span class="cell">{{value}}</span>
-            }
-        </div>
+  <div class="table">
+    <div class="row header">
+      @for (title of tableSQLQueryEntity?.titles; track title) {
+        <span class="cell">{{ title }}</span>
+      }
+    </div>
+    @for (row of tableSQLQueryEntity?.rows; track row) {
+      <div class="row">
+        @for (value of row?.values; track value) {
+          <span class="cell">{{ value }}</span>
         }
-    </div>   
+      </div>
+    }
+  </div>
 </div>

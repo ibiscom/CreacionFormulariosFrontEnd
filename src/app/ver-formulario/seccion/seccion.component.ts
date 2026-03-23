@@ -33,7 +33,7 @@ export class SeccionComponent {
 
   constructor() {}
   ngOnInit(): void {
-    console.log("Sección:",this.seccion);
+    console.log('Sección:', this.seccion);
   }
 
   public hasComponentes(value: unknown): boolean {

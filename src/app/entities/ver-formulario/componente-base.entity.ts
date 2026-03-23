@@ -60,7 +60,7 @@ export interface ComponenteBaseEntity {
   operadorAritmetico: string;
   formato?: string;
   formatoMoneda?: string;
-  
+
   // List and query-related properties
   orientacion?: string;
   cantidadObservables?: string;
@@ -82,14 +82,14 @@ export interface ComponenteBaseEntity {
   mapaAtributos?: string;
   mapaCondicionesTot?: { [key: string]: any };
   columnasMostrablesSeleccionadas?: { [key: string]: any };
-  
+
   // Button-specific properties
   utilizaImagen?: string;
   ubicacionImagen?: string;
   expresionLogicaFiltro?: string;
   nombreEntidad?: string;
   mostrarLink?: string;
-  
+
   // Table-specific properties
   columnaRelacion?: string;
   columnaPrimaria?: string;

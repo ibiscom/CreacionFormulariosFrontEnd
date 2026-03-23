@@ -5,7 +5,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RefreshButtonEntity } from '../../entities/ver-formulario/refresh-button.entity';
 
-
 @Component({
   selector: 'frm-refresh-button',
   imports: [MatInputModule, MatButtonModule, MatIconModule],
@@ -23,7 +22,9 @@ export class RefreshButtonComponent {
   }
 
   public click() {
-    console.log('Click en Refresh Button. Accion:', this.refreshButtonEntity?.expresionLogicaFiltro);
+    console.log(
+      'Click en Refresh Button. Accion:',
+      this.refreshButtonEntity?.expresionLogicaFiltro,
+    );
   }
 }
-

@@ -1,36 +1,39 @@
 <div class="tableDetailsEntity" [style]="tableDetailsEntity?.styleContenedor">
-    <br/>
-    <div class="actionButtons">
-        <span>Filas por página: <input matInput type="number" [value]="rowsPerPage" min="1" class="rowsInput"/></span>
-        <button class="actionButton" (click)="search()">
-            <span class="material-icons">search</span>
-        </button>
-        <button class="actionButton" (click)="addRow()">
-            <span class="material-icons">add</span>
-        </button>
+  <br />
+  <div class="actionButtons">
+    <span
+      >Filas por página:
+      <input matInput type="number" [value]="rowsPerPage" min="1" class="rowsInput"
+    /></span>
+    <button class="actionButton" (click)="search()">
+      <span class="material-icons">search</span>
+    </button>
+    <button class="actionButton" (click)="addRow()">
+      <span class="material-icons">add</span>
+    </button>
+  </div>
+  <div class="table" [style.--grid-columns]="getGridColumns()">
+    <div class="row header">
+      @for (headerColumn of headerColumns; track headerColumn) {
+        <span class="cell">{{ headerColumn }}</span>
+      }
+      <span class="cell">Acciones</span>
     </div>
-    <div class="table" [style.--grid-columns]="getGridColumns()">
-        <div class="row header">
-            @for(headerColumn of headerColumns; track headerColumn) {
-                <span class="cell">{{headerColumn}}</span>
-            }
-            <span class="cell">Acciones</span>
-        </div>
-        @for(row of tableDetailsEntity?.columnas; track row){
-        <div class="row">
-            @for(value of row?.valores; track value) { 
-            <span class="cell">{{value}}</span>
-            }
-            <span class="cell">
-                <button class="actionButton" (click)="editRow(row)">
-                    <span class="material-icons">edit</span>
-                </button>
-                <button class="actionButton" (click)="deleteRow(row)">
-                    <span class="material-icons">delete</span>
-                </button>
-            </span>
-        </div>
+    @for (row of tableDetailsEntity?.columnas; track row) {
+      <div class="row">
+        @for (value of row?.valores; track value) {
+          <span class="cell">{{ value }}</span>
         }
-    </div>
-    <br/>
+        <span class="cell">
+          <button class="actionButton" (click)="editRow(row)">
+            <span class="material-icons">edit</span>
+          </button>
+          <button class="actionButton" (click)="deleteRow(row)">
+            <span class="material-icons">delete</span>
+          </button>
+        </span>
+      </div>
+    }
+  </div>
+  <br />
 </div>

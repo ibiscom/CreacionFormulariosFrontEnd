@@ -24,6 +24,7 @@ import { TableDetailsComponent } from '../table-details/table-details.component'
 import { OutPutLinkComponent } from '../out-put-link/out-put-link.component';
 import { SelectOneRadioComponent } from '../select-one-radio/select-one-radio.component';
 import { CargaMasivaComponent } from '../carga-masiva/carga-masiva.component';
+import { ListaCompuestaComponent } from '../lista-compuesta/lista-compuesta.component';
 
 @Component({
   selector: 'frm-componentes',
@@ -50,6 +51,7 @@ import { CargaMasivaComponent } from '../carga-masiva/carga-masiva.component';
     OutPutLinkComponent,
     SelectOneRadioComponent,
     CargaMasivaComponent,
+    ListaCompuestaComponent,
   ],
   templateUrl: './componentes.component.html',
   styleUrl: './componentes.component.scss',
@@ -61,7 +63,7 @@ export class ComponentesComponent {
   public constructor() {}
 
   ngOnInit(): void {
-    console.log("Componentes:", this.componentes);
+    console.log('Componentes:', this.componentes);
   }
 
   /**
@@ -88,16 +90,27 @@ export class ComponentesComponent {
   /**
    * Verifica si los datos son un componente único (no un arreglo)
    */
-  public isComponent(data: ComponenteBaseEntity | ComponenteBaseEntity[] | undefined): data is ComponenteBaseEntity {
-    return data !== undefined && !Array.isArray(data) && typeof data === 'object' && 'tipoComponente' in data;
+  public isComponent(
+    data: ComponenteBaseEntity | ComponenteBaseEntity[] | undefined,
+  ): data is ComponenteBaseEntity {
+    return (
+      data !== undefined &&
+      !Array.isArray(data) &&
+      typeof data === 'object' &&
+      'tipoComponente' in data
+    );
   }
 
   /**
    * Verifica si los datos son un arreglo de componentes
    */
-  public isComponentArray(data: ComponenteBaseEntity | ComponenteBaseEntity[] | undefined): data is ComponenteBaseEntity[] {
-    return Array.isArray(data) && data.length > 0 && data.every(item => 
-      typeof item === 'object' && item !== null && 'tipoComponente' in item
+  public isComponentArray(
+    data: ComponenteBaseEntity | ComponenteBaseEntity[] | undefined,
+  ): data is ComponenteBaseEntity[] {
+    return (
+      Array.isArray(data) &&
+      data.length > 0 &&
+      data.every((item) => typeof item === 'object' && item !== null && 'tipoComponente' in item)
     );
   }
 }

@@ -1,1 +1,9 @@
-<p>out-put-link works!</p>
+<div [style]="outPutLinkEntity?.styleContenedor">
+  <a
+    matButton
+    [href]="outPutLinkEntity!.valor['']"
+    [class]="outPutLinkEntity?.columnClasses?.replaceAll(',', ' ')"
+    target="_blank"
+    >Output Link</a
+  >
+</div>

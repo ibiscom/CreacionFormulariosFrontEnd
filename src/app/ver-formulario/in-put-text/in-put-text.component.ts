@@ -22,14 +22,19 @@ export class InPutTextComponent {
 
   private colocarValorInicial(): void {
     //Valor por defecto
-    if( this.inPutTextEntity && this.inPutTextEntity.valor && this.inPutTextEntity.valor[''] === undefined){
-      if(this.inPutTextEntity.valorDefecto && this.inPutTextEntity.valorDefecto[''] !== undefined){
+    if (
+      this.inPutTextEntity &&
+      this.inPutTextEntity.valor &&
+      this.inPutTextEntity.valor[''] === undefined
+    ) {
+      if (
+        this.inPutTextEntity.valorDefecto &&
+        this.inPutTextEntity.valorDefecto[''] !== undefined
+      ) {
         this.inPutTextEntity.valor[''] = this.inPutTextEntity.valorDefecto[''];
-      }
-      else {
+      } else {
         this.inPutTextEntity.valor[''] = '';
       }
     }
   }
-
 }

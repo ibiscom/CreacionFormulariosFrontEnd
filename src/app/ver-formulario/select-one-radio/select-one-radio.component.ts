@@ -87,11 +87,20 @@ export class SelectOneRadioComponent implements OnChanges {
       if (item && typeof item === 'object') {
         const entry = item as Record<string, unknown>;
         const label = String(
-          entry['label'] ?? entry['string'] ?? entry['descripcion'] ?? entry['text'] ?? entry['value'] ??
+          entry['label'] ??
+            entry['string'] ??
+            entry['descripcion'] ??
+            entry['text'] ??
+            entry['value'] ??
             '',
         );
         const value = String(
-          entry['value'] ?? entry['id'] ?? entry['codigo'] ?? entry['string'] ?? entry['label'] ?? '',
+          entry['value'] ??
+            entry['id'] ??
+            entry['codigo'] ??
+            entry['string'] ??
+            entry['label'] ??
+            '',
         );
 
         if (label || value) {
@@ -120,4 +129,3 @@ export class SelectOneRadioComponent implements OnChanges {
       .filter(Boolean);
   }
 }
-

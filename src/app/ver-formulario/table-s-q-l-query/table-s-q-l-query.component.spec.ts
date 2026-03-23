@@ -8,9 +8,8 @@ describe('TableSQLQueryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TableSQLQueryComponent]
-    })
-    .compileComponents();
+      imports: [TableSQLQueryComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TableSQLQueryComponent);
     component = fixture.componentInstance;

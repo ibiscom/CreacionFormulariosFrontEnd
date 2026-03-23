@@ -1,5 +1,5 @@
-import { Injectable } from "@angular/core";
-import { NativeDateAdapter } from "@angular/material/core";
+import { Injectable } from '@angular/core';
+import { NativeDateAdapter } from '@angular/material/core';
 
 // Adaptador de fecha personalizado que fuerza el formato YYYY-MM-DD
 @Injectable()

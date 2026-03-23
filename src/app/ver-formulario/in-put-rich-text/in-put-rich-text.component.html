@@ -3,7 +3,8 @@
   <div
     class="rich-text-field"
     [style]="sanitizedStyle()"
-    [class]="inPutRichTextEntity?.columnClasses?.replaceAll(',', ' ')">
+    [class]="inPutRichTextEntity?.columnClasses?.replaceAll(',', ' ')"
+  >
     @if (isBrowser && editor) {
       <ckeditor
         class="rich-text-editor"
@@ -22,7 +23,8 @@
         [value]="editorData"
         [disabled]="inPutRichTextEntity?.readOnly === 'true'"
         placeholder="Rich text editor loading..."
-        rows="4">
+        rows="4"
+      >
       </textarea>
     }
   </div>
