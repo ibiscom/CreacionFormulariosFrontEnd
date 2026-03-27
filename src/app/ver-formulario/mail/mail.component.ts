@@ -1,13 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { VerFormularioComponent } from '../ver-formulario.component';
 import { MailEntity } from '../../entities/ver-formulario/mail.entity';
-import { MatFormField, MatLabel } from "@angular/material/input";
+import { MatFormField, MatLabel } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'frm-mail',
-  imports: [MatLabel, MatButtonModule, MatFormFieldModule ],
+  imports: [MatLabel, MatButtonModule, MatFormFieldModule],
   templateUrl: './mail.component.html',
   styleUrl: './mail.component.scss',
 })
@@ -19,5 +19,9 @@ export class MailComponent {
 
   ngOnInit(): void {
     console.log('Mail:', this.mailEntity);
+  }
+
+  enviarMail(): void {
+    console.log('Enviar mail:', this.mailEntity);
   }
 }

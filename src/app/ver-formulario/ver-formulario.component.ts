@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { VerFormularioService } from './ver-formulario.service';
 import { Constants } from '../utils/constants';
 import { MessageUtil } from '../utils/message.util';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormularioJSONEntity } from '../entities/ver-formulario/formulario-json.entity';
 
 @Component({
@@ -15,12 +15,21 @@ import { FormularioJSONEntity } from '../entities/ver-formulario/formulario-json
 export class VerFormularioComponent {
   public mensaje: string = '';
   public formulario?: FormularioJSONEntity;
+  public id: string = '';
 
-  constructor(private verFormularioService: VerFormularioService) {}
+  constructor(
+    private verFormularioService: VerFormularioService,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {}
 
-  ngOnInit(): void {
-    let nombreFormulario = 'FormularioCompletoAngular2'; //'FormAyudabusquedacopia';
-    this.verFormularioService.getFormulario(nombreFormulario).subscribe({
+  public ngOnInit(): void {
+    this.consultarFormulario();
+  }
+
+  public consultarFormulario(): void {
+    this.id = this.route.snapshot.paramMap.get('id') || 'Formulario sin ID';
+    this.verFormularioService.getFormulario(this.id).subscribe({
       next: (response) => {
         this.formulario = this.parseFormularioResponse(this.extractPayload(response));
         console.log('Formulario cargado:', this.formulario?.titulo);
