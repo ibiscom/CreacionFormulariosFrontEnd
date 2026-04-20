@@ -14,7 +14,7 @@ import {
   withFetch,
   withInterceptorsFromDi,
 } from '@angular/common/http';
-import { GlobalErrorHandler } from './utils/global-error-handler';
+import { GlobalErrorHandler } from './utilidades/global-error-handler';
 
 export const appConfig: ApplicationConfig = {
   providers: [

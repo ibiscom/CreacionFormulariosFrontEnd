@@ -1,27 +1,38 @@
 import { Routes } from '@angular/router';
-import { VerFormularioComponent } from './ver-formulario/ver-formulario.component';
-import { VisorComponent } from './ver-formulario/visor/visor.component';
-import { ListaFormulariosComponent } from './lista-formularios/lista-formularios.component';
+import { ListaFormsCapturaComponent } from './modulos/captura/lista-forms-captura/lista-forms-captura.component';
+import { VerFormCapturaComponent } from './modulos/captura/ver-form-captura/ver-form-captura.component';
+import { DiligenciarFormCapturaComponent } from './modulos/captura/diligenciar-form-captura/diligenciar-form-captura.component';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: '/lista-formularios',
+    redirectTo: 'captura',
     pathMatch: 'full',
   },
   {
-    path: 'ver-formulario/:id',
-    component: VerFormularioComponent,
+    path: 'captura',
     children: [
       {
         path: '',
-        component: VisorComponent,
+        redirectTo: 'lista-forms-captura', 
+        pathMatch: 'full',
       },
-    ],
+      {
+          path: 'ver-form-captura/:id',
+          component: VerFormCapturaComponent,
+          children: [],
+      },
+      {
+          path: 'diligenciar-form-captura/:id',
+          component: DiligenciarFormCapturaComponent,
+          children: [],
+      },
+      {
+          path: 'lista-forms-captura',
+          component: ListaFormsCapturaComponent,
+          children: [],
+      },
+    ]
   },
-  {
-    path: 'lista-formularios',
-    component: ListaFormulariosComponent,
-    children: [],
-  },
+  
 ];
