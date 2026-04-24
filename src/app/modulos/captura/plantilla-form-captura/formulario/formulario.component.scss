@@ -1,0 +1,26 @@
+.formulario-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.enc-formulario {
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: 'Roboto', sans-serif;
+}
+.seccs-formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.ayuda-formulario {
+  display: flex;
+  justify-content: flex-end;
+}
+
+//Estilos para las clases de ancho dinámico .width1, .width2, ..., .width100
+@for $i from 1 through 100 {
+  .width#{$i} {
+    width: $i * 1%;
+  }
+}   

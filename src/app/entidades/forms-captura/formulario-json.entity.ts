@@ -22,4 +22,5 @@ export interface FormularioJSONEntity {
   diligenciable: BooleanString;
   consultable: BooleanString;
   plantillasMostrables: BooleanString;
+  htmlAyuda?: string; // Nuevo campo para almacenar el contenido de ayuda en formato HTML
 }

@@ -1,0 +1,43 @@
+.base-inputtext-field {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  padding: 0px 0px;
+  background: var(--Schemes-Surface-Container-Lowest, #ffffff);
+  border-radius: 4px;
+
+  /* Neutraliza el color azul del label que aplica Material MDC (reposo y enfocado) */
+  --mdc-filled-text-field-label-text-color: var(--Schemes-On-Surface-Variant, #49454f);
+  --mdc-filled-text-field-focus-label-text-color: var(--Schemes-On-Surface, #1c1b1f);
+  --mdc-outlined-text-field-label-text-color: var(--Schemes-On-Surface-Variant, #49454f);
+  --mdc-outlined-text-field-focus-label-text-color: var(--Schemes-On-Surface, #1c1b1f);
+
+  /* Línea inferior — neutraliza el color azul del indicador de Material MDC */
+  --mdc-filled-text-field-active-indicator-color: var(--Schemes-On-Surface-Variant, #49454f);
+  --mdc-filled-text-field-hover-active-indicator-color: var(--Schemes-On-Surface-Variant, #49454f);
+  --mdc-filled-text-field-focus-active-indicator-color: var(--Schemes-On-Surface, #1c1b1f);
+
+  /* Label — apunta al label flotante de mat-label (MDC) */
+  ::ng-deep label.mdc-floating-label {
+    color: var(--Schemes-On-Surface-Variant, #49454f);
+    font-size: 16px;
+    font-family: Roboto, sans-serif;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  /* Input — apunta al input nativo dentro de mat-form-field (MDC) */
+  ::ng-deep input.mat-mdc-input-element {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 16px;
+    font-family: Roboto, sans-serif;
+    color: var(--Schemes-On-Surface, #1c1b1f);
+    padding: 4px 0;
+  }
+}

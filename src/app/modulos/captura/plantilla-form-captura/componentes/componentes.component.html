@@ -166,6 +166,18 @@
                     [verFormularioCmp]="verFormularioCmp"
                   ></frm-search-button>
                 }
+                @case ('SaveButton') {
+                  <frm-save-button
+                    [saveButtonEntity]="$any(componente)"
+                    [verFormularioCmp]="verFormularioCmp"
+                  ></frm-save-button>
+                }
+                @case ('RefreshButton') {
+                  <frm-refresh-button
+                    [refreshButtonEntity]="$any(componente)"
+                    [verFormularioCmp]="verFormularioCmp"
+                  ></frm-refresh-button>
+                }
                 @case ('InPutTextArea') {
                   <frm-in-put-text-area
                     [inPutTextAreaEntity]="$any(componente)"
@@ -208,17 +220,65 @@
                     [verFormularioCmp]="verFormularioCmp"
                   ></frm-select-one-list-box-customized>
                 }
-                @case ('TablaDetalles') {
-                  <frm-table-details
-                    [tableDetailsEntity]="$any(componente)"
+                @case ('Label') {
+                  <frm-label
+                    [labelEntity]="$any(componente)"
                     [verFormularioCmp]="verFormularioCmp"
-                  ></frm-table-details>
+                  ></frm-label>
+                }
+                @case ('Separador') {
+                  <frm-separador
+                    [separadorEntity]="$any(componente)"
+                    [verFormularioCmp]="verFormularioCmp"
+                  ></frm-separador>
+                }
+                @case ('LinkToAForm') {
+                  <frm-link-to-a-form
+                    [linkToAFormEntity]="$any(componente)"
+                    [verFormularioCmp]="verFormularioCmp"
+                  ></frm-link-to-a-form>
+                }
+                @case ('LinkToDifferentForm') {
+                  <frm-link-to-different-form
+                    [linkToDifferentFormEntity]="$any(componente)"
+                    [verFormularioCmp]="verFormularioCmp"
+                  ></frm-link-to-different-form>
                 }
                 @case ('LinkFormToIfaces') {
                   <frm-link-form-to-icefaces
                     [linkFormToIcefacesEntity]="$any(componente)"
                     [verFormularioCmp]="verFormularioCmp"
                   ></frm-link-form-to-icefaces>
+                }
+                @case ('Mail') {
+                  <frm-mail
+                    [mailEntity]="$any(componente)"
+                    [verFormularioCmp]="verFormularioCmp"
+                  ></frm-mail>
+                }
+                @case ('TablaDetalles') {
+                  <frm-table-details
+                    [tableDetailsEntity]="$any(componente)"
+                    [verFormularioCmp]="verFormularioCmp"
+                  ></frm-table-details>
+                }
+                @case ('TableSQLQuery') {
+                  <frm-table-s-q-l-query
+                    [tableSQLQueryEntity]="$any(componente)"
+                    [verFormularioCmp]="verFormularioCmp"
+                  ></frm-table-s-q-l-query>
+                }
+                @case ('OutPutLink') {
+                  <frm-out-put-link
+                    [outPutLinkEntity]="$any(componente)"
+                    [verFormularioCmp]="verFormularioCmp"
+                  ></frm-out-put-link>
+                }
+                @case ('SelectOneRadioButton') {
+                 <frm-select-one-radio
+                    [selectOneRadioEntity]="$any(componente)"
+                    [verFormularioCmp]="verFormularioCmp"
+                  ></frm-select-one-radio>
                 }
                 @case ('CargaMasiva') {
                   <frm-carga-masiva
