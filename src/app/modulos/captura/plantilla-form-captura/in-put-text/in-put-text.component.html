@@ -1,14 +1,13 @@
-<div style="padding-right: 1px">
-  <mat-form-field class="base-inputtext-field" [style]="inPutTextEntity!.styleContenedor"  subscriptSizing="dynamic">  
-    <mat-label>{{ inPutTextEntity?.nombre }}</mat-label>
+
+  <mat-form-field [class]="'base-inputtext-field ' + matInputClasses" [style]="inPutTextEntity!.styleContenedor"  subscriptSizing="dynamic">  
+    <mat-label [class]="matLabelClasses">{{ inPutTextEntity?.nombre }}</mat-label>
     <input
       matInput
       [placeholder]="inPutTextEntity!.nombre"
       [required]="inPutTextEntity?.obligatorio === 'true'"
       [readonly]="inPutTextEntity?.readOnly === 'true'"
       [style]="inPutTextEntity?.style"
-      [value]="inPutTextEntity?.valor?.['']"
-      [class]="inPutTextEntity?.columnClasses?.replaceAll(',', ' ')"
+      [value]="valorInput"
+      [class]="inPutTextEntity?.claseEstilo"
     />
   </mat-form-field>
-</div>

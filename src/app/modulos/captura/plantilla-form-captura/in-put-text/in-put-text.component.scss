@@ -6,6 +6,7 @@
   padding: 0px 0px;
   background: var(--Schemes-Surface-Container-Lowest, #ffffff);
   border-radius: 4px;
+  --mat-form-field-container-horizontal-padding: 0px;
 
   /* Neutraliza el color azul del label que aplica Material MDC (reposo y enfocado) */
   --mdc-filled-text-field-label-text-color: var(--Schemes-On-Surface-Variant, #49454f);
@@ -29,9 +30,16 @@
     margin-bottom: 4px;
   }
 
+  /* Label en focus — evita el azul del tema primario en el estado activo */
+  ::ng-deep .mdc-text-field--focused .mdc-floating-label {
+    color: var(--Schemes-On-Surface, #1c1b1f) !important;
+  }
+
   /* Input — apunta al input nativo dentro de mat-form-field (MDC) */
   ::ng-deep input.mat-mdc-input-element {
-    width: 100%;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
     border: none;
     outline: none;
     background: transparent;
@@ -39,5 +47,18 @@
     font-family: Roboto, sans-serif;
     color: var(--Schemes-On-Surface, #1c1b1f);
     padding: 4px 0;
+  }
+
+  /* Alinea el ancho interno de Material con el ancho externo del mat-form-field */
+  ::ng-deep .mat-mdc-text-field-wrapper,
+  ::ng-deep .mat-mdc-form-field-flex,
+  ::ng-deep .mat-mdc-form-field-infix {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* Línea inferior en focus — sobreescribe el color primario del tema que aplica Material al ripple */
+  ::ng-deep .mdc-line-ripple::after {
+    border-bottom-color: var(--Schemes-On-Surface, #1c1b1f) !important;
   }
 }

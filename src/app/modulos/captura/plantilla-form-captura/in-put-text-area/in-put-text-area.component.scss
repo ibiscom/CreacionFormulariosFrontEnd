@@ -1,0 +1,46 @@
+.base-inputtextarea-field {
+	width: 100%;
+	--mat-form-field-container-horizontal-padding: 0px;
+
+	/* Neutraliza el color azul del label que aplica Material MDC (reposo y enfocado) */
+	--mdc-filled-text-field-label-text-color: var(--Schemes-On-Surface-Variant, #49454f);
+	--mdc-filled-text-field-focus-label-text-color: var(--Schemes-On-Surface, #1c1b1f);
+	--mdc-outlined-text-field-label-text-color: var(--Schemes-On-Surface-Variant, #49454f);
+	--mdc-outlined-text-field-focus-label-text-color: var(--Schemes-On-Surface, #1c1b1f);
+
+	/* Línea inferior — neutraliza el color azul del indicador de Material MDC */
+	--mdc-filled-text-field-active-indicator-color: var(--Schemes-On-Surface-Variant, #49454f);
+	--mdc-filled-text-field-hover-active-indicator-color: var(--Schemes-On-Surface-Variant, #49454f);
+	--mdc-filled-text-field-focus-active-indicator-color: var(--Schemes-On-Surface, #1c1b1f);
+
+	/* Label flotante */
+	::ng-deep label.mdc-floating-label {
+		color: var(--Schemes-On-Surface-Variant, #49454f);
+	}
+
+	/* Label en focus */
+	::ng-deep .mdc-text-field--focused .mdc-floating-label {
+		color: var(--Schemes-On-Surface, #1c1b1f) !important;
+	}
+
+	/* Textarea nativo */
+	::ng-deep textarea.mat-mdc-input-element {
+		width: 100% !important;
+		max-width: 100% !important;
+		box-sizing: border-box;
+		color: var(--Schemes-On-Surface, #1c1b1f);
+	}
+
+	/* Alinea el ancho interno de Material con el ancho externo del mat-form-field */
+	::ng-deep .mat-mdc-text-field-wrapper,
+	::ng-deep .mat-mdc-form-field-flex,
+	::ng-deep .mat-mdc-form-field-infix {
+		width: 100%;
+		min-width: 0;
+	}
+
+	/* Línea inferior en focus */
+	::ng-deep .mdc-line-ripple::after {
+		border-bottom-color: var(--Schemes-On-Surface, #1c1b1f) !important;
+	}
+}
