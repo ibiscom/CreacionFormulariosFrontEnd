@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { VerFormularioService } from './plantilla-form-captura.service';
+import { PlantillaFormCapturaService } from './plantilla-form-captura.service';
 import { Constants } from '../../../utilidades/constants';
 import { MessageUtil } from '../../../utilidades/message.util';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -14,13 +14,14 @@ import { VisorComponent } from './visor/visor.component';
   styleUrl: './plantilla-form-captura.component.scss',
 })
 export class PlantillaFormCapturaComponent {
+
   public mensaje: string = '';
   public formulario?: FormularioJSONEntity;
   @Input() public id?: string;
   @Input() public modo?: string;
 
   constructor(
-    private verFormularioService: VerFormularioService,
+    private plantillaFormCapturaService: PlantillaFormCapturaService,
     private route: ActivatedRoute,
     private router: Router,
   ) {}
@@ -40,7 +41,7 @@ export class PlantillaFormCapturaComponent {
       return;
     }
 
-    this.verFormularioService.getFormulario(this.id).subscribe({
+    this.plantillaFormCapturaService.getFormulario(this.id).subscribe({
       next: (response) => {
         this.formulario = this.parseFormularioResponse(this.extractPayload(response));
         console.debug('Formulario cargado:', this.formulario?.titulo);
@@ -90,5 +91,10 @@ export class PlantillaFormCapturaComponent {
 
   private isFormularioPayload(payload: unknown): payload is FormularioJSONEntity {
     return !!payload && typeof payload === 'object' && 'seccionesFormulario' in payload;
+  }
+
+  public limpiarFormulario() {
+    //TODO QUEDE AQUI - pend implementar lógica para limpiar formulario
+    throw new Error('Method not implemented.');
   }
 }

@@ -1,0 +1,11 @@
+<div [style]="clearButtonEntity!.styleContenedor">
+  <button
+    [id]="clearButtonEntity!.id"
+    matButton="elevated"
+    [disabled]="clearButtonEntity?.readOnly === 'true'"
+    (click)="click()"
+  >
+    <mat-icon>clean</mat-icon>
+    Actualizar
+  </button>
+</div>

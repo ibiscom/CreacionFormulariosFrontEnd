@@ -26,5 +26,9 @@ export class RefreshButtonComponent {
       'Click en Refresh Button. Accion:',
       this.refreshButtonEntity?.expresionLogicaFiltro,
     );
+    if(this.verFormularioCmp?.modo === 'diligenciar') {
+      console.debug('El formulario está en modo diligenciar. Se recargará el formulario para reflejar los cambios realizados.');
+      this.verFormularioCmp.consultarFormulario();
+    }
   }
 }

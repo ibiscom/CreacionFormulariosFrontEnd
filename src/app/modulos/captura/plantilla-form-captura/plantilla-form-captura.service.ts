@@ -3,11 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { FormularioJSONEntity } from '../../../entidades/forms-captura/formulario-json.entity';
 
 @Injectable({
   providedIn: 'root',
 })
-export class VerFormularioService {
+export class PlantillaFormCapturaService {
   constructor(
     private http: HttpClient,
     private cookieService: CookieService,
@@ -20,5 +21,18 @@ export class VerFormularioService {
     return this.http.get<unknown>(
       `${environment.creacionFormulariosApiUrl}/form/getForm?formName=${formName}`,
     );
+  }
+
+  public guardarFormulario(formData: FormularioJSONEntity): Observable<unknown> {
+    const token = this.cookieService.get('token');
+    return this.http.post<unknown>(
+      `${environment.creacionFormulariosApiUrl}/form/saveForm`,
+      formData,{});
+      /*{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );*/
   }
 }
