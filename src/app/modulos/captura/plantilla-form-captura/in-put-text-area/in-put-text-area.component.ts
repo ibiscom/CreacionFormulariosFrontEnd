@@ -4,6 +4,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { InPutTextAreaEntity } from '../../../../entidades/forms-captura/in-put-text-area.entity';
+import { getFieldPayloadValue, setFieldPayloadValue } from '../../../../utilidades/field-value.util';
 
 @Component({
   selector: 'frm-in-put-text-area',
@@ -22,21 +23,35 @@ export class InPutTextAreaComponent {
     this.colocarValorInicial();
   }
 
+  public get valorInput(): string {
+    return String(getFieldPayloadValue(this.inPutTextAreaEntity?.valor) ?? '');
+  }
+
+  public updateValue(value: string): void {
+    if (!this.inPutTextAreaEntity) {
+      return;
+    }
+
+    const nuevoValor = setFieldPayloadValue(this.inPutTextAreaEntity.valor, value);
+    if (nuevoValor !== this.inPutTextAreaEntity.valor) {
+      (this.inPutTextAreaEntity as any).valor = nuevoValor;
+    }
+  }
+
   private colocarValorInicial(): void {
-    //Valor por defecto
-    if (
-      this.inPutTextAreaEntity &&
-      this.inPutTextAreaEntity.valor &&
-      this.inPutTextAreaEntity.valor[''] === undefined
-    ) {
-      if (
-        this.inPutTextAreaEntity.valorDefecto &&
-        this.inPutTextAreaEntity.valorDefecto[''] !== undefined
-      ) {
-        this.inPutTextAreaEntity.valor[''] = this.inPutTextAreaEntity.valorDefecto[''];
-      } else {
-        this.inPutTextAreaEntity.valor[''] = '';
-      }
+    if (!this.inPutTextAreaEntity) {
+      return;
+    }
+
+    const valorActual = getFieldPayloadValue(this.inPutTextAreaEntity.valor);
+    if (valorActual !== undefined) {
+      return;
+    }
+
+    const valorInicial = getFieldPayloadValue(this.inPutTextAreaEntity.valorDefecto) ?? '';
+    const nuevoValor = setFieldPayloadValue(this.inPutTextAreaEntity.valor, valorInicial);
+    if (nuevoValor !== this.inPutTextAreaEntity.valor) {
+      (this.inPutTextAreaEntity as any).valor = nuevoValor;
     }
   }
 }

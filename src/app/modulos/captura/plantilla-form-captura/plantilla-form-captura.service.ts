@@ -15,9 +15,6 @@ export class PlantillaFormCapturaService {
   ) {}
 
   public getFormulario(formName: string): Observable<unknown> {
-    /*return this.http.get<FrmResponseEntity<string>>(
-      `${environment.creacionFormulariosApiUrl}/form/getFormStructure?formName=${formName}`,
-    );*/
     return this.http.get<unknown>(
       `${environment.creacionFormulariosApiUrl}/form/getForm?formName=${formName}`,
     );
@@ -28,11 +25,5 @@ export class PlantillaFormCapturaService {
     return this.http.post<unknown>(
       `${environment.creacionFormulariosApiUrl}/form/saveForm`,
       formData,{});
-      /*{
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );*/
   }
 }

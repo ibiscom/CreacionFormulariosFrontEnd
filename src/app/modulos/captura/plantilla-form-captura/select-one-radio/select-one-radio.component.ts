@@ -4,6 +4,7 @@ import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.compone
 import { SelectOneRadioEntity } from '../../../../entidades/forms-captura/select-one-radio.entity';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { getFieldPayloadValue, setFieldPayloadValue } from '../../../../utilidades/field-value.util';
 
 @Component({
   selector: 'frm-select-one-radio',
@@ -28,7 +29,22 @@ export class SelectOneRadioComponent implements OnChanges {
   }
 
   public selected(option?: { label: string; value: string }): boolean {
-    return this.selectOneRadioEntity?.valor?.[''] === option?.value;
+    return this.selectedValue === option?.value;
+  }
+
+  public get selectedValue(): string {
+    return String(getFieldPayloadValue(this.selectOneRadioEntity?.valor) ?? '');
+  }
+
+  public updateValue(value: string): void {
+    if (!this.selectOneRadioEntity) {
+      return;
+    }
+
+    const nuevoValor = setFieldPayloadValue(this.selectOneRadioEntity.valor, value);
+    if (nuevoValor !== this.selectOneRadioEntity.valor) {
+      (this.selectOneRadioEntity as any).valor = nuevoValor;
+    }
   }
 
   private resolveOptions(): Array<{ label: string; value: string }> {

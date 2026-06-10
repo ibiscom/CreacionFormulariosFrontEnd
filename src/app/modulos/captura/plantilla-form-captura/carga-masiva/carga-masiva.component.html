@@ -1,8 +1,11 @@
 <div [style]="cargaMasivaEntity!.styleContenedor">
-  <mat-label>{{ cargaMasivaEntity?.nombre }}</mat-label>
-  <br />
-  <div>
-    <input #fileInput type="file" class="file-upload" (change)="cargarArchivos($event)" />
-    <input type="submit" value="Cargar" (click)="subirArchivos()" />
-  </div>
+	<div class="file-upload-box">
+		<input type="file" class="inputFileField" (change)="onFileSelected(cargaMasivaEntity!, $event)" />
+		@if (uploadedFiles[componentKey(cargaMasivaEntity!)]) {
+		<span class="smallLabelTexto">{{ uploadedFiles[componentKey(cargaMasivaEntity!)] }}</span>
+		}
+	</div>
 </div>
+
+
+

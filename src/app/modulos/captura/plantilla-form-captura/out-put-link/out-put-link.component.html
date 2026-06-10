@@ -1,9 +1,7 @@
 <div [style]="outPutLinkEntity?.styleContenedor">
   <a
-    matButton
-    [href]="outPutLinkEntity!.valor['']"
+    [href]="hrefValue"
     [class]="outPutLinkEntity?.columnClasses?.replaceAll(',', ' ')"
     target="_blank"
-    >Output Link</a
-  >
+    >{{outPutLinkEntity?.nombre}}</a>
 </div>

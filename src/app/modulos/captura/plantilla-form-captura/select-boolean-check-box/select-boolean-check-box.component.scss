@@ -1,0 +1,46 @@
+.base-select-boolean-check-box {
+	--frm-purple-text: #5b2a8a;
+	--frm-purple-border: #c59aee;
+	--frm-purple-soft: rgba(191, 126, 255, 0.207);
+	--frm-purple-strong: #7a34b3;
+	--frm-purple-check: #ffffff;
+
+	::ng-deep .mat-mdc-checkbox {
+		--mdc-checkbox-selected-icon-color: var(--frm-purple-strong);
+		--mdc-checkbox-selected-checkmark-color: var(--frm-purple-check);
+		--mdc-checkbox-selected-focus-icon-color: var(--frm-purple-strong);
+		--mdc-checkbox-selected-hover-icon-color: var(--frm-purple-strong);
+		--mdc-checkbox-selected-pressed-icon-color: var(--frm-purple-strong);
+		--mdc-checkbox-unselected-icon-color: var(--frm-purple-border);
+		--mdc-checkbox-unselected-hover-icon-color: var(--frm-purple-border);
+		--mdc-checkbox-unselected-focus-icon-color: var(--frm-purple-border);
+		--mdc-checkbox-unselected-pressed-icon-color: var(--frm-purple-border);
+		--mdc-checkbox-state-layer-size: 36px;
+		color: var(--frm-purple-text);
+	}
+
+	::ng-deep .mat-mdc-checkbox .mdc-label {
+		color: var(--frm-purple-text);
+	}
+
+	::ng-deep .mat-mdc-checkbox.mat-mdc-checkbox-checked .mdc-checkbox__background,
+	::ng-deep .mat-mdc-checkbox.mat-mdc-checkbox-indeterminate .mdc-checkbox__background {
+		background-color: var(--frm-purple-strong) !important;
+		border-color: var(--frm-purple-strong) !important;
+	}
+
+	::ng-deep .mat-mdc-checkbox .mdc-checkbox__background {
+		box-shadow: none !important;
+		border-color: var(--frm-purple-border) !important;
+	}
+
+	::ng-deep .mat-mdc-checkbox.mat-mdc-checkbox-checked .mdc-checkbox__checkmark,
+	::ng-deep .mat-mdc-checkbox.mat-mdc-checkbox-indeterminate .mdc-checkbox__checkmark {
+		color: var(--frm-purple-check) !important;
+	}
+
+	::ng-deep .mat-mdc-checkbox.mat-mdc-checkbox-checked .mdc-checkbox__checkmark-path,
+	::ng-deep .mat-mdc-checkbox.mat-mdc-checkbox-indeterminate .mdc-checkbox__checkmark-path {
+		stroke: var(--frm-purple-check) !important;
+	}
+}

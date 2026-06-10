@@ -1,9 +1,12 @@
 <div [style]="linkToAFormEntity?.styleContenedor">
   <a
-    matButton
-    [href]="linkToAFormEntity!.valor['']"
+    [href]="hrefValue"
     [class]="linkToAFormEntity?.columnClasses?.replaceAll(',', ' ')"
     target="_blank"
-    >Link to a form</a
-  >
+    >{{linkToAFormEntity?.nombre}}</a>
 </div>
+
+
+														<!--<button type="button" class="formButton" (click)="ejecutarAccionComponente(componente)">
+															{{ componente.nombre }}
+													  </button>-->

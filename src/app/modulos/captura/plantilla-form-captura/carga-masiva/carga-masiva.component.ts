@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { CargaMasivaEntity } from '../../../../entidades/forms-captura/carga-masiva.entity';
+import { ComponenteBaseEntity } from '../../../../entidades/forms-captura/componente-base.entity';
 
 @Component({
   selector: 'frm-carga-masiva',
@@ -16,6 +17,7 @@ export class CargaMasivaComponent {
   @Input() public cargaMasivaEntity?: CargaMasivaEntity;
   @Input() public verFormularioCmp?: PlantillaFormCapturaComponent;
   public archivos?: File[] = [];
+  public uploadedFiles: Record<string, string> = {};
 
   constructor() {}
 
@@ -23,19 +25,17 @@ export class CargaMasivaComponent {
     console.debug('Carga Masiva Entity:', this.cargaMasivaEntity);
   }
 
-  public cargarArchivos(event: Event): void {
+  public onFileSelected(componente: CargaMasivaEntity, event: Event): void {
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.archivos = Array.from(input.files);
-      console.debug('Se seleccionaron archivos');
+    const file = input.files?.[0];
+    this.uploadedFiles[this.componentKey(componente)] = file?.name ?? '';
+
+    if (file) {
+      console.debug(`Archivo seleccionado para ${componente.nombre}: ${file.name}.`);
     }
   }
 
-  public subirArchivos(): void {
-    console.debug('Archivos para subir...');
-    console.debug(
-      'Archivos seleccionados:',
-      this.archivos?.map((archivo) => archivo.name).join(', '),
-    );
+  public componentKey(componente: CargaMasivaEntity): string {
+      return componente.id ?? componente.nombre;
   }
 }

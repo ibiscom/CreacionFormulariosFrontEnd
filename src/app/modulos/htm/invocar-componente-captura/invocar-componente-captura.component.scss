@@ -1,0 +1,169 @@
+.legacy-form-wrapper {
+	display: block;
+}
+
+.legacy-form {
+	display: block;
+}
+
+.legacy-validation-sample {
+	margin-bottom: 0.75rem;
+}
+
+.legacy-validation-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 0.75rem;
+	margin-bottom: 1rem;
+}
+
+.legacy-field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+}
+
+.legacy-field label {
+	font-size: 0.9rem;
+	font-weight: 600;
+	color: #23384d;
+}
+
+.legacy-field input {
+	border: 1px solid #b8c7d5;
+	border-radius: 4px;
+	padding: 0.45rem 0.5rem;
+	font-size: 0.95rem;
+}
+
+.legacy-field input:focus {
+	outline: 2px solid #7fa8ce;
+	outline-offset: 1px;
+}
+
+.legacy-form-actions {
+	margin-top: 0.75rem;
+}
+
+.legacy-form-actions .menuStyle {
+	height: auto;
+	line-height: 1.2;
+	padding: 0.4rem 0.8rem;
+	max-width: 220px;
+	background-color: #f6f8fb;
+	cursor: pointer;
+}
+
+.legacy-error {
+	margin: 0;
+	font-size: 0.82rem;
+	color: #b10e1e;
+}
+
+.menuStyle {
+	border: 1px solid #dbdbdb;
+	padding: 0;
+	margin: 0;
+	display: block;
+	vertical-align: top;
+	line-height: 25px;
+	color: #000;
+	height: 25px;
+	width: 100%;
+}
+
+.menuStyle a {
+	text-decoration: none;
+	text-align: left;
+	font-family: serif;
+	font-weight: bold;
+	font-size: 1em;
+}
+
+.menuStyle img {
+	width: 20px;
+	height: 20px;
+}
+
+.menuStyle:hover {
+	text-decoration: none;
+	font-weight: bold;
+	display: block;
+	font-size: 1em;
+	color: #000;
+}
+
+.alinearTopWidth30 {
+	vertical-align: top;
+	width: 30%;
+}
+
+.alinearTopWidth70 {
+	vertical-align: top;
+	width: 70%;
+}
+
+.columnaAlineacionVertical {
+	vertical-align: top;
+}
+
+.columnaAlineacionVertical1 {
+	vertical-align: top;
+	width: 30%;
+}
+
+.columnaAlineacionVertical2 {
+	vertical-align: top;
+	width: 70%;
+}
+
+.columnaAlineacionCentro {
+	vertical-align: middle;
+}
+
+.width30AV {
+	width: 30%;
+	vertical-align: top;
+}
+
+.width60AV {
+	width: 60%;
+	vertical-align: top;
+}
+
+.alinearCenterWidth30 {
+	vertical-align: middle;
+	width: 30%;
+}
+
+.alinearCenterWidth20 {
+	vertical-align: middle;
+	width: 20%;
+}
+
+.panelCollapsible {
+	background-color: #eaf2fd;
+	background-image: url('/xmlhttp/css/xp/css-images/table_col_header.gif');
+	background-position: bottom;
+	background-repeat: repeat-x;
+	font-weight: bold;
+	text-align: left;
+	color: #000;
+	border: 1px solid #eaf2fd;
+	border-bottom: none;
+	padding-left: 2px;
+	padding-right: 5px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	cursor: pointer;
+}
+
+.legacy-validation-hint {
+	margin-top: 1rem;
+	font-size: 0.9rem;
+	color: #425466;
+}
+
+.legacy-spacer {
+	height: 5rem;
+}

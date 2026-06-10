@@ -1,4 +1,9 @@
 .base-select-input-date-field {
+	--frm-purple-text: #5b2a8a;
+	--frm-purple-border: #c59aee;
+	--frm-purple-soft: rgba(191, 126, 255, 0.207);
+	--frm-purple-soft-strong: rgba(191, 126, 255, 0.32);
+
 	width: 100%;
 	--mat-form-field-container-horizontal-padding: 0px;
 
@@ -55,4 +60,43 @@
 	::ng-deep .mdc-line-ripple::after {
 		border-bottom-color: var(--Schemes-On-Surface, #1c1b1f) !important;
 	}
+
+	/* Icono del calendario en tonos morados FRM */
+	::ng-deep .mat-datepicker-toggle .mat-mdc-icon-button,
+	::ng-deep .mat-datepicker-toggle-default-icon {
+		color: var(--frm-purple-text);
+	}
+
+	::ng-deep .mat-datepicker-toggle .mat-mdc-icon-button:hover {
+		background-color: var(--frm-purple-soft);
+	}
+}
+
+/*
+	El datepicker se renderiza en overlay; por eso estos overrides deben ir en alcance global
+	vía ::ng-deep para reemplazar el esquema azul por el morado FRM.
+*/
+::ng-deep .mat-datepicker-content {
+	--mat-datepicker-calendar-date-selected-state-background-color: #5b2a8a;
+	--mat-datepicker-calendar-date-selected-state-text-color: #ffffff;
+	--mat-datepicker-calendar-date-today-outline-color: #c59aee;
+	--mat-datepicker-calendar-date-focus-state-background-color: rgba(191, 126, 255, 0.32);
+	--mat-datepicker-calendar-date-hover-state-background-color: rgba(191, 126, 255, 0.207);
+	--mat-datepicker-calendar-navigation-button-icon-color: #5b2a8a;
+	--mat-datepicker-calendar-header-text-color: #5b2a8a;
+}
+
+::ng-deep .mat-datepicker-content .mat-calendar-body-selected {
+	background-color: #5b2a8a !important;
+	color: #ffffff !important;
+}
+
+::ng-deep .mat-datepicker-content .mat-calendar-body-today:not(.mat-calendar-body-selected) {
+	border-color: #c59aee !important;
+	color: #5b2a8a;
+}
+
+::ng-deep .mat-datepicker-content .mat-calendar-body-cell-content:hover,
+::ng-deep .mat-datepicker-content .mat-calendar-body-active .mat-calendar-body-cell-content {
+	background-color: rgba(191, 126, 255, 0.207) !important;
 }

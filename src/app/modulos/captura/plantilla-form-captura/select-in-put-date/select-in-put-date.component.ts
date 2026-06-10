@@ -7,6 +7,7 @@ import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.compone
 import { SelectInPutDateEntity } from '../../../../entidades/forms-captura/select-in-put-date.entity';
 import { FormsModule } from '@angular/forms';
 import { CustomDateAdapter } from '../../../../utilidades/custom-date-adapter';
+import { getFieldPayloadValue, setFieldPayloadValue } from '../../../../utilidades/field-value.util';
 
 // Configuración del formato de fecha
 export const MY_DATE_FORMATS = {
@@ -39,10 +40,11 @@ export class SelectInPutDateComponent {
   public constructor() {}
 
   public ngOnInit(): void {
-    const dateString =
-      this.selectInPutDateEntity?.valor?.[''] ||
-      this.selectInPutDateEntity?.valorDefecto?.[''] ||
+    const rawDateValue =
+      getFieldPayloadValue(this.selectInPutDateEntity?.valor) ??
+      getFieldPayloadValue(this.selectInPutDateEntity?.valorDefecto) ??
       null;
+    const dateString = typeof rawDateValue === 'string' ? rawDateValue : null;
     this.dateValue = dateString ? this.parseDate(dateString) : null;
     console.debug('Initial date string value:', dateString);
     console.debug('Initial date value:', this.dateValue);
@@ -51,11 +53,16 @@ export class SelectInPutDateComponent {
 
   public updateDateValue(event: any) {
     if (this.selectInPutDateEntity && this.selectInPutDateEntity.valor) {
-      this.selectInPutDateEntity.valor[''] = this.dateValue
-        ? this.formatToISO8601(this.dateValue)
-        : '';
+      const nuevoValor = setFieldPayloadValue(
+        this.selectInPutDateEntity.valor,
+        this.dateValue ? this.formatToISO8601(this.dateValue) : '',
+      );
+
+      if (nuevoValor !== this.selectInPutDateEntity.valor) {
+        (this.selectInPutDateEntity as any).valor = nuevoValor;
+      }
     }
-    console.debug('Updated date value:', this.selectInPutDateEntity?.valor?.['']);
+    console.debug('Updated date value:', getFieldPayloadValue(this.selectInPutDateEntity?.valor));
   }
 
   private parseDate(dateString: string): Date | null {

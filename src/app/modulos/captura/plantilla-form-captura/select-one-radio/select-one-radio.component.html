@@ -1,7 +1,6 @@
 @if (selectOneRadioEntity!.visible === 'true') {
-  <div [style]="selectOneRadioEntity!.styleContenedor">
-    <mat-label>{{ selectOneRadioEntity!.nombre }}</mat-label>
-    <mat-radio-group aria-label="Seleccione una opción" [value]="selectOneRadioEntity!.valor['']">
+	<div class="base-select-one-radio-field" [style]="selectOneRadioEntity!.styleContenedor">
+    <mat-radio-group aria-label="Seleccione una opción" [value]="selectedValue" (change)="updateValue($event.value)">
       @for (opcion of radioOptions; track opcion.value) {
         @if (selected(opcion)) {
           <mat-radio-button [value]="opcion.value" checked>{{ opcion.label }}</mat-radio-button>
@@ -12,3 +11,19 @@
     </mat-radio-group>
   </div>
 }
+
+
+														<!--<div class="radio-group">
+															@for (item of getSelectItems(componente); track item.label + item.value) {
+																<label>
+																	<input
+																		type="radio"
+																		[name]="componentKey(componente)"
+																		[value]="item.value"
+																		[checked]="getComponentValueAsString(componente) === item.value"
+																		[disabled]="!diligenciable || asBool(componente.readOnly)"
+																		(change)="setComponentValue(componente, item.value)" />
+																	<span>{{ item.label }}</span>
+																</label>
+															}
+														</div>-->

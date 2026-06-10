@@ -19,15 +19,33 @@
       }
       <span class="cell">Acciones</span>
     </div>
-    @for (row of tableDetailsEntity?.columnas; track row) {
+    @for (row of tableDetailsEntity?.columnas; track $index; let rowIndex = $index) {
       <div class="row">
-        @for (value of row?.valores; track value) {
-          <span class="cell">{{ value }}</span>
+        @for (columnIndex of getColumnIndexes(row); track columnIndex) {
+          <span class="cell">
+            @if (editingRowIndex === rowIndex) {
+              <input
+                matInput
+                type="text"
+                class="cellInput"
+                [value]="getCellValue(row, columnIndex)"
+                (input)="updateCellValue(row, columnIndex, $any($event.target).value)"
+              />
+            } @else {
+              {{ getCellValue(row, columnIndex) }}
+            }
+          </span>
         }
         <span class="cell">
-          <button class="actionButton" (click)="editRow(row)">
-            <span class="material-icons">edit</span>
-          </button>
+          @if (editingRowIndex === rowIndex) {
+            <button class="actionButton" (click)="saveRow()">
+              <span class="material-icons">save</span>
+            </button>
+          } @else {
+            <button class="actionButton" (click)="editRow(row)">
+              <span class="material-icons">edit</span>
+            </button>
+          }
           <button class="actionButton" (click)="deleteRow(row)">
             <span class="material-icons">delete</span>
           </button>

@@ -35,3 +35,22 @@
 .row:nth-child(odd):not(.header) {
   background: #fbfbfb;
 }
+
+.actionButtons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rowsInput {
+  width: 64px;
+}
+
+.actionButton {
+  cursor: pointer;
+}
+
+.cellInput {
+  width: 100%;
+  box-sizing: border-box;
+}

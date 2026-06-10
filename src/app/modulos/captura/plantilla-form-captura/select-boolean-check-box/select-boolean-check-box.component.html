@@ -1,12 +1,22 @@
-<div [style]="selectBooleanCheckBoxEntity!.styleContenedor">
+<div class="base-select-boolean-check-box" [style]="selectBooleanCheckBoxEntity!.styleContenedor">
   <mat-label></mat-label>
   <mat-checkbox
     [style]="selectBooleanCheckBoxEntity?.style"
     [class]="selectBooleanCheckBoxEntity?.columnClasses?.replaceAll(',', ' ')"
-    [checked]="selectBooleanCheckBoxEntity?.valor?.[''] === 'true'"
+    [checked]="checked"
     [indeterminate]="partiallyComplete()"
     (change)="update($event.checked)"
   >
     {{ selectBooleanCheckBoxEntity?.nombre }}
   </mat-checkbox>
 </div>
+
+
+														<!--<label class="checkbox-row">
+															<input
+																type="checkbox"
+																[disabled]="!diligenciable || asBool(componente.readOnly)"
+																[ngModel]="$any(getComponentValue(componente))"
+																(ngModelChange)="setComponentValue(componente, $event)" />
+															<span>{{ componente.nombre }}</span>
+														</label>-->		

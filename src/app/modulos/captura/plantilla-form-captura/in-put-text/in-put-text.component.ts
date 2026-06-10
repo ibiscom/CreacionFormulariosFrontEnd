@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { MatFormField, MatInputModule } from '@angular/material/input';
 import { InPutTextEntity } from '../../../../entidades/forms-captura/in-put-text.entity';
+import { getFieldPayloadValue, setFieldPayloadValue } from '../../../../utilidades/field-value.util';
 @Component({
   selector: 'frm-in-put-text',
   imports: [MatFormField, MatInputModule],
@@ -67,19 +68,7 @@ export class InPutTextComponent {
   }
 
   private obtenerValorNormalizado(valor: unknown): unknown {
-    if (valor === null || valor === undefined) {
-      return undefined;
-    }
-
-    if (Array.isArray(valor)) {
-      return valor[0];
-    }
-
-    if (typeof valor === 'object') {
-      return (valor as Record<string, unknown>)[''];
-    }
-
-    return valor;
+    return getFieldPayloadValue(valor);
   }
 
   private asignarValorNormalizado(valor: unknown): void {
@@ -89,17 +78,15 @@ export class InPutTextComponent {
 
     const valorActual = this.inPutTextEntity.valor as unknown;
 
-    if (Array.isArray(valorActual)) {
-      valorActual[0] = valor;
-      return;
-    }
+    const nuevoValor = setFieldPayloadValue(valorActual, valor);
 
-    if (valorActual !== null && typeof valorActual === 'object') {
-      (valorActual as Record<string, unknown>)[''] = valor;
+    if (nuevoValor === valorActual) {
       return;
     }
 
     // Compatibilidad con payloads donde valor llega como tipo básico.
-    (this.inPutTextEntity as any).valor = valor;
+    (this.inPutTextEntity as any).valor = nuevoValor;
   }
+
+
 }

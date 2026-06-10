@@ -1,0 +1,68 @@
+.base-select-one-radio-field {
+	--frm-purple-text: #5b2a8a;
+	--frm-purple-border: #c59aee;
+	--frm-purple-soft: rgba(191, 126, 255, 0.207);
+	--frm-purple-strong: #7a34b3;
+
+	width: 100%;
+
+	::ng-deep mat-label {
+		display: block;
+		margin-bottom: 0.35rem;
+		color: var(--frm-purple-text);
+		font-weight: 600;
+	}
+
+	::ng-deep .mat-mdc-radio-group {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		gap: 0.85rem;
+		align-items: center;
+	}
+
+	::ng-deep .mat-mdc-radio-button {
+		--mdc-radio-disabled-selected-icon-color: var(--frm-purple-border);
+		--mdc-radio-disabled-unselected-icon-color: var(--frm-purple-border);
+		--mdc-radio-selected-focus-icon-color: var(--frm-purple-strong);
+		--mdc-radio-selected-hover-icon-color: var(--frm-purple-strong);
+		--mdc-radio-selected-icon-color: var(--frm-purple-strong);
+		--mdc-radio-selected-pressed-icon-color: var(--frm-purple-strong);
+		--mdc-radio-unselected-hover-icon-color: var(--frm-purple-border);
+		--mdc-radio-unselected-icon-color: var(--frm-purple-border);
+		--mdc-radio-unselected-pressed-icon-color: var(--frm-purple-border);
+		--mdc-radio-state-layer-size: 36px;
+		color: var(--frm-purple-text);
+	}
+
+	::ng-deep .mat-mdc-radio-button .mdc-label {
+		color: var(--frm-purple-text);
+	}
+
+	::ng-deep .mat-mdc-radio-button .mdc-radio__outer-circle {
+		border-color: var(--frm-purple-border) !important;
+	}
+
+	::ng-deep .mat-mdc-radio-button .mdc-radio__inner-circle {
+		border-color: var(--frm-purple-strong) !important;
+		background-color: var(--frm-purple-strong) !important;
+	}
+
+	::ng-deep .mat-mdc-radio-button.mat-mdc-radio-checked .mdc-radio__outer-circle {
+		border-color: var(--frm-purple-strong) !important;
+	}
+
+	::ng-deep .mat-mdc-radio-button.mat-mdc-radio-checked .mdc-radio__inner-circle {
+		border-color: var(--frm-purple-strong) !important;
+		background-color: var(--frm-purple-strong) !important;
+	}
+
+	::ng-deep .mat-mdc-radio-button .mdc-radio__background {
+		background: transparent !important;
+	}
+
+	::ng-deep .mat-mdc-radio-button .mat-mdc-radio-ripple,
+	::ng-deep .mat-mdc-radio-button .mdc-radio__ripple {
+		color: var(--frm-purple-soft);
+	}
+}

@@ -6,7 +6,13 @@
     [required]="inPutTextAreaEntity?.obligatorio === 'true'"
     [readonly]="inPutTextAreaEntity?.readOnly === 'true'"
     [style]="inPutTextAreaEntity?.style"
-    [value]="inPutTextAreaEntity?.valor?.['']"
+    [value]="valorInput"
+    (input)="updateValue($any($event.target).value)"
     [class]="inPutTextAreaEntity?.columnClasses?.replaceAll(',', ' ')"
   ></textarea>
 </mat-form-field>
+														<!--<textarea
+															class="textAreaField"
+															[disabled]="!diligenciable || asBool(componente.readOnly)"
+															[ngModel]="$any(getComponentValue(componente))"
+															(ngModelChange)="setComponentValue(componente, $event)"></textarea>-->

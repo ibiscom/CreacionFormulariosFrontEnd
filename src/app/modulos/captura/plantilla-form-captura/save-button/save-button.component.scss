@@ -1,0 +1,20 @@
+.base-save-button {
+  color: var(--Schemes-On-Surface-Variant, #49454f);
+  font-family: Roboto, sans-serif;
+
+  mat-icon {
+    color: var(--Schemes-On-Surface-Variant, #49454f);
+  }
+
+  &:hover:not(:disabled) {
+    color: var(--Schemes-On-Surface, #1c1b1f);
+
+    mat-icon {
+      color: var(--Schemes-On-Surface, #1c1b1f);
+    }
+  }
+
+  &:disabled {
+    opacity: 0.38;
+  }
+}

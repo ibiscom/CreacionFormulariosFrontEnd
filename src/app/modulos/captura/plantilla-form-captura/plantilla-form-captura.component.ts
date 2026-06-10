@@ -21,9 +21,9 @@ export class PlantillaFormCapturaComponent {
   @Input() public modo?: string;
 
   constructor(
-    private plantillaFormCapturaService: PlantillaFormCapturaService,
-    private route: ActivatedRoute,
-    private router: Router,
+    protected plantillaFormCapturaService: PlantillaFormCapturaService,
+    protected route: ActivatedRoute,
+    protected router: Router,
   ) {}
 
   public ngOnInit(): void {
@@ -94,7 +94,12 @@ export class PlantillaFormCapturaComponent {
   }
 
   public limpiarFormulario() {
-    //TODO QUEDE AQUI - pend implementar lógica para limpiar formulario
-    throw new Error('Method not implemented.');
+   /* if (this.formulario)  {
+  
+     for (seccionEntry of  this.formulario?.seccionesFormulario | keyvalue: keepOrder; track seccionEntry.key) {
+        const seccion = seccionEntry.value;
+        for (campoEntry of seccion.campos | keyvalue: keepOrder; track campoEntry.key) {
+          const campo = campoEntry.value;
+  }}}*/
   }
 }

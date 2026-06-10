@@ -15,6 +15,7 @@ export class TableDetailsComponent implements OnChanges {
 
   public rowsPerPage: number = 5;
   public headerColumns: string[] = [];
+  public editingRowIndex: number | null = null;
 
   public constructor() {}
 
@@ -28,8 +29,9 @@ export class TableDetailsComponent implements OnChanges {
   }
 
   public getGridColumns(): string {
-    if (this.headerColumns.length > 0) {
-      const colCount = this.headerColumns.length + 1;
+    const dataColumnsCount = this.resolveColumnCount();
+    if (dataColumnsCount > 0) {
+      const colCount = dataColumnsCount + 1;
       return Array(colCount).fill('1fr').join(' ');
     }
 
@@ -91,18 +93,105 @@ export class TableDetailsComponent implements OnChanges {
   }
 
   public addRow(): void {
-    throw new Error('Method not implemented.');
+    if (!this.tableDetailsEntity) {
+      return;
+    }
+
+    if (!Array.isArray(this.tableDetailsEntity.columnas)) {
+      this.tableDetailsEntity.columnas = [];
+    }
+
+    const columnCount = this.resolveColumnCount();
+    const newRow = {
+      valores: Array(columnCount).fill(''),
+    };
+
+    this.tableDetailsEntity.columnas.push(newRow);
+    this.editingRowIndex = this.tableDetailsEntity.columnas.length - 1;
   }
 
   public search(): void {
-    throw new Error('Method not implemented.');
+    // TODO: implementar búsqueda cuando se conecte con backend o filtros locales.
   }
 
-  public deleteRow(_t23: { valores: string[] }): void {
-    throw new Error('Method not implemented.');
+  public deleteRow(row: { valores: string[] }): void {
+    const rows = this.tableDetailsEntity?.columnas;
+
+    if (!rows || !Array.isArray(rows)) {
+      return;
+    }
+
+    const rowIndex = rows.indexOf(row);
+    if (rowIndex < 0) {
+      return;
+    }
+
+    rows.splice(rowIndex, 1);
+
+    if (this.editingRowIndex === rowIndex) {
+      this.editingRowIndex = null;
+      return;
+    }
+
+    if (this.editingRowIndex !== null && this.editingRowIndex > rowIndex) {
+      this.editingRowIndex -= 1;
+    }
   }
 
-  public editRow(_t23: { valores: string[] }): void {
-    throw new Error('Method not implemented.');
+  public editRow(row: { valores: string[] }): void {
+    const rows = this.tableDetailsEntity?.columnas;
+
+    if (!rows || !Array.isArray(rows)) {
+      return;
+    }
+
+    const rowIndex = rows.indexOf(row);
+    this.editingRowIndex = rowIndex >= 0 ? rowIndex : null;
+  }
+
+  public saveRow(): void {
+    this.editingRowIndex = null;
+  }
+
+  public updateCellValue(row: { valores: string[] }, columnIndex: number, value: string): void {
+    if (!Array.isArray(row.valores)) {
+      row.valores = [];
+    }
+
+    while (row.valores.length <= columnIndex) {
+      row.valores.push('');
+    }
+
+    row.valores[columnIndex] = value;
+  }
+
+  public getDisplayCellCount(row: { valores: string[] }): number {
+    const rowValuesCount = Array.isArray(row.valores) ? row.valores.length : 0;
+    return Math.max(this.resolveColumnCount(), rowValuesCount);
+  }
+
+  public getColumnIndexes(row: { valores: string[] }): number[] {
+    return Array.from({ length: this.getDisplayCellCount(row) }, (_, index) => index);
+  }
+
+  public getCellValue(row: { valores: string[] }, columnIndex: number): string {
+    if (!Array.isArray(row.valores)) {
+      return '';
+    }
+
+    return row.valores[columnIndex] ?? '';
+  }
+
+  private resolveColumnCount(): number {
+    if (this.headerColumns.length > 0) {
+      return this.headerColumns.length;
+    }
+
+    const firstRow = this.tableDetailsEntity?.columnas?.[0];
+    if (firstRow?.valores?.length) {
+      return firstRow.valores.length;
+    }
+
+    return 1;
   }
 }

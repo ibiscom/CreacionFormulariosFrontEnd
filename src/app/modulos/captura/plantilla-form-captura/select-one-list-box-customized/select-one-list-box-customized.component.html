@@ -1,6 +1,6 @@
-<mat-form-field [style]="selectOneListBoxCustomizedEntity!.styleContenedor">
+<mat-form-field class="base-select-one-list-box-customized-field" [style]="selectOneListBoxCustomizedEntity!.styleContenedor">
   <mat-label>{{ selectOneListBoxCustomizedEntity!.nombre }}</mat-label>
-  <mat-select>
+  <mat-select [panelClass]="'frm-purple-select-panel'">
     @for (opcion of selectOneListBoxCustomizedEntity!.opciones; track opcion) {
       @if (selected(opcion)) {
         <mat-option [value]="opcion" selected>{{ opcion }}</mat-option>

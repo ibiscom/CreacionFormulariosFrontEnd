@@ -3,6 +3,7 @@ import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.compone
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { LinkFormToIcefacesEntity } from '../../../../entidades/forms-captura/link-form-to-icefaces.entity';
+import { getFieldPayloadValue } from '../../../../utilidades/field-value.util';
 
 @Component({
   selector: 'frm-link-form-to-icefaces',
@@ -18,5 +19,9 @@ export class LinkFormToIcefacesComponent {
 
   ngOnInit(): void {
     console.debug('Link Form to Icefaces:', this.linkFormToIcefacesEntity);
+  }
+
+  public get hrefValue(): string {
+    return String(getFieldPayloadValue(this.linkFormToIcefacesEntity?.valor) ?? '');
   }
 }

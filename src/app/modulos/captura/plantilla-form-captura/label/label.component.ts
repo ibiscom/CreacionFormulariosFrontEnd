@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { LabelEntity } from '../../../../entidades/forms-captura/label-entity';
+import { getFieldPayloadValue } from '../../../../utilidades/field-value.util';
 
 @Component({
   selector: 'frm-label',
@@ -16,5 +17,9 @@ export class LabelComponent {
 
   ngOnInit(): void {
     console.debug('Label:', this.labelEntity);
+  }
+
+  public get displayValue(): string {
+    return String(getFieldPayloadValue(this.labelEntity?.valor) ?? this.labelEntity?.nombre ?? '');
   }
 }

@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { InPutRichTextEntity } from '../../../../entidades/forms-captura/in-put-rich-text.entity';
+import { getFieldPayloadValue } from '../../../../utilidades/field-value.util';
 
 @Component({
   selector: 'frm-in-put-rich-text',
@@ -41,7 +42,7 @@ export class InPutRichTextComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     console.debug('Input Rich Text:', this.inPutRichTextEntity);
-    this.editorData = this.inPutRichTextEntity?.valor?.[''] || '';
+    this.editorData = String(getFieldPayloadValue(this.inPutRichTextEntity?.valor) ?? '');
 
     // Solo cargar CKEditor en el lado del navegador
     if (this.isBrowser) {

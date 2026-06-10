@@ -5,6 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { SelectOneListBoxEntity } from '../../../../entidades/forms-captura/select-one-list-box.entity';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { MatSelectModule } from '@angular/material/select';
+import { getFieldPayloadValue, setFieldPayloadValue } from '../../../../utilidades/field-value.util';
 
 @Component({
   selector: 'frm-select-one-list-box',
@@ -29,7 +30,22 @@ export class SelectOneListBoxComponent implements OnChanges {
   }
 
   public selected(opcion?: { label: string; value: string }): boolean {
-    return opcion?.value === this.selectOneListBoxEntity?.valor?.[''];
+    return opcion?.value === this.selectedValue;
+  }
+
+  public get selectedValue(): string {
+    return String(getFieldPayloadValue(this.selectOneListBoxEntity?.valor) ?? '');
+  }
+
+  public updateValue(value: string): void {
+    if (!this.selectOneListBoxEntity) {
+      return;
+    }
+
+    const nuevoValor = setFieldPayloadValue(this.selectOneListBoxEntity.valor, value);
+    if (nuevoValor !== this.selectOneListBoxEntity.valor) {
+      (this.selectOneListBoxEntity as any).valor = nuevoValor;
+    }
   }
 
   private resolveOptions(): Array<{ label: string; value: string }> {

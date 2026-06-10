@@ -3,6 +3,7 @@ import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.compone
 import { OutPutLinkEntity } from '../../../../entidades/forms-captura/out-put-link.entity';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
+import { getFieldPayloadValue } from '../../../../utilidades/field-value.util';
 
 @Component({
   selector: 'frm-out-put-link',
@@ -18,5 +19,9 @@ export class OutPutLinkComponent {
 
   ngOnInit(): void {
     console.debug('OutPutLink:', this.outPutLinkEntity);
+  }
+
+  public get hrefValue(): string {
+    return String(getFieldPayloadValue(this.outPutLinkEntity?.valor) ?? '');
   }
 }

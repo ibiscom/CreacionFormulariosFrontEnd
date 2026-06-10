@@ -5,6 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { SelectBooleanCheckBoxEntity } from '../../../../entidades/forms-captura/select-boolean-checkbox.entity';
+import { getFieldPayloadValue, setFieldPayloadValue } from '../../../../utilidades/field-value.util';
 
 @Component({
   selector: 'frm-select-boolean-check-box',
@@ -23,7 +24,18 @@ export class SelectBooleanCheckBoxComponent {
   }
 
   public update(value: boolean) {
-    //TODO Completar
+    if (!this.selectBooleanCheckBoxEntity) {
+      return;
+    }
+
+    const nuevoValor = setFieldPayloadValue(this.selectBooleanCheckBoxEntity.valor, String(value));
+    if (nuevoValor !== this.selectBooleanCheckBoxEntity.valor) {
+      (this.selectBooleanCheckBoxEntity as any).valor = nuevoValor;
+    }
+  }
+
+  public get checked(): boolean {
+    return String(getFieldPayloadValue(this.selectBooleanCheckBoxEntity?.valor) ?? '') === 'true';
   }
 
   public partiallyComplete(): unknown {

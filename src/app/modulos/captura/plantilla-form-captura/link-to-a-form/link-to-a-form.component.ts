@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { LinkToAFormEntity } from '../../../../entidades/forms-captura/link-to-a-form';
+import { getFieldPayloadValue } from '../../../../utilidades/field-value.util';
 
 @Component({
   selector: 'frm-link-to-a-form',
@@ -18,5 +19,9 @@ export class LinkToAFormComponent {
 
   ngOnInit(): void {
     console.debug('Link To A Form:', this.linkToAFormEntity);
+  }
+
+  public get hrefValue(): string {
+    return String(getFieldPayloadValue(this.linkToAFormEntity?.valor) ?? '');
   }
 }

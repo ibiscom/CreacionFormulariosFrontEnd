@@ -1,8 +1,10 @@
 @if (selectOneListBoxEntity?.visible === 'true') {
-  <mat-form-field [style]="selectOneListBoxEntity!.styleContenedor">
+  <mat-form-field class="base-select-one-list-box-field" [style]="selectOneListBoxEntity!.styleContenedor">
     <mat-label>{{ selectOneListBoxEntity!.nombre }}</mat-label>
     <mat-select
-      [value]="selectOneListBoxEntity?.valor?.['']"
+      [value]="selectedValue"
+      (valueChange)="updateValue($event)"
+      [panelClass]="'frm-purple-select-panel'"
       [class]="selectOneListBoxEntity?.columnClasses?.replaceAll(',', ' ')"
     >
       @for (opcion of options; track opcion.value) {
@@ -15,3 +17,12 @@
     </mat-select>
   </mat-form-field>
 }
+													<!--<select
+															class="comboField"
+															[disabled]="!diligenciable || asBool(componente.readOnly)"
+															[ngModel]="$any(getComponentValue(componente))"
+															(ngModelChange)="setComponentValue(componente, $event)">
+															@for (item of getSelectItems(componente); track item.label + item.value) {
+																<option [value]="item.value">{{ item.label }}</option>
+															}
+														</select>-->

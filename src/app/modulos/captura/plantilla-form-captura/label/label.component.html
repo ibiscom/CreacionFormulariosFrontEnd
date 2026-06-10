@@ -2,5 +2,6 @@
   [style]="labelEntity!.styleContenedor"
   [class]="labelEntity?.columnClasses?.replaceAll(',', ' ')"
 >
-  <label [style]="labelEntity?.style">{{ labelEntity?.valor?.[''] || labelEntity?.nombre }}</label>
+  <label [style]="labelEntity?.style">{{ displayValue }}</label>
 </div>
+                          

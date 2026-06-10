@@ -3,6 +3,7 @@ import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.compone
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { LinkToDifferentFormEntity } from '../../../../entidades/forms-captura/link-to-different-form';
+import { getFieldPayloadValue } from '../../../../utilidades/field-value.util';
 
 @Component({
   selector: 'frm-link-to-different-form',
@@ -18,5 +19,9 @@ export class LinkToDifferentFormComponent {
 
   ngOnInit(): void {
     console.debug('Link To Different Form:', this.linkToDifferentFormEntity);
+  }
+
+  public get hrefValue(): string {
+    return String(getFieldPayloadValue(this.linkToDifferentFormEntity?.valor) ?? '');
   }
 }
