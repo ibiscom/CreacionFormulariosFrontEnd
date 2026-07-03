@@ -1,0 +1,185 @@
+.detalle-wrapper {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.message-zone {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.alert-message-info {
+	margin: 0;
+	padding: 8px 12px;
+	border-radius: 4px;
+	background: #eef7ff;
+	color: #0b5ea8;
+}
+
+.formulario-panel {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.formulario-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-bottom: 8px;
+	border-bottom: 1px solid #d9d9d9;
+}
+
+.superTitle {
+	margin: 0;
+	font-size: 1.15rem;
+	font-weight: 600;
+}
+
+.seccion-wrap {
+	border: 1px solid #e0e0e0;
+	border-radius: 6px;
+	overflow: hidden;
+	background: #fff;
+}
+
+.divTitleZone {
+	width: 100%;
+	border: 0;
+	background: #f4f7fb;
+	text-align: left;
+	padding: 10px 12px;
+	cursor: pointer;
+	font-weight: 600;
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+.section-icon {
+	font-weight: 700;
+}
+
+.seccion-body {
+	padding: 12px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.columns-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: 12px;
+}
+
+.column {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.componente-row {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.full-width-component {
+	width: 100%;
+}
+
+.component-title {
+	margin: 0 0 4px;
+}
+
+.normalLabelTexto {
+	font-size: 0.95rem;
+	font-weight: 500;
+}
+
+.required-red {
+	color: #c62828;
+	margin-left: 2px;
+}
+
+.validation-warning {
+	color: #ef6c00;
+	margin-left: 4px;
+}
+
+.smallLabelTexto {
+	color: #666;
+	font-size: 0.9rem;
+}
+
+.cartas-zone,
+.actions-row,
+.resource-row,
+.mail-zone {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	align-items: center;
+}
+
+.resource-row,
+.mail-zone {
+	margin-top: 6px;
+}
+
+.comboField,
+.formButton,
+.iconFormLinkWithIcon {
+	border: 1px solid #cfd8dc;
+	border-radius: 4px;
+	padding: 6px 8px;
+	background: #fff;
+	color: inherit;
+	text-decoration: none;
+}
+
+.popup-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.25);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+}
+
+.popup-card {
+	width: min(90vw, 760px);
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+	padding: 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.popup-help {
+	width: min(90vw, 600px);
+}
+
+.popup-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.firma-frame {
+	width: 100%;
+	min-height: 360px;
+	border: 1px solid #ddd;
+}
+
+.help-body {
+	max-height: 60vh;
+	overflow: auto;
+}
