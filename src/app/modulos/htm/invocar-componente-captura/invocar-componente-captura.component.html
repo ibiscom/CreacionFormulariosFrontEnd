@@ -1,66 +1,72 @@
 <section class="pageDefaultBody legacy-form-wrapper">
-	<form
-		id="presentacionFormulario"
-		class="legacy-form"
-		novalidate
-		#presentacionFormularioForm="ngForm"
-		(ngSubmit)="onSubmit(presentacionFormularioForm)">
-		<div class="legacy-validation-sample panelCollapsible">
-			Validacion legacy migrada (Template-Driven)
-		</div>
-
-		<div class="legacy-validation-grid">
-			<div class="legacy-field">
-				<label for="field1">Nombre de usuario (field1)</label>
-				<input id="field1" name="field1" type="text" [(ngModel)]="field1" required (ngModelChange)="onFormValidate(presentacionFormularioForm)" />
+	@if (!this.authenticated)
+	{
+		<form
+			id="presentacionFormulario"
+			class="legacy-form"
+			novalidate
+			#presentacionFormularioForm="ngForm"
+			(ngSubmit)="onSubmit(presentacionFormularioForm)">
+			<div class="legacy-validation-sample panelCollapsible">
+				Validacion
 			</div>
 
-			<div class="legacy-field">
-				<label for="field8">Contrasena (field8)</label>
-				<input
-					id="field8"
-					name="field8"
-					type="password"
-					[(ngModel)]="field8"
-					required
-					minlength="7"
-					(ngModelChange)="onFormValidate(presentacionFormularioForm)" />
+			<div class="legacy-validation-grid">
+				<div class="legacy-field">
+					<label for="field1">Nombre de usuario</label>
+					<input id="field1" name="field1" type="text" [(ngModel)]="field1" required (ngModelChange)="onFormValidate(presentacionFormularioForm)" />
+				</div>
 
-				@if (hasLegacyPasswordError) {
-					<p class="legacy-error">
-						Your password must be more than 6 characters and not be 'password' or the same as your name.
-					</p>
-				}
+				<div class="legacy-field">
+					<label for="field8">Contraseña</label>
+					<input
+						id="field8"
+						name="field8"
+						type="password"
+						[(ngModel)]="field8"
+						required
+						minlength="7"
+						(ngModelChange)="onFormValidate(presentacionFormularioForm)" />
+
+					@if (hasLegacyPasswordError) {
+						<p class="legacy-error">
+							Your password must be more than 6 characters and not be 'password' or the same as your name.
+						</p>
+					}
+				</div>
+
+				<div class="legacy-field">
+					<label for="field9">Confirmar contraseña</label>
+					<input
+						id="field9"
+						name="field9"
+						type="password"
+						[(ngModel)]="field9"
+						required
+						(ngModelChange)="onFormValidate(presentacionFormularioForm)" />
+
+					@if (isPasswordConfirmMismatch) {
+						<p class="legacy-error">
+							Your confirmation password does not match your first password, please try again.
+						</p>
+					}
+				</div>
 			</div>
-
-			<div class="legacy-field">
-				<label for="field9">Confirmar contrasena</label>
-				<input
-					id="field9"
-					name="field9"
-					type="password"
-					[(ngModel)]="field9"
-					required
-					(ngModelChange)="onFormValidate(presentacionFormularioForm)" />
-
-				@if (isPasswordConfirmMismatch) {
-					<p class="legacy-error">
-						Your confirmation password does not match your first password, please try again.
-					</p>
-				}
+			<div class="legacy-form-actions">
+				<button type="submit" class="menuStyle">Validar formulario</button>
 			</div>
-		</div>
+		</form>
 
-		<htm-plantilla-formulario-htm></htm-plantilla-formulario-htm>
-
-		<div class="legacy-form-actions">
-			<button type="submit" class="menuStyle">Validar formulario</button>
-		</div>
-	</form>
-
-	@if (validationStatus) {
-		<div class="legacy-validation-hint" role="status">{{ validationStatus }}</div>
+		@if (validationStatus) {
+			<div class="legacy-validation-hint" role="status">{{ validationStatus }}</div>
+		}
 	}
-
+	@else {
+			@if (isFormularioReady) {
+				<htm-plantilla-formulario-htm [formularioInput]="formularioHtm"></htm-plantilla-formulario-htm>
+			} @else {
+				<div class="legacy-validation-hint" role="status">Cargando formulario...</div>
+			}
+	}
 	<div class="legacy-spacer" aria-hidden="true"></div>
 </section>

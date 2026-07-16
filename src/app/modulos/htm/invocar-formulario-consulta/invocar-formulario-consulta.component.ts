@@ -1,67 +1,58 @@
-import { isPlatformBrowser } from '@angular/common';
-import { Component, inject, PLATFORM_ID } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { PlantillaFormularioHtmComponent } from '../plantilla-formulario-htm/plantilla-formulario-htm.component';
-import { InvocarComponenteCapturaService } from './invocar-componente-captura.service';
+import { PlantillaFormularioConsultaNormalHtmComponent } from '../plantilla-formulario-consulta-normal-htm/plantilla-formulario-consulta-normal-htm.component';
+import { ParamsFormConsultaHTMEntity } from '../../../entidades/htm/params-form-consulta-htm.entity';
 import { FormularioJSONEntity } from '../../../entidades/forms-captura/formulario-json.entity';
-import { ParamsFormHTMEntity } from '../../../entidades/htm/params-form-htm.entity';
+import { InvocarFormularioConsultaService } from './invocar-formulario-consulta.service';
 
 @Component({
-  selector: 'htm-invocar-componente-captura',
-  imports: [FormsModule, PlantillaFormularioHtmComponent],
-  templateUrl: './invocar-componente-captura.component.html',
-  styleUrl: './invocar-componente-captura.component.scss',
+  selector: 'app-invocar-formulario-consulta',
+  imports: [FormsModule, PlantillaFormularioConsultaNormalHtmComponent],
+  templateUrl: './invocar-formulario-consulta.component.html',
+  styleUrl: './invocar-formulario-consulta.component.scss',
 })
-export class InvocarComponenteCapturaComponent {
-  private readonly platformId = inject(PLATFORM_ID);
-
+export class InvocarFormularioConsultaComponent {
   field1 = '';
   field8 = '';
   field9 = '';
-  
 
-  validationStatus = '';
-
-  public idFormulario?: ParamsFormHTMEntity = undefined;    
+  public idFormulario?: ParamsFormConsultaHTMEntity = undefined;    
 
   public isFormularioReady = false;
 
   public authenticated = false;
 
-  public formularioHtm?: FormularioJSONEntity = undefined;
+  public formularioConsultaHtm: FormularioJSONEntity = {} as FormularioJSONEntity;
+
+
+  validationStatus = '';
+
 
   private readonly blockedPasswords = new Set(['password', 'PASSWORD', '1234567', '0123456']);
 
-  
-  public constructor(
-    private route: ActivatedRoute,
-    private invocarComponenteCapturaService: InvocarComponenteCapturaService
-  ) {
-    var idFormularioEnc = this.route.snapshot.paramMap.get('id') ?? '';
-    this.idFormulario = this.decodeHTMFormParams(idFormularioEnc);
+  constructor(private readonly route: ActivatedRoute,
+              private invocarFormularioConsultaService: InvocarFormularioConsultaService) {
+    var idFormularioEnc = this.route.snapshot.paramMap.get('id');
+    this.idFormulario = this.decodeHTMInfoFormParams(idFormularioEnc);
   }
 
   ngOnInit(): void {
-    this.loadFormularioHtm();
+    this.loadFormularioConsultaHtm();
   }
 
-  private loadFormularioHtm(): void {
+  private loadFormularioConsultaHtm(): void {
     if (!this.idFormulario) {
       this.isFormularioReady = false;
       return;
     }
 
-    // Avoid Node/SSR request to self-signed HTTPS endpoints.
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
 
     this.isFormularioReady = false;
-    this.invocarComponenteCapturaService.obtenerFormularioHtm(this.idFormulario).subscribe({
+    this.invocarFormularioConsultaService.obtenerFormularioConsultaHtm(this.idFormulario).subscribe({
       next: (response) => {
-        console.log('Formulario HTM obtenido:', response, response.respuesta);
-        this.formularioHtm = response.respuesta;
+        console.log('Formulario Consulta HTM obtenido:', response, response.respuesta);
+        this.formularioConsultaHtm = response.respuesta;
         this.isFormularioReady = true;
         this.authenticated = true;
       },
@@ -70,7 +61,7 @@ export class InvocarComponenteCapturaComponent {
       },
     });
   }
-  
+
   get isPasswordShort(): boolean {
     return this.field8.length > 0 && this.field8.length < 7;
   }
@@ -105,8 +96,8 @@ export class InvocarComponenteCapturaComponent {
   }
 
 
-  private decodeHTMFormParams(idFormularioEnc: string): ParamsFormHTMEntity | undefined {
-    if (!idFormularioEnc) {
+  private decodeHTMInfoFormParams(idFormularioEnc?: string | null): ParamsFormConsultaHTMEntity | undefined {
+    if (!idFormularioEnc || idFormularioEnc === null ) {
       return undefined;
     }
 
@@ -114,7 +105,7 @@ export class InvocarComponenteCapturaComponent {
       const encodedParam = this.safelyDecodeURIComponent(idFormularioEnc);
       const jsonPayload = this.decodeBase64UrlToUtf8(encodedParam);
       const parsedPayload = JSON.parse(jsonPayload) as unknown;
-      return this.toParamsFormHTMEntity(parsedPayload);
+      return this.toParamsFormConsultaHTMEntity(parsedPayload);
     } catch (error) {
       console.warn('No fue posible decodificar los parametros de entrada.', error);
     }
@@ -122,7 +113,7 @@ export class InvocarComponenteCapturaComponent {
     return undefined;
   }
 
-  private toParamsFormHTMEntity(parsedPayload: unknown): ParamsFormHTMEntity {
+  private toParamsFormConsultaHTMEntity(parsedPayload: unknown): ParamsFormConsultaHTMEntity {
     if (!parsedPayload || typeof parsedPayload !== 'object') {
       throw new Error('El payload decodificado no es un objeto JSON valido.');
     }

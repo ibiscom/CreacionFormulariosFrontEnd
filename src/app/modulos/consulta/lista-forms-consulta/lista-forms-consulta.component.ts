@@ -79,7 +79,7 @@ export class ListaFormsConsultaComponent {
     console.debug('Method not implemented.');
   }
  
-  public consultarFormulario(_t41: any) {
+  public consultarFormulario(row: any) {
  this.router.navigate([`/consulta/consultar-form-consulta/${row?.name}`]);
   }
  

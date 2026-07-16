@@ -1,1 +1,253 @@
-<p>plantilla-formulario-evt-inicio-htm works!</p>
+<section class="evt-inicio-htm-wrapper">
+	<br />
+
+	@if (mensajes.length > 0) {
+		<div class="message-zone">
+			@for (mensaje of mensajes; track mensaje) {
+				<p class="alert-message-info">{{ mensaje }}</p>
+			}
+		</div>
+	}
+
+	@if (mostrarFormulario) {
+		<section class="formulario-panel">
+			<header class="formulario-header">
+				<h2 class="superTitle">{{ formulario.titulo }}</h2>
+				<button type="button" class="iconFormLinkWithIcon" title="Ayuda" (click)="abrirVentanaAyuda()">
+					Ayuda
+				</button>
+			</header>
+
+			@for (seccion of secciones; track seccion.titulo) {
+				<article class="seccion-wrap">
+					<button type="button" class="divTitleZone" (click)="toggleSeccion(seccion)">
+						<span class="section-icon">{{ asBool(seccion.expandido) ? '-' : '+' }}</span>
+						<span class="panelGridTitle">{{ seccion.titulo }}</span>
+					</button>
+
+					@if (asBool(seccion.expandido)) {
+						<div class="seccion-body">
+							<div class="columns-grid">
+								@for (column of [seccion.componentesIzq, seccion.componentesCent, seccion.componentesDer]; track $index) {
+									<div class="column">
+										@for (componente of getComponentList(column); track componentKey(componente)) {
+											@if (asBool(componente.visible)) {
+												<div class="componente-row" [class]="componente.styleClassContenedor">
+													@if (!asBool(componente.labelType) && !asBool(componente.linkType) && !asBool(componente.linkToAFormType) && !hasComponentFlag(componente, 'linkToDifferentFormType') && !asBool(componente.linkFormToIfacesType) && !asBool(componente.mailType)) {
+														<label class="normalLabelTexto" [attr.title]="componente.descripcion">
+															{{ componente.nombre }}
+															@if (getMostrarAsteriscoRojo(componente)) {
+																<span class="required-red">*</span>
+															}
+															@if (getMostrarAsteriscoVerde(componente)) {
+																<span class="required-green">*</span>
+															}
+															@if (!asBool(componente.cumpleValidaciones)) {
+																<span class="validation-warning">!</span>
+															}
+														</label>
+													}
+
+													@if (asBool(componente.textType)) {
+														<frm-in-put-text [inPutTextEntity]="$any(componente)" [verFormularioCmp]="this"></frm-in-put-text>
+													}
+
+													@if (asBool(componente.textAreaType)) {
+														<frm-in-put-text-area [inPutTextAreaEntity]="$any(componente)" [verFormularioCmp]="this"></frm-in-put-text-area>
+													}
+
+													@if (asBool(componente.dateType)) {
+														<frm-select-in-put-date [selectInPutDateEntity]="$any(componente)" [verFormularioCmp]="this"></frm-select-in-put-date>
+													}
+
+													@if (asBool(componente.listBoxType)) {
+														<frm-select-one-list-box [selectOneListBoxEntity]="$any(componente)" [verFormularioCmp]="this"></frm-select-one-list-box>
+													}
+
+													@if (asBool(componente.listBoxCustomizedType)) {
+														<frm-select-one-list-box-customized [selectOneListBoxCustomizedEntity]="$any(componente)" [verFormularioCmp]="this"></frm-select-one-list-box-customized>
+													}
+
+													@if (asBool(componente.checkBoxType)) {
+														<frm-select-boolean-check-box [selectBooleanCheckBoxEntity]="$any(componente)" [verFormularioCmp]="this"></frm-select-boolean-check-box>
+													}
+
+													@if (asBool(componente.radioButtonType)) {
+														<frm-select-one-radio [selectOneRadioEntity]="$any(componente)" [verFormularioCmp]="this"></frm-select-one-radio>
+													}
+
+													@if (asBool(componente.cargaMasivaType)) {
+														<frm-carga-masiva [cargaMasivaEntity]="$any(componente)" [verFormularioCmp]="this"></frm-carga-masiva>
+													}
+
+													@if (asBool(componente.labelType)) {
+														<frm-label [labelEntity]="$any(componente)" [verFormularioCmp]="this"></frm-label>
+													}
+
+													@if (asBool(componente.linkType)) {
+														<frm-out-put-link [outPutLinkEntity]="$any(componente)" [verFormularioCmp]="this"></frm-out-put-link>
+													}
+
+													@if (asBool(componente.linkToAFormType)) {
+														<frm-link-to-a-form [linkToAFormEntity]="$any(componente)" [verFormularioCmp]="this"></frm-link-to-a-form>
+													}
+
+													@if (hasComponentFlag(componente, 'linkToDifferentFormType')) {
+														<frm-link-to-different-form [linkToDifferentFormEntity]="$any(componente)" [verFormularioCmp]="this"></frm-link-to-different-form>
+													}
+
+													@if (asBool(componente.linkFormToIfacesType)) {
+														<frm-link-form-to-icefaces [linkFormToIcefacesEntity]="$any(componente)" [verFormularioCmp]="this"></frm-link-form-to-icefaces>
+													}
+
+													@if (asBool(componente.saveButtonType)) {
+														<frm-save-button [saveButtonEntity]="$any(componente)" [verFormularioCmp]="this"></frm-save-button>
+													}
+
+													@if (asBool(componente.searchButtonType)) {
+														<frm-search-button [searchButtonEntity]="$any(componente)" [verFormularioCmp]="this"></frm-search-button>
+													}
+
+													@if (asBool(componente.refreshButtonType)) {
+														<frm-refresh-button [refreshButtonEntity]="$any(componente)" [verFormularioCmp]="this"></frm-refresh-button>
+													}
+
+													@if (asBool(componente.mailType)) {
+														<frm-mail [mailEntity]="$any(componente)" [verFormularioCmp]="this"></frm-mail>
+													}
+												</div>
+											}
+										}
+									</div>
+								}
+							</div>
+
+							<footer class="smallLabelTexto section-description">{{ seccion.descripcion }}</footer>
+						</div>
+					}
+				</article>
+			}
+
+			@if (hayCartas && mostrarCartas) {
+				<section class="cartas-zone">
+					<div>
+						<label class="normalLabelTexto" for="cartaEvtInicio">Plantilla</label>
+						<select id="cartaEvtInicio" [(ngModel)]="cartaSeleccionada" class="comboField">
+							<option value="cartaA">Carta A</option>
+							<option value="cartaB">Carta B</option>
+						</select>
+					</div>
+					<div>
+						<label class="normalLabelTexto" for="hojaEvtInicio">Tamano de pagina</label>
+						<select id="hojaEvtInicio" [(ngModel)]="tipoHoja" class="comboField">
+							<option value="letter">Carta</option>
+							<option value="portrait">Retrato</option>
+							<option value="inherit">Inherit</option>
+							<option value="landscape">Landscape</option>
+							<option value="auto">Auto</option>
+						</select>
+					</div>
+					<button type="button" class="formButton" (click)="generarPlantilla()">Generar</button>
+
+					<div class="resource-row">
+						@if (hayRecurso) {
+							<a class="formButton" [href]="recursoPdfUrl" target="_blank" rel="noopener noreferrer">Ver PDF</a>
+						}
+						@if (firmable && hayRecurso) {
+							<button type="button" class="formButton compact" title="Firmar documento" (click)="abrirPopUp()">Firmar</button>
+						}
+						@if (hayRecurso) {
+							<button type="button" class="formButton" (click)="adjuntarPlantillaPDF()">Anexar PDF</button>
+						}
+						@if (hayRecursoWord) {
+							<a class="formButton" [href]="recursoWordUrl" target="_blank" rel="noopener noreferrer">Ver WORD</a>
+						}
+					</div>
+
+					@if (hayRecurso && hayComponentesMail) {
+						<div class="mail-zone">
+							<label class="normalLabelTexto" for="mailSelectorEvtInicio">Envio de correo</label>
+							<select id="mailSelectorEvtInicio" class="comboField" [ngModel]="idMailSeleccionado" (ngModelChange)="seleccionarMail($event)">
+								@for (item of componentesMail; track item.value) {
+									<option [value]="item.value">{{ item.label }}</option>
+								}
+							</select>
+							<button type="button" class="formButton" (click)="adjuntarPlantillaMail()">
+								Adjuntar carta al envio correo
+							</button>
+						</div>
+					}
+				</section>
+			}
+
+			<p class="smallLabelTexto form-description">{{ formulario.descripcion }}</p>
+
+			@if (mensajes.length > 0) {
+				<div class="message-zone duplicated-messages">
+					@for (mensaje of mensajes; track mensaje + '-footer') {
+						<p class="alert-message-info">{{ mensaje }}</p>
+					}
+				</div>
+			}
+
+			<section class="actions-row">
+				@if (asBool(formulario.eliminable) && mostrarBotonEliminar) {
+					<button type="button" class="iconFormLinkWithIcon" (click)="eliminarRegistro()">Cancelar</button>
+				}
+				<button type="button" class="iconFormLinkWithIcon" (click)="nuevoRegistro()">Limpiar</button>
+				<button type="button" class="iconFormLinkWithIcon" (click)="refrescarPagina()">Refrescar</button>
+				@if (mostrarBotonTerminar) {
+					<button type="button" class="iconFormLinkWithIcon" (click)="terminarFormulario()">Finalizar tarea</button>
+				}
+				@if (hayAnteriorFormulario) {
+					<button type="button" class="iconFormLinkWithIcon" (click)="regresarAnteriorFormulario()">Regresar</button>
+				}
+			</section>
+		</section>
+	}
+
+	@if (popupFirmaVisible) {
+		<div class="popup-overlay">
+			<div class="popup-card">
+				<div class="popup-header">
+					<h3>Firmar documento</h3>
+					<button type="button" (click)="cerrarPopUp()">X</button>
+				</div>
+				<iframe class="firma-frame" [src]="urlPopupFirma" title="Firma de documento"></iframe>
+			</div>
+		</div>
+	}
+
+	@if (popupMensajePostTerminacionTareaVisible) {
+		<div class="popup-overlay">
+			<div class="popup-card popup-message">
+				<div class="popup-header">
+					<h3>Mensaje</h3>
+					<button type="button" class="iconFormLinkWithIcon" (click)="cerrarPopUpMensajePostTerminacionTarea()">Cerrar</button>
+				</div>
+				<p class="normalLabelTexto">{{ mensajePostTerminacionTarea }}</p>
+				<div class="actions-row">
+					<button type="button" class="formButton" (click)="cerrarPopUpMensajePostTerminacionTarea()">Cerrar</button>
+				</div>
+			</div>
+		</div>
+	}
+
+	@if (popupMensajeVisualizarErroresEnvioMailVisible) {
+		<div class="popup-overlay">
+			<div class="popup-card popup-message">
+				<div class="popup-header">
+					<h3>Mensaje</h3>
+					<button type="button" class="iconFormLinkWithIcon" (click)="cancelarPopupMensajeVisualizarErroresEnvioMail()">X</button>
+				</div>
+				<p class="normalLabelTexto">Ha ocurrido un problema al enviar el mensaje de correo electronico.</p>
+				<pre class="mail-error-detail">{{ mensajeNoEnvioMail }}</pre>
+				<p class="normalLabelTexto">Desea continuar?</p>
+				<div class="actions-row">
+					<button type="button" class="formButton" (click)="continuarPopupMensajeVisualizarErroresEnvioMail()">Si</button>
+					<button type="button" class="formButton" (click)="cancelarPopupMensajeVisualizarErroresEnvioMail()">No</button>
+				</div>
+			</div>
+		</div>
+	}
+</section>

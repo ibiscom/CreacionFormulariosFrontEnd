@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { PlantillaFormCapturaComponent } from "../plantilla-form-captura/plantilla-form-captura.component";
 import { ActivatedRoute } from '@angular/router';
 import { PlantillaFormConsultaComponent } from '../plantilla-form-consulta/plantilla-form-consulta.component';
 

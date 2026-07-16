@@ -52,6 +52,7 @@ import { MailComponent } from '../../captura/plantilla-form-captura/mail/mail.co
   styleUrl: './plantilla-formulario-htm.component.scss',
 })
 export class PlantillaFormularioHtmComponent {
+  
   @Input() public set formularioInput(value: FormularioJSONEntity | undefined) {
     if (!value) {
       return;

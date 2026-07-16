@@ -1,0 +1,253 @@
+.consulta-htm-wrapper {
+	width: 100%;
+	display: block;
+}
+
+.message-zone {
+	margin-bottom: 0.75rem;
+}
+
+.duplicated-messages {
+	margin-top: 1rem;
+}
+
+.alert-message-info {
+	margin: 0.2rem 0;
+	padding: 0.45rem 0.7rem;
+	border-radius: 4px;
+	background: #eef8ff;
+	color: #1f516e;
+	border: 1px solid #cfe8fb;
+}
+
+.formulario-panel {
+	width: 100%;
+	border: 1px solid #d9e1ea;
+	border-radius: 6px;
+	padding: 0.75rem;
+	background: #fff;
+}
+
+.formulario-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+}
+
+.superTitle {
+	margin: 0;
+	font-size: 1.2rem;
+	color: #19364f;
+}
+
+.seccion-wrap {
+	margin-top: 0.8rem;
+	border: 1px solid #d8d0e2;
+}
+
+.divTitleZone {
+	width: 100%;
+	border: 1px solid #d8d0e2;
+	background-color: #f5f1fb;
+	color: #4d2f71;
+	display: flex;
+	align-items: center;
+	gap: 0.45rem;
+	cursor: pointer;
+	padding: 0.45rem 0.55rem;
+	text-align: left;
+}
+
+.section-icon {
+	width: 1.1rem;
+	display: inline-block;
+}
+
+.panelGridTitle {
+	font-weight: 700;
+}
+
+.seccion-body {
+	padding: 0.6rem;
+}
+
+.columns-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 0.6rem;
+}
+
+.column {
+	min-width: 0;
+}
+
+.componente-row {
+	margin-bottom: 0.7rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
+}
+
+.component-title {
+	margin: 0;
+}
+
+.filter-toggle {
+	margin-right: 0.35rem;
+}
+
+.normalLabelTexto {
+	font-size: 0.9rem;
+}
+
+.required-red {
+	color: #c2272d;
+	margin-left: 0.25rem;
+}
+
+.required-green {
+	color: #1e8a38;
+	margin-left: 0.25rem;
+}
+
+.validation-warning {
+	color: #b56a00;
+	margin-left: 0.25rem;
+}
+
+.smallLabelTexto {
+	font-size: 0.82rem;
+	color: #425466;
+}
+
+.smallTextField {
+	width: 80px;
+	border: 1px solid #b6c7d8;
+	border-radius: 4px;
+	font-size: 0.85rem;
+	padding: 0.25rem 0.35rem;
+}
+
+.section-description,
+.form-description {
+	border-top: 1px solid #dddbdb;
+	margin-top: 0.7rem;
+	padding-top: 0.65rem;
+}
+
+.result-table-zone {
+	margin-top: 1rem;
+	border: 1px solid #dfe6ef;
+	border-radius: 6px;
+	padding: 0.65rem;
+}
+
+.table-header-tools {
+	display: flex;
+	align-items: center;
+	gap: 0.45rem;
+	margin-bottom: 0.5rem;
+}
+
+.result-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.result-table th,
+.result-table td {
+	border: 1px solid #dbe3ec;
+	padding: 0.4rem 0.5rem;
+	font-size: 0.88rem;
+	text-align: left;
+}
+
+.result-table th {
+	background: #f6f9fc;
+}
+
+.selector-col {
+	width: 2rem;
+	text-align: center;
+}
+
+.row-selected {
+	background: #edf7ff;
+}
+
+.paginator {
+	margin-top: 0.6rem;
+	display: flex;
+	align-items: center;
+	gap: 0.45rem;
+	flex-wrap: wrap;
+}
+
+.actions-row {
+	margin-top: 0.8rem;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.45rem;
+}
+
+.iconFormLinkWithIcon,
+.formButton {
+	border: 1px solid #d8d0e2;
+	background: #f6f2fd;
+	color: #4d2f71;
+	border-radius: 4px;
+	padding: 0.35rem 0.6rem;
+	cursor: pointer;
+}
+
+.popup-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(24, 38, 54, 0.35);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 30;
+	padding: 1rem;
+}
+
+.non-modal-overlay {
+	align-items: flex-start;
+	justify-content: flex-start;
+	background: transparent;
+	padding: 2rem;
+}
+
+.popup-card {
+	width: min(700px, 96vw);
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 14px 30px rgba(11, 35, 58, 0.25);
+	padding: 0.85rem;
+}
+
+.popup-help {
+	width: min(620px, 96vw);
+}
+
+.popup-message {
+	width: min(520px, 96vw);
+}
+
+.popup-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.help-body {
+	max-height: 60vh;
+	overflow: auto;
+}
+
+@media (max-width: 960px) {
+	.columns-grid {
+		grid-template-columns: 1fr;
+	}
+}
