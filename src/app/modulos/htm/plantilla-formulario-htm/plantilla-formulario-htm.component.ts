@@ -2,9 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FormularioJSONEntity } from '../../../entidades/forms-captura/formulario-json.entity';
+import { FormularioConsultaJSONEntity } from '../../../entidades/forms-consulta/formulario-consulta-json.entity';
 import { ComponenteBaseEntity } from '../../../entidades/forms-captura/componente-base.entity';
 import { ComponentesEntity } from '../../../entidades/forms-captura/componentes.entity';
 import { SeccionEntity } from '../../../entidades/forms-captura/seccion.entity';
+import { SeccionesFormularioEntity } from '../../../entidades/forms-captura/secciones-formulario.entity';
 import { SelectItemEntity } from '../../../entidades/forms-captura/select-item.entity';
 import { getFieldPayloadValue, setFieldPayloadValue } from '../../../utilidades/field-value.util';
 import { InPutTextComponent } from '../../captura/plantilla-form-captura/in-put-text/in-put-text.component';
@@ -53,12 +55,22 @@ import { MailComponent } from '../../captura/plantilla-form-captura/mail/mail.co
 })
 export class PlantillaFormularioHtmComponent {
   
-  @Input() public set formularioInput(value: FormularioJSONEntity | undefined) {
+  @Input() public padre?: any;
+
+  @Input() public set formularioInput(
+    value: FormularioJSONEntity | FormularioConsultaJSONEntity | unknown,
+  ) {
     if (!value) {
       return;
     }
 
-    this.formulario = value;
+    const formularioNormalizado = this.normalizarFormularioInput(value);
+    if (!formularioNormalizado) {
+      this.addMensaje('No fue posible interpretar la estructura del formulario recibido.');
+      return;
+    }
+
+    this.formulario = formularioNormalizado;
     this.seedComponentValues();
   }
 
@@ -146,7 +158,7 @@ export class PlantillaFormularioHtmComponent {
   }
 
   public get secciones(): SeccionEntity[] {
-    return Object.values(this.formulario.seccionesFormulario);
+    return Object.values(this.formulario.seccionesFormulario ?? {});
   }
 
   public toggleSeccion(seccion: SeccionEntity): void {
@@ -397,4 +409,68 @@ export class PlantillaFormularioHtmComponent {
     };
   }
 
+  private normalizarFormularioInput(
+    value: FormularioJSONEntity | FormularioConsultaJSONEntity | unknown,
+  ): FormularioJSONEntity | undefined {
+    const payload = this.extractPayload(value);
+
+    if (!payload || typeof payload !== 'object') {
+      return undefined;
+    }
+
+    if (this.hasSeccionesFormulario(payload)) {
+      return payload as FormularioJSONEntity;
+    }
+
+    if (!this.hasSeccionesFormularioConsulta(payload)) {
+      return undefined;
+    }
+
+    const consulta = payload as FormularioConsultaJSONEntity;
+    return {
+      ...(consulta as unknown as Omit<FormularioJSONEntity, 'seccionesFormulario'>),
+      seccionesFormulario: consulta.seccionesFormularioConsulta,
+    };
+  }
+
+  private extractPayload(value: unknown): unknown {
+    if (typeof value === 'string') {
+      try {
+        return JSON.parse(value);
+      } catch {
+        return undefined;
+      }
+    }
+
+    if (!value || typeof value !== 'object') {
+      return value;
+    }
+
+    const raw = value as Record<string, unknown>;
+
+    if (raw['respuesta'] !== undefined) {
+      return this.extractPayload(raw['respuesta']);
+    }
+
+    const nestedPayload = raw['formulario'] ?? raw['data'] ?? raw['resultado'];
+    if (nestedPayload !== undefined) {
+      return this.extractPayload(nestedPayload);
+    }
+
+    return value;
+  }
+
+  private hasSeccionesFormulario(payload: unknown): payload is { seccionesFormulario: SeccionesFormularioEntity } {
+    return !!payload && typeof payload === 'object' && 'seccionesFormulario' in payload;
+  }
+
+  private hasSeccionesFormularioConsulta(
+    payload: unknown,
+  ): payload is { seccionesFormularioConsulta: SeccionesFormularioEntity } {
+    return !!payload && typeof payload === 'object' && 'seccionesFormularioConsulta' in payload;
+  }
+
+  ngAfterViewChecked(): void {
+    this.padre?.refrescarAltura?.();
+  }
 }

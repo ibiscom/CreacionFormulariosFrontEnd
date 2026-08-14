@@ -63,7 +63,7 @@
 	}
 	@else {
 			@if (isFormularioReady) {
-				<htm-plantilla-formulario-htm [formularioInput]="formularioHtm"></htm-plantilla-formulario-htm>
+				<htm-plantilla-formulario-htm [formularioInput]="formularioHtm" [padre]="this"></htm-plantilla-formulario-htm>
 			} @else {
 				<div class="legacy-validation-hint" role="status">Cargando formulario...</div>
 			}

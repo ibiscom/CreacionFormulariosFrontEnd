@@ -1,11 +1,11 @@
-@if (selectOneListBoxEntity?.visible === 'true') {
+@if (selectOneListBoxEntityVisible) {
   <mat-form-field class="base-select-one-list-box-field" [style]="selectOneListBoxEntity!.styleContenedor">
     <mat-label>{{ selectOneListBoxEntity!.nombre }}</mat-label>
     <mat-select
       [value]="selectedValue"
       (valueChange)="updateValue($event)"
       [panelClass]="'frm-purple-select-panel'"
-      [class]="selectOneListBoxEntity?.columnClasses?.replaceAll(',', ' ')"
+      [class]="selectOneListBoxEntity!.columnClasses.replaceAll(',', ' ')"
     >
       @for (opcion of options; track opcion.value) {
         @if (selected(opcion)) {

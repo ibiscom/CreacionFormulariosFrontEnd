@@ -84,11 +84,11 @@ export interface ComponenteBaseEntity {
   columnasMostrablesSeleccionadas?: { [key: string]: any };
 
   // Button-specific properties
-  utilizaImagen?: string;
+  utilizaImagen?: BooleanString;
   ubicacionImagen?: string;
   expresionLogicaFiltro?: string;
   nombreEntidad?: string;
-  mostrarLink?: string;
+  mostrarLink?: BooleanString;
 
   // Table-specific properties
   columnaRelacion?: string;

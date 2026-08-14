@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { ListaFormsCapturaComponent } from './modulos/captura/lista-forms-captura/lista-forms-captura.component';
 import { VerFormCapturaComponent } from './modulos/captura/ver-form-captura/ver-form-captura.component';
 import { DiligenciarFormCapturaComponent } from './modulos/captura/diligenciar-form-captura/diligenciar-form-captura.component';
+import { ModelarFormCapturaComponent } from './modulos/captura/modelar-form-captura/modelar-form-captura/modelar-form-captura.component';
 import { PlantillaFormularioNormalHtmComponent } from './modulos/htm/plantilla-formulario-normal-htm/plantilla-formulario-normal-htm.component';
 import { PlantillaFormularioHtmComponent } from './modulos/htm/plantilla-formulario-htm/plantilla-formulario-htm.component';
 import { ListaFormsConsultaComponent } from './modulos/consulta/lista-forms-consulta/lista-forms-consulta.component';
@@ -39,6 +40,11 @@ export const routes: Routes = [
       {
           path: 'lista-forms-captura',
           component: ListaFormsCapturaComponent,
+          children: [],
+      },
+      {
+          path: 'modelar-form-captura',
+          component: ModelarFormCapturaComponent,
           children: [],
       },
     ]

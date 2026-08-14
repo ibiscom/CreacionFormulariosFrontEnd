@@ -13,7 +13,7 @@ export class ListaFormulariosConsultaService {
 
   public getFormularios(filtroNomForm: string): Observable<FrmResponseEntity<any[]>> {
     return this.http.get<FrmResponseEntity<any[]>>(
-      `${environment.creacionFormulariosApiUrl}/form/getForms?formName=${filtroNomForm}`,
+      `${environment.creacionFormulariosApiUrl}/form/getFormsConsulta?formName=${filtroNomForm}`,
     );
   }
 }

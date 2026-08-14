@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { InPutTextComponent } from '../in-put-text/in-put-text.component';
 import { SearchButtonComponent } from '../search-button/search-button.component';
@@ -59,6 +59,11 @@ import { ComponenteBaseEntity } from '../../../../entidades/forms-captura/compon
 export class ComponentesComponent {
   @Input() public componentes: ComponentesEntity | '' = '';
   @Input() public verFormularioCmp?: PlantillaFormCapturaComponent;
+  @Input() public sectionKey = '';
+  @Output() public componenteSeleccionado = new EventEmitter<string>();
+  @Output() public componenteReordenado = new EventEmitter<{ sourceKey: string; targetKey: string; sectionKey: string }>();
+
+  public activeDropTargetKey = '';
 
   public constructor() {}
 
@@ -112,5 +117,60 @@ export class ComponentesComponent {
       data.length > 0 &&
       data.every((item) => typeof item === 'object' && item !== null && 'tipoComponente' in item)
     );
+  }
+
+  public seleccionarComponente(key: string): void {
+    this.componenteSeleccionado.emit(key);
+  }
+
+  public dragComponent(key: string, event: DragEvent): void {
+    const payload = `component:${key}`;
+    if (event.dataTransfer) {
+      event.dataTransfer.setData('text/plain', payload);
+      event.dataTransfer.setData('application/x-component-key', payload);
+      event.dataTransfer.effectAllowed = 'move';
+    }
+  }
+
+  public allowDrop(event: DragEvent): void {
+    event.preventDefault();
+  }
+
+  public onComponentDragEnter(targetKey: string): void {
+    this.activeDropTargetKey = targetKey;
+  }
+
+  public onComponentDragLeave(targetKey: string, event: DragEvent): void {
+    if (event.relatedTarget && (event.relatedTarget as Node).parentElement?.closest('.component-render-wrapper')) {
+      return;
+    }
+
+    if (this.activeDropTargetKey === targetKey) {
+      this.activeDropTargetKey = '';
+    }
+  }
+
+  public isDropTarget(targetKey: string): boolean {
+    return this.activeDropTargetKey === targetKey;
+  }
+
+  public dropComponent(targetKey: string, event: DragEvent): void {
+    this.allowDrop(event);
+    this.activeDropTargetKey = '';
+    event.stopPropagation();
+    const data =
+      event.dataTransfer?.getData('application/x-component-key') ||
+      event.dataTransfer?.getData('text/plain') ||
+      '';
+    if (!data.startsWith('component:')) {
+      return;
+    }
+
+    const sourceKey = data.replace('component:', '');
+    if (!sourceKey || sourceKey === targetKey) {
+      return;
+    }
+
+    this.componenteReordenado.emit({ sourceKey, targetKey, sectionKey: this.sectionKey });
   }
 }

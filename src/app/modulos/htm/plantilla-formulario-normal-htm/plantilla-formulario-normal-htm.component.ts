@@ -37,6 +37,8 @@ import { LinkFormToIcefacesComponent } from '../../captura/plantilla-form-captur
   styleUrl: './plantilla-formulario-normal-htm.component.scss',
 })
 export class PlantillaFormularioNormalHtmComponent extends PlantillaFormCapturaComponent {
+  @Input() public padre?: any;
+ 
   @Input() public set formularioInput(value: FormularioJSONEntity | undefined) {
     if (!value) {
       return;
@@ -154,47 +156,47 @@ export class PlantillaFormularioNormalHtmComponent extends PlantillaFormCapturaC
       '<p>Ayuda del formulario normal migrada.</p><p>Puede sustituirse por el contenido HTML enviado por backend.</p>',
   };
 
-  public mensajes: string[] = [];
+  public override mensajes: string[] = [];
   public componentValues: Record<string, string | boolean> = {};
 
-  public clicksGuardar = 0;
+  public override clicksGuardar = 0;
 
-  public mostrarFormulario = true;
+  public override mostrarFormulario = true;
   public diligenciable = true;
-  public hayAnteriorFormulario = true;
-  public mostrarBotonNuevo = true;
-  public mostrarBotonEdicion = true;
-  public mostrarBotonEliminar = true;
+  public override hayAnteriorFormulario = true;
+  public override mostrarBotonNuevo = true;
+  public override mostrarBotonEdicion = true;
+  public override mostrarBotonEliminar = true;
 
-  public hayCartas = true;
-  public mostrarCartas = true;
-  public cartaSeleccionada = 'cartaA';
-  public tipoHoja = 'letter';
+  public override hayCartas = true;
+  public override mostrarCartas = true;
+  public override cartaSeleccionada = 'cartaA';
+  public override tipoHoja = 'letter';
 
-  public hayRecurso = true;
-  public hayRecursoWord = true;
-  public hayComponentesMail = true;
-  public firmable = true;
+  public override hayRecurso = true;
+  public override hayRecursoWord = true;
+  public override hayComponentesMail = true;
+  public override firmable = true;
 
-  public nombreCarta = 'plantilla-demo';
-  public recursoPdfUrl = '#';
-  public recursoWordUrl = '#';
-  public idMailSeleccionado = 'mail1';
-  public componentesMail = [
+  public override nombreCarta = 'plantilla-demo';
+  public override recursoPdfUrl = '#';
+  public override recursoWordUrl = '#';
+  public override idMailSeleccionado = 'mail1';
+  public override componentesMail = [
     { label: 'Correo principal', value: 'mail1' },
     { label: 'Correo secundario', value: 'mail2' },
   ];
 
-  public popupFirmaVisible = false;
-  public urlPopupFirma = 'about:blank';
+  public override popupFirmaVisible = false;
+  public override urlPopupFirma = 'about:blank';
 
   public constructor(
-    public dialog: MatDialog,
+    dialog: MatDialog,
     protected override plantillaFormCapturaService: PlantillaFormCapturaService,
     protected override route: ActivatedRoute,
     protected override router: Router,
   ) {
-    super( plantillaFormCapturaService, route, router);
+    super(plantillaFormCapturaService, route, router, dialog);
   }
 
   public override ngOnInit(): void {
@@ -206,24 +208,12 @@ export class PlantillaFormularioNormalHtmComponent extends PlantillaFormCapturaC
     return Object.values(this.formulario.seccionesFormulario);
   }
 
-  public asBool(value: unknown): boolean {
-    return value === true || value === 'true';
-  }
-
   public hasComponentFlag(componente: ComponenteBaseEntity, flagName: string): boolean {
     return this.asBool((componente as unknown as Record<string, unknown>)[flagName]);
   }
 
   public toggleSeccion(seccion: SeccionEntity): void {
     seccion.expandido = this.asBool(seccion.expandido) ? 'false' : 'true';
-  }
-
-  public getComponentList(componentes: ComponentesEntity | ''): ComponenteBaseEntity[] {
-    if (componentes === '') {
-      return [];
-    }
-
-    return Object.values(componentes).flatMap((entry) => (Array.isArray(entry) ? entry : entry ? [entry] : []));
   }
 
   public componentKey(componente: ComponenteBaseEntity): string {
@@ -283,11 +273,11 @@ export class PlantillaFormularioNormalHtmComponent extends PlantillaFormCapturaC
     return this.asBool(componente.obligatorioFuncional) && !this.hayAnteriorFormulario;
   }
 
-  public addMensaje(message: string): void {
+  public override addMensaje(message: string): void {
     this.mensajes = [message, ...this.mensajes].slice(0, 5);
   }
 
-  public abrirVentanaAyuda(): void {
+  public override abrirVentanaAyuda(): void {
      const dialogRef = this.dialog.open(DialogAyudaComponent, {
       width: '400px',
       data: { nombreFormulario: this.formulario?.titulo || 'Formulario',
@@ -300,24 +290,7 @@ export class PlantillaFormularioNormalHtmComponent extends PlantillaFormCapturaC
     });
   }
 
-  public abrirPopUp(): void {
-    this.popupFirmaVisible = true;
-  }
-
-  public cerrarPopUp(): void {
-    this.popupFirmaVisible = false;
-  }
-
-  public prevencionDobleClic(): boolean {
-    this.clicksGuardar += 1;
-    return this.clicksGuardar > 1;
-  }
-
-  public resetPrevencionDobleClic(): void {
-    this.clicksGuardar = 0;
-  }
-
-  public guardarFormulario(): void {
+  public override guardarFormulario(): void {
     if (this.prevencionDobleClic()) {
       return;
     }
@@ -325,7 +298,7 @@ export class PlantillaFormularioNormalHtmComponent extends PlantillaFormCapturaC
     this.addMensaje('Formulario guardado y trazabilidad local actualizada.');
   }
 
-  public editarFormulario(): void {
+  public override editarFormulario(): void {
     if (this.prevencionDobleClic()) {
       return;
     }
@@ -333,27 +306,27 @@ export class PlantillaFormularioNormalHtmComponent extends PlantillaFormCapturaC
     this.addMensaje('Registro editado correctamente.');
   }
 
-  public eliminarRegistro(): void {
+  public override eliminarRegistro(): void {
     this.addMensaje('Registro eliminado.');
   }
 
-  public nuevoRegistro(): void {
+  public override nuevoRegistro(): void {
     this.componentValues = {};
     this.seedComponentValues();
     this.resetPrevencionDobleClic();
     this.addMensaje('Formulario limpiado.');
   }
 
-  public refrescarPagina(): void {
+  public override refrescarPagina(): void {
     this.resetPrevencionDobleClic();
     this.addMensaje('Pagina refrescada.');
   }
 
-  public regresarAnteriorFormulario(): void {
+  public override regresarAnteriorFormulario(): void {
     this.addMensaje('Navegacion al formulario anterior.');
   }
 
-  public generarPlantilla(): void {
+  public override generarPlantilla(): void {
     this.hayRecurso = true;
     this.hayRecursoWord = true;
     this.addMensaje(`Plantilla generada en formato ${this.tipoHoja}.`);
@@ -368,11 +341,7 @@ export class PlantillaFormularioNormalHtmComponent extends PlantillaFormCapturaC
     this.addMensaje('Se anexo correctamente la planilla.');
   }
 
-  public seleccionarMail(value: string): void {
-    this.idMailSeleccionado = value;
-  }
-
-  public adjuntarPlantillaMail(): void {
+  public override adjuntarPlantillaMail(): void {
     this.addMensaje(`Carta adjuntada al envio de correo ${this.idMailSeleccionado}.`);
   }
 
@@ -512,6 +481,11 @@ export class PlantillaFormularioNormalHtmComponent extends PlantillaFormCapturaC
       operadorAritmetico: '',
       items: partial.items,
     };
+  }
+
+  
+  ngAfterViewChecked(): void {
+    this.padre?.refrescarAltura?.();
   }
 
 }

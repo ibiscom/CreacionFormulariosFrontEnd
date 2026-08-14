@@ -160,38 +160,11 @@ export class PlantillaFormularioEvtInicioHtmComponent extends PlantillaFormCaptu
       '<p>Ayuda del formulario de evento de inicio.</p><p>La informacion diligenciada se usa para iniciar el flujo.</p>',
   };
 
-  public mensajes: string[] = [];
   public componentValues: Record<string, string | boolean> = {};
   public valoresComponentes: Record<string, string> = {};
-  public clicksGuardar = 0;
 
-  public mostrarFormulario = true;
   public diligenciable = true;
-  public hayAnteriorFormulario = true;
-  public mostrarBotonEliminar = true;
   public mostrarBotonTerminar = true;
-
-  public hayCartas = true;
-  public mostrarCartas = true;
-  public cartaSeleccionada = 'cartaA';
-  public tipoHoja = 'letter';
-
-  public hayRecurso = true;
-  public hayRecursoWord = true;
-  public hayComponentesMail = true;
-  public firmable = true;
-
-  public nombreCarta = 'plantilla-evento-inicio';
-  public recursoPdfUrl = '#';
-  public recursoWordUrl = '#';
-  public idMailSeleccionado = 'mail1';
-  public componentesMail = [
-    { label: 'Correo principal', value: 'mail1' },
-    { label: 'Correo respaldo', value: 'mail2' },
-  ];
-
-  public popupFirmaVisible = false;
-  public urlPopupFirma = 'about:blank';
 
   public mensajePostTerminacionTarea = '';
   public popupMensajePostTerminacionTareaVisible = false;
@@ -200,12 +173,12 @@ export class PlantillaFormularioEvtInicioHtmComponent extends PlantillaFormCaptu
   public simularErrorEnvioMail = false;
 
   public constructor(
-    public dialog: MatDialog,
+    dialog: MatDialog,
     protected override plantillaFormCapturaService: PlantillaFormCapturaService,
     protected override route: ActivatedRoute,
     protected override router: Router,
   ) {
-    super(plantillaFormCapturaService, route, router);
+    super(plantillaFormCapturaService, route, router, dialog);
   }
 
   public override ngOnInit(): void {
@@ -217,24 +190,12 @@ export class PlantillaFormularioEvtInicioHtmComponent extends PlantillaFormCaptu
     return Object.values(this.formulario.seccionesFormulario);
   }
 
-  public asBool(value: unknown): boolean {
-    return value === true || value === 'true';
-  }
-
   public hasComponentFlag(componente: ComponenteBaseEntity, flagName: string): boolean {
     return this.asBool((componente as unknown as Record<string, unknown>)[flagName]);
   }
 
   public toggleSeccion(seccion: SeccionEntity): void {
     seccion.expandido = this.asBool(seccion.expandido) ? 'false' : 'true';
-  }
-
-  public getComponentList(componentes: ComponentesEntity | ''): ComponenteBaseEntity[] {
-    if (componentes === '') {
-      return [];
-    }
-
-    return Object.values(componentes).flatMap((entry) => (Array.isArray(entry) ? entry : entry ? [entry] : []));
   }
 
   public componentKey(componente: ComponenteBaseEntity): string {
@@ -290,70 +251,39 @@ export class PlantillaFormularioEvtInicioHtmComponent extends PlantillaFormCaptu
     return this.asBool(componente.obligatorioFuncional) && !this.hayAnteriorFormulario;
   }
 
-  public addMensaje(message: string): void {
-    this.mensajes = [message, ...this.mensajes].slice(0, 6);
+  public override addMensaje(message: string): void {
+    super.addMensaje(message);
   }
 
-  public abrirVentanaAyuda(): void {
-    this.dialog.open(DialogAyudaComponent, {
-      width: '420px',
-      data: {
-        nombreFormulario: this.formulario?.titulo || 'Formulario',
-        contenidoAyuda: this.formulario?.htmlAyuda || '',
-      },
-    });
+  public override abrirVentanaAyuda(): void {
+    super.abrirVentanaAyuda();
   }
 
-  public abrirPopUp(): void {
-    this.popupFirmaVisible = true;
+  public override guardarFormulario(): void {
+    super.guardarFormulario();
   }
 
-  public cerrarPopUp(): void {
-    this.popupFirmaVisible = false;
+  public override eliminarRegistro(): void {
+    super.eliminarRegistro();
   }
 
-  public prevencionDobleClic(): boolean {
-    this.clicksGuardar += 1;
-    return this.clicksGuardar > 1;
-  }
-
-  public resetPrevencionDobleClic(): void {
-    this.clicksGuardar = 0;
-  }
-
-  public guardarFormulario(): void {
-    if (this.prevencionDobleClic()) {
-      return;
-    }
-
-    this.addMensaje('Formulario guardado correctamente.');
-    this.resetPrevencionDobleClic();
-  }
-
-  public eliminarRegistro(): void {
-    this.addMensaje('Registro cancelado/eliminado.');
-  }
-
-  public nuevoRegistro(): void {
+  public override nuevoRegistro(): void {
     this.componentValues = {};
     this.seedComponentValues();
     this.resetPrevencionDobleClic();
     this.addMensaje('Formulario limpiado.');
   }
 
-  public refrescarPagina(): void {
-    this.resetPrevencionDobleClic();
-    this.addMensaje('Pagina refrescada.');
+  public override refrescarPagina(): void {
+    super.refrescarPagina();
   }
 
-  public regresarAnteriorFormulario(): void {
-    this.addMensaje('Navegacion al formulario anterior.');
+  public override regresarAnteriorFormulario(): void {
+    super.regresarAnteriorFormulario();
   }
 
-  public generarPlantilla(): void {
-    this.hayRecurso = true;
-    this.hayRecursoWord = true;
-    this.addMensaje(`Plantilla generada en formato ${this.tipoHoja}.`);
+  public override generarPlantilla(): void {
+    super.generarPlantilla();
   }
 
   public adjuntarPlantillaPDF(): void {
@@ -365,12 +295,8 @@ export class PlantillaFormularioEvtInicioHtmComponent extends PlantillaFormCaptu
     this.addMensaje('Se anexo correctamente la planilla.');
   }
 
-  public seleccionarMail(value: string): void {
-    this.idMailSeleccionado = value;
-  }
-
-  public adjuntarPlantillaMail(): void {
-    this.addMensaje(`Carta adjuntada al envio de correo ${this.idMailSeleccionado}.`);
+  public override adjuntarPlantillaMail(): void {
+    super.adjuntarPlantillaMail();
   }
 
   public terminarFormulario(): void {

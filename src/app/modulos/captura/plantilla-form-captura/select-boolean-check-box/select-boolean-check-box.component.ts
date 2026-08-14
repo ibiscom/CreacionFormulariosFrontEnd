@@ -28,14 +28,15 @@ export class SelectBooleanCheckBoxComponent {
       return;
     }
 
-    const nuevoValor = setFieldPayloadValue(this.selectBooleanCheckBoxEntity.valor, String(value));
+    const nuevoValor = setFieldPayloadValue(this.selectBooleanCheckBoxEntity.valor, value);
     if (nuevoValor !== this.selectBooleanCheckBoxEntity.valor) {
       (this.selectBooleanCheckBoxEntity as any).valor = nuevoValor;
     }
   }
 
   public get checked(): boolean {
-    return String(getFieldPayloadValue(this.selectBooleanCheckBoxEntity?.valor) ?? '') === 'true';
+    const value = getFieldPayloadValue(this.selectBooleanCheckBoxEntity?.valor);
+    return value === true || value === 'true';
   }
 
   public partiallyComplete(): unknown {

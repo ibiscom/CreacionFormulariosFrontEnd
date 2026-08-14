@@ -72,7 +72,7 @@ export class ListaFormsConsultaComponent {
   }
 
   public consultar(row: any) {
-    this.router.navigate([`/consulta/ver-form-consulta/${row?.name}`]);
+    this.router.navigate([`/consulta/consultar-form-consulta/${row?.name}`]);
   }
 
   public eliminar(_t48: any) {

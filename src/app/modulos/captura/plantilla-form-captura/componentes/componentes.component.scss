@@ -16,3 +16,15 @@ frm-in-put-rich-text {
   width: 100%;
   min-width: 0;
 }
+
+.component-render-wrapper {
+  width: 100%;
+  cursor: pointer;
+}
+
+.component-render-wrapper:hover,
+.component-render-wrapper--drop-target {
+  outline: 2px dashed #1976d2;
+  outline-offset: 2px;
+  background: #eef6ff;
+}

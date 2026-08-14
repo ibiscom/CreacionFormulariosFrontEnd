@@ -48,6 +48,10 @@ export class SelectOneListBoxComponent implements OnChanges {
     }
   }
 
+  public get selectOneListBoxEntityVisible(): boolean {
+    return !!(this.selectOneListBoxEntity && (this.selectOneListBoxEntity.visible === true || this.selectOneListBoxEntity.visible === 'true'));
+  }
+
   private resolveOptions(): Array<{ label: string; value: string }> {
     const entity = this.selectOneListBoxEntity as Record<string, unknown> | undefined;
     if (!entity) {
@@ -55,7 +59,7 @@ export class SelectOneListBoxComponent implements OnChanges {
     }
 
     const fromItems = this.fromItems(entity['items']);
-    if (fromItems.length > 0) {
+    if (  fromItems.length > 0) {
       return fromItems;
     }
 

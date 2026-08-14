@@ -64,6 +64,7 @@ export class InvocarComponenteCapturaComponent {
         this.formularioHtm = response.respuesta;
         this.isFormularioReady = true;
         this.authenticated = true;
+        setTimeout(() => this.refrescarAltura(), 0);
       },
       error: (error) => {
         console.error('Error al obtener el formulario HTM:', error);
@@ -173,7 +174,39 @@ export class InvocarComponenteCapturaComponent {
     const paddingLength = (4 - (base64Value.length % 4)) % 4;
     return `${base64Value}${'='.repeat(paddingLength)}`;
   }
+  
+    private lastHeight = 0;
 
+  ngAfterViewInit(): void {
+    this.enviarAltura();
+  }
 
+  public refrescarAltura(): void {
+    setTimeout(() => this.enviarAltura(), 0);
+  }
 
+  private enviarAltura(): void {
+    const height = Math.max(
+      document.body?.scrollHeight ?? 0,
+      document.documentElement?.scrollHeight ?? 0,
+      document.body?.offsetHeight ?? 0,
+      document.documentElement?.offsetHeight ?? 0
+    );
+
+    const nextHeight = Math.ceil(height);
+
+    if (Math.abs(nextHeight - this.lastHeight) < 5) {
+      return;
+    }
+
+    this.lastHeight = nextHeight;
+
+    window.parent.postMessage(
+      {
+        type: 'iframe-height',
+        height: nextHeight
+      },
+      '*'
+    );
+  }
 }

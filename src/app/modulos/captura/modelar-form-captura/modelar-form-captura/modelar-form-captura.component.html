@@ -1,0 +1,458 @@
+<section class="designer-shell">
+  <header class="designer-header">
+    <h2>Diseño del formulario</h2>
+  </header>
+
+  <div class="designer-actions">
+    <button type="button" class="save-button" (click)="guardarFormulario()">Guardar formulario</button>
+  </div>
+
+  <div class="designer-layout">
+    <aside class="designer-sidebar">
+      <div class="panel">
+        <h3>Datos generales</h3>
+        <label>
+          Nombre del formulario
+          <input type="text" [(ngModel)]="formulario.titulo" />
+        </label>
+        <label>
+          Descripción
+          <textarea [(ngModel)]="formulario.descripcion"></textarea>
+        </label>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title-row">
+          <h3>Secciones</h3>
+          <button type="button" (click)="addSection()">Agregar</button>
+        </div>
+        @if (getSectionEntries().length > 0) {
+          <ul class="list">
+            @for (section of getSectionEntries(); track section.key) {
+              <li
+                [class.active]="section.key === selectedSectionKey"
+                (click)="selectSection(section.key)"
+              >
+                {{ section.value.titulo }}
+              </li>
+            }
+          </ul>
+        } @else {
+          <p>No hay secciones todavía.</p>
+        }
+      </div>
+
+      @if (selectedSectionKey) {
+        <div class="panel">
+          <div class="panel-title-row">
+            <h3>Componentes</h3>
+            <button type="button" (click)="addComponentToSelectedSection()">Agregar</button>
+          </div>
+          <label>
+            Tipo de componente
+            <select [(ngModel)]="selectedComponentType">
+              @for (type of componentTypes; track type) {
+                <option [value]="type">{{ type }}</option>
+              }
+            </select>
+          </label>
+          @if (getComponentEntries(selectedSectionKey).length > 0) {
+            <ul class="list">
+              @for (component of getComponentEntries(selectedSectionKey); track component.key) {
+                <li
+                  [class.active]="component.key === selectedComponentKey"
+                  (click)="selectComponent(component.key)"
+                >
+                  {{ component.value.nombre || component.key }}
+                </li>
+              }
+            </ul>
+          } @else {
+            <p>La sección aún no tiene componentes.</p>
+          }
+        </div>
+      }
+
+      @if (selectedSectionKey && selectedComponentKey) {
+        <div class="panel">
+          <div class="panel-title-row">
+            <h3>Propiedades</h3>
+          </div>
+          @let selectedComponent = getSelectedComponent();
+          @if (selectedComponent) {
+            <div class="property-section">
+              <h4>Generales</h4>
+              <label>
+                Nombre
+                <input type="text" [ngModel]="selectedComponent.nombre" (ngModelChange)="updateSelectedComponentProperty('nombre', $event)" />
+              </label>
+              <label>
+                Descripción
+                <textarea [ngModel]="selectedComponent.descripcion" (ngModelChange)="updateSelectedComponentProperty('descripcion', $event)"></textarea>
+              </label>
+              <label>
+                Etiqueta / valor
+                <input type="text" [ngModel]="selectedComponent.valor?.['value'] ?? ''" (ngModelChange)="updateSelectedComponentValue($event)" />
+              </label>
+              <label>
+                Valor por defecto
+                <input type="text" [ngModel]="selectedComponent.valorDefecto?.['value'] ?? ''" (ngModelChange)="updateSelectedComponentDefaultValue($event)" />
+              </label>
+              <label>
+                Tipo de dato
+                <input type="text" [ngModel]="selectedComponent.tipoDato" (ngModelChange)="updateSelectedComponentProperty('tipoDato', $event)" />
+              </label>
+              <label>
+                Obligatorio
+                <select [ngModel]="selectedComponent.obligatorio" (ngModelChange)="updateSelectedComponentProperty('obligatorio', $event)">
+                  <option value="true">Sí</option>
+                  <option value="false">No</option>
+                </select>
+              </label>
+              <label>
+                Solo lectura
+                <select [ngModel]="selectedComponent.readOnly" (ngModelChange)="updateSelectedComponentProperty('readOnly', $event)">
+                  <option value="true">Sí</option>
+                  <option value="false">No</option>
+                </select>
+              </label>
+              <label>
+                Visible
+                <select [ngModel]="selectedComponent.visible" (ngModelChange)="updateSelectedComponentProperty('visible', $event)">
+                  <option value="true">Sí</option>
+                  <option value="false">No</option>
+                </select>
+              </label>
+              <label>
+                Filtro
+                <select [ngModel]="selectedComponent.filtro" (ngModelChange)="updateSelectedComponentProperty('filtro', $event)">
+                  <option value="true">Sí</option>
+                  <option value="false">No</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="property-section">
+              <h4>Apariencia</h4>
+              <label>
+                Estilo
+                <input type="text" [ngModel]="selectedComponent.style" (ngModelChange)="updateSelectedComponentProperty('style', $event)" />
+              </label>
+              <label>
+                Clase CSS
+                <input type="text" [ngModel]="selectedComponent.styleClass" (ngModelChange)="updateSelectedComponentProperty('styleClass', $event)" />
+              </label>
+              <label>
+                Estilo contenedor
+                <input type="text" [ngModel]="selectedComponent.styleContenedor" (ngModelChange)="updateSelectedComponentProperty('styleContenedor', $event)" />
+              </label>
+              <label>
+                Clase contenedor
+                <input type="text" [ngModel]="selectedComponent.styleClassContenedor" (ngModelChange)="updateSelectedComponentProperty('styleClassContenedor', $event)" />
+              </label>
+              <label>
+                Column classes
+                <input type="text" [ngModel]="selectedComponent.columnClasses" (ngModelChange)="updateSelectedComponentProperty('columnClasses', $event)" />
+              </label>
+            </div>
+
+            @if (isInputLikeComponent(selectedComponent) || isTableLikeComponent(selectedComponent)) {
+              <div class="property-section">
+                <h4>Datos y consulta</h4>
+                <label>
+                  Id columna
+                  <input type="text" [ngModel]="selectedComponent.idColumna ?? ''" (ngModelChange)="updateSelectedComponentProperty('idColumna', $event)" />
+                </label>
+                <label>
+                  Nombre entidad
+                  <input type="text" [ngModel]="selectedComponent.nombreEntidad ?? ''" (ngModelChange)="updateSelectedComponentProperty('nombreEntidad', $event)" />
+                </label>
+                <label>
+                  Query
+                  <textarea [ngModel]="selectedComponent.query ?? ''" (ngModelChange)="updateSelectedComponentProperty('query', $event)"></textarea>
+                </label>
+                <label>
+                  Select
+                  <textarea [ngModel]="selectedComponent.select ?? ''" (ngModelChange)="updateSelectedComponentProperty('select', $event)"></textarea>
+                </label>
+                <label>
+                  Where
+                  <textarea [ngModel]="selectedComponent.where ?? ''" (ngModelChange)="updateSelectedComponentProperty('where', $event)"></textarea>
+                </label>
+                <label>
+                  Order by
+                  <input type="text" [ngModel]="selectedComponent.orderBy ?? ''" (ngModelChange)="updateSelectedComponentProperty('orderBy', $event)" />
+                </label>
+                <label>
+                  Pag size
+                  <input type="text" [ngModel]="selectedComponent.pagSize ?? ''" (ngModelChange)="updateSelectedComponentProperty('pagSize', $event)" />
+                </label>
+                <label>
+                  Condiciones
+                  <textarea [ngModel]="selectedComponent.condiciones ?? ''" (ngModelChange)="updateSelectedComponentProperty('condiciones', $event)"></textarea>
+                </label>
+                <label>
+                  Mapa condiciones
+                  <textarea [ngModel]="selectedComponent.mapaCondiciones ?? ''" (ngModelChange)="updateSelectedComponentProperty('mapaCondiciones', $event)"></textarea>
+                </label>
+                <label>
+                  Consulta genérica
+                  <textarea [ngModel]="selectedComponent.consultaGenerica ?? ''" (ngModelChange)="updateSelectedComponentProperty('consultaGenerica', $event)"></textarea>
+                </label>
+                <label>
+                  Where temporal
+                  <textarea [ngModel]="selectedComponent.whereTemp ?? ''" (ngModelChange)="updateSelectedComponentProperty('whereTemp', $event)"></textarea>
+                </label>
+                <label>
+                  Where con
+                  <textarea [ngModel]="selectedComponent.whereCon ?? ''" (ngModelChange)="updateSelectedComponentProperty('whereCon', $event)"></textarea>
+                </label>
+                <label>
+                  Lista identificadores
+                  <input type="text" [ngModel]="selectedComponent.listaIdentificadores ?? ''" (ngModelChange)="updateSelectedComponentProperty('listaIdentificadores', $event)" />
+                </label>
+                <label>
+                  Lista labels
+                  <input type="text" [ngModel]="selectedComponent.listaLabels ?? ''" (ngModelChange)="updateSelectedComponentProperty('listaLabels', $event)" />
+                </label>
+                <label>
+                  Label organizable
+                  <input type="text" [ngModel]="selectedComponent.labelOrganizable ?? ''" (ngModelChange)="updateSelectedComponentProperty('labelOrganizable', $event)" />
+                </label>
+              </div>
+            }
+
+            @if (isTableLikeComponent(selectedComponent) || isLinkLikeComponent(selectedComponent)) {
+              <div class="property-section">
+                <h4>Relaciones y tablas</h4>
+                <label>
+                  Columna relación
+                  <input type="text" [ngModel]="selectedComponent.columnaRelacion ?? ''" (ngModelChange)="updateSelectedComponentProperty('columnaRelacion', $event)" />
+                </label>
+                <label>
+                  Columna primaria
+                  <input type="text" [ngModel]="selectedComponent.columnaPrimaria ?? ''" (ngModelChange)="updateSelectedComponentProperty('columnaPrimaria', $event)" />
+                </label>
+                <label>
+                  Atributo padre 1:1
+                  <input type="text" [ngModel]="selectedComponent.nombreAtributoPadreUnoAUno ?? ''" (ngModelChange)="updateSelectedComponentProperty('nombreAtributoPadreUnoAUno', $event)" />
+                </label>
+                <label>
+                  Atributo hijo 1:1
+                  <input type="text" [ngModel]="selectedComponent.nombreAtributoHijoUnoAUno ?? ''" (ngModelChange)="updateSelectedComponentProperty('nombreAtributoHijoUnoAUno', $event)" />
+                </label>
+                <label>
+                  Nombre formulario
+                  <input type="text" [ngModel]="selectedComponent.nombreFormulario ?? ''" (ngModelChange)="updateSelectedComponentProperty('nombreFormulario', $event)" />
+                </label>
+                <label>
+                  Nombre formulario edición
+                  <input type="text" [ngModel]="selectedComponent.nombreFormularioEdicion ?? ''" (ngModelChange)="updateSelectedComponentProperty('nombreFormularioEdicion', $event)" />
+                </label>
+                <label>
+                  Mostrar botón agregar
+                  <input type="text" [ngModel]="selectedComponent.mostrarBotonAgregar ?? ''" (ngModelChange)="updateSelectedComponentProperty('mostrarBotonAgregar', $event)" />
+                </label>
+                <label>
+                  Mostrar botón buscar
+                  <input type="text" [ngModel]="selectedComponent.mostrarBotonBuscar ?? ''" (ngModelChange)="updateSelectedComponentProperty('mostrarBotonBuscar', $event)" />
+                </label>
+                <label>
+                  Mostrar botón eliminar
+                  <input type="text" [ngModel]="selectedComponent.mostrarBotonEliminar ?? ''" (ngModelChange)="updateSelectedComponentProperty('mostrarBotonEliminar', $event)" />
+                </label>
+                <label>
+                  Cantidad mínima
+                  <input type="text" [ngModel]="selectedComponent.cantidadMinima ?? ''" (ngModelChange)="updateSelectedComponentProperty('cantidadMinima', $event)" />
+                </label>
+                <label>
+                  Mensaje error
+                  <input type="text" [ngModel]="selectedComponent.mensajeError ?? ''" (ngModelChange)="updateSelectedComponentProperty('mensajeError', $event)" />
+                </label>
+              </div>
+            }
+
+            @if (isInputLikeComponent(selectedComponent)) {
+              <div class="property-section">
+                <h4>Entrada / selección</h4>
+                <label>
+                  Formato
+                  <input type="text" [ngModel]="selectedComponent.formato ?? ''" (ngModelChange)="updateSelectedComponentProperty('formato', $event)" />
+                </label>
+                <label>
+                  Formato moneda
+                  <input type="text" [ngModel]="selectedComponent.formatoMoneda ?? ''" (ngModelChange)="updateSelectedComponentProperty('formatoMoneda', $event)" />
+                </label>
+              </div>
+            }
+
+            @if (isButtonLikeComponent(selectedComponent)) {
+              <div class="property-section">
+                <h4>Acción</h4>
+                <label>
+                  Utiliza imagen
+                  <select [ngModel]="selectedComponent.utilizaImagen ?? 'false'" (ngModelChange)="updateSelectedComponentProperty('utilizaImagen', $event)">
+                    <option value="true">Sí</option>
+                    <option value="false">No</option>
+                  </select>
+                </label>
+                <label>
+                  Ubicación imagen
+                  <input type="text" [ngModel]="selectedComponent.ubicacionImagen ?? ''" (ngModelChange)="updateSelectedComponentProperty('ubicacionImagen', $event)" />
+                </label>
+              </div>
+            }
+
+            @if (isLinkLikeComponent(selectedComponent)) {
+              <div class="property-section">
+                <h4>Enlace</h4>
+                <label>
+                  Mostrar link
+                  <select [ngModel]="selectedComponent.mostrarLink ?? 'false'" (ngModelChange)="updateSelectedComponentProperty('mostrarLink', $event)">
+                    <option value="true">Sí</option>
+                    <option value="false">No</option>
+                  </select>
+                </label>
+                <label>
+                  Nombre formulario
+                  <input type="text" [ngModel]="selectedComponent.nombreFormulario ?? ''" (ngModelChange)="updateSelectedComponentProperty('nombreFormulario', $event)" />
+                </label>
+              </div>
+            }
+
+            <div class="property-section">
+              <h4>Validación y comportamiento</h4>
+              <label>
+                Validaciones expresiones
+                <textarea [ngModel]="selectedComponent.validacionesExpresiones" (ngModelChange)="updateSelectedComponentProperty('validacionesExpresiones', $event)"></textarea>
+              </label>
+              <label>
+                Expresión lógica filtro
+                <textarea [ngModel]="selectedComponent.expresionLogicaFiltro ?? ''" (ngModelChange)="updateSelectedComponentProperty('expresionLogicaFiltro', $event)"></textarea>
+              </label>
+              <label>
+                Operador aritmético
+                <input type="text" [ngModel]="selectedComponent.operadorAritmetico" (ngModelChange)="updateSelectedComponentProperty('operadorAritmetico', $event)" />
+              </label>
+              <label>
+                Componentes relacionados
+                <input type="text" [ngModel]="selectedComponent.componentesRelacionados ?? ''" (ngModelChange)="updateSelectedComponentProperty('componentesRelacionados', $event)" />
+              </label>
+              <label>
+                Mostrar link
+                <select [ngModel]="selectedComponent.mostrarLink ?? 'false'" (ngModelChange)="updateSelectedComponentProperty('mostrarLink', $event)">
+                  <option value="true">Sí</option>
+                  <option value="false">No</option>
+                </select>
+              </label>
+              <label>
+                Obligatorio funcional
+                <select [ngModel]="selectedComponent.obligatorioFuncional" (ngModelChange)="updateSelectedComponentProperty('obligatorioFuncional', $event)">
+                  <option value="true">Sí</option>
+                  <option value="false">No</option>
+                </select>
+              </label>
+              <label>
+                Cumple validaciones
+                <select [ngModel]="selectedComponent.cumpleValidaciones" (ngModelChange)="updateSelectedComponentProperty('cumpleValidaciones', $event)">
+                  <option value="true">Sí</option>
+                  <option value="false">No</option>
+                </select>
+              </label>
+              <label>
+                Opción extra
+                <select [ngModel]="selectedComponent.opcionExtra" (ngModelChange)="updateSelectedComponentProperty('opcionExtra', $event)">
+                  <option value="true">Sí</option>
+                  <option value="false">No</option>
+                </select>
+              </label>
+              <label>
+                Sujeto de validación
+                <select [ngModel]="selectedComponent.estaSujeto ?? 'false'" (ngModelChange)="updateSelectedComponentProperty('estaSujeto', $event)">
+                  <option value="true">Sí</option>
+                  <option value="false">No</option>
+                </select>
+              </label>
+              <label>
+                Origen de validación
+                <select [ngModel]="selectedComponent.esOrigenValidacion ?? 'false'" (ngModelChange)="updateSelectedComponentProperty('esOrigenValidacion', $event)">
+                  <option value="true">Sí</option>
+                  <option value="false">No</option>
+                </select>
+              </label>
+              <label>
+                Tipo
+                <input type="text" [ngModel]="selectedComponent.tipoComponente" disabled />
+              </label>
+            </div>
+
+            <div class="property-section">
+              <h4>Vista completa del componente</h4>
+              <pre class="property-json">{{ selectedComponent | json }}</pre>
+            </div>
+          }
+        </div>
+      }
+    </aside>
+
+    <main class="designer-main">
+      <div class="panel">
+        <h3>Vista previa del formulario</h3>
+        <div class="palette">
+          <h4>Paleta de componentes</h4>
+          <div class="component-palette">
+            @for (type of componentTypes; track type) {
+              <button
+                type="button"
+                class="palette-item"
+                draggable="true"
+                (dragstart)="dragComponent(type, $event)"
+              >
+                {{ type }}
+              </button>
+            }
+          </div>
+        </div>
+        <div class="preview-card">
+          @if (mensajes.length > 0) {
+            <div class="message-stack">
+              @for (message of mensajes; track message) {
+                <p class="message-item">{{ message }}</p>
+              }
+            </div>
+          }
+          <h4>{{ formulario.titulo || 'Sin título' }}</h4>
+          <p>{{ formulario.descripcion || 'Sin descripción' }}</p>
+
+          @for (section of getSectionEntries(); track section.key) {
+            <div
+              class="section-card"
+              [class.section-card--active-drop]="isDraggingOverSection(section.key)"
+              (dragover)="onSectionDragOver(section.key, $event)"
+              (dragleave)="onSectionDragLeave(section.key, $event)"
+              (drop)="dropComponent(section.key, $event)"
+            >
+              <div class="section-title-row">
+                <h5>{{ section.value.titulo }}</h5>
+                <span class="drop-hint">Suelta aquí</span>
+              </div>
+              <p>{{ section.value.descripcion }}</p>
+              <div class="component-list">
+                @if (getComponentEntries(section.key).length > 0) {
+                  <frm-componentes
+                    [componentes]="section.value.componentesIzq"
+                    [sectionKey]="section.key"
+                    (componenteSeleccionado)="selectComponent($event)"
+                    (componenteReordenado)="reorderComponent($event)"
+                  ></frm-componentes>
+                } @else {
+                  <div class="empty-drop-zone">Arrastra un componente aquí</div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </main>
+  </div>
+</section>

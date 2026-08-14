@@ -4,155 +4,177 @@
     @for (componentKey of getComponentKeys(); track componentKey) {
       @let componentData = getComponentData(componentKey);
       @if (componentData && isComponent(componentData)) {
-        @switch (componentData.tipoComponente) {
-          @case ('InPutText') {
-            <frm-in-put-text
-              [inPutTextEntity]="$any(componentData)"
-              [verFormularioCmp]="verFormularioCmp"
-            ></frm-in-put-text>
+        <div
+          class="component-render-wrapper"
+          [class.component-render-wrapper--drop-target]="isDropTarget(componentKey)"
+          draggable="true"
+          (click)="seleccionarComponente(componentKey)"
+          (dragstart)="dragComponent(componentKey, $event)"
+          (dragenter)="onComponentDragEnter(componentKey); allowDrop($event)"
+          (dragover)="allowDrop($event)"
+          (dragleave)="onComponentDragLeave(componentKey, $event)"
+          (drop)="dropComponent(componentKey, $event)"
+        >
+          @switch (componentData.tipoComponente) {
+            @case ('InPutText') {
+              <frm-in-put-text
+                [inPutTextEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-in-put-text>
+            }
+            @case ('SearchButton') {
+              <frm-search-button
+                [searchButtonEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-search-button>
+            }
+            @case ('SaveButton') {
+              <frm-save-button
+                [saveButtonEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-save-button>
+            }
+            @case ('RefreshButton') {
+              <frm-refresh-button
+                [refreshButtonEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-refresh-button>
+            }
+            @case ('InPutTextArea') {
+              <frm-in-put-text-area
+                [inPutTextAreaEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-in-put-text-area>
+            }
+            @case ('InPutRichText') {
+              <frm-in-put-rich-text
+                [inPutRichTextEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-in-put-rich-text>
+            }
+            @case ('FileUpload') {
+              <frm-file-upload
+                [fileUploadEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-file-upload>
+            }
+            @case ('SelectBooleanCheckBox') {
+              <frm-select-boolean-check-box
+                [selectBooleanCheckBoxEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-select-boolean-check-box>
+            }
+            @case ('SelectOneListBox') {
+              <frm-select-one-list-box
+                [selectOneListBoxEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-select-one-list-box>
+            }
+            @case ('SelectInPutDate') {
+              <frm-select-in-put-date
+                [selectInPutDateEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-select-in-put-date>
+            }
+            @case ('SelectOneListBoxCustomized') {
+              <frm-select-one-list-box-customized
+                [selectOneListBoxCustomizedEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-select-one-list-box-customized>
+            }
+            @case ('Label') {
+              <frm-label
+                [labelEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-label>
+            }
+            @case ('Separador') {
+              <frm-separador
+                [separadorEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-separador>
+            }
+            @case ('LinkToAForm') {
+              <frm-link-to-a-form
+                [linkToAFormEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-link-to-a-form>
+            }
+            @case ('LinkToDifferentForm') {
+              <frm-link-to-different-form
+                [linkToDifferentFormEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-link-to-different-form>
+            }
+            @case ('LinkFormToIfaces') {
+              <frm-link-form-to-icefaces
+                [linkFormToIcefacesEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-link-form-to-icefaces>
+            }
+            @case ('Mail') {
+              <frm-mail
+                [mailEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-mail>
+            }
+            @case ('TablaDetalles') {
+              <frm-table-details
+                [tableDetailsEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-table-details>
+            }
+            @case ('TableSQLQuery') {
+              <frm-table-s-q-l-query
+                [tableSQLQueryEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-table-s-q-l-query>
+            }
+            @case ('OutPutLink') {
+              <frm-out-put-link
+                [outPutLinkEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-out-put-link>
+            }
+            @case ('SelectOneRadioButton') {
+              <frm-select-one-radio
+                [selectOneRadioEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-select-one-radio>
+            }
+            @case ('CargaMasiva') {
+              <frm-carga-masiva
+                [cargaMasivaEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-carga-masiva>
+            }
+            @case ('ListaCompuesta') {
+              <frm-lista-compuesta
+                [listaCompuestaEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-lista-compuesta>
+            }
+            @default {
+              <p (click)="seleccionarComponente(componentKey)">Tipo de componente desconocido: {{ componentData.tipoComponente }}</p>
+              <!-- Tipo de componente desconocido: {{componentData.tipoComponente}} -->
+            }
           }
-          @case ('SearchButton') {
-            <frm-search-button
-              [searchButtonEntity]="$any(componentData)"
-              [verFormularioCmp]="verFormularioCmp"
-            ></frm-search-button>
-          }
-          @case ('SaveButton') {
-            <frm-save-button
-              [saveButtonEntity]="$any(componentData)"
-              [verFormularioCmp]="verFormularioCmp"
-            ></frm-save-button>
-          }
-          @case ('RefreshButton') {
-            <frm-refresh-button
-              [refreshButtonEntity]="$any(componentData)"
-              [verFormularioCmp]="verFormularioCmp"
-            ></frm-refresh-button>
-          }
-          @case ('InPutTextArea') {
-            <frm-in-put-text-area
-              [inPutTextAreaEntity]="$any(componentData)"
-              [verFormularioCmp]="verFormularioCmp"
-            ></frm-in-put-text-area>
-          }
-          @case ('InPutRichText') {
-            <frm-in-put-rich-text
-              [inPutRichTextEntity]="$any(componentData)"
-              [verFormularioCmp]="verFormularioCmp"
-            ></frm-in-put-rich-text>
-          }
-          @case ('FileUpload') {
-            <frm-file-upload
-              [fileUploadEntity]="$any(componentData)"
-              [verFormularioCmp]="verFormularioCmp"
-            ></frm-file-upload>
-          }
-          @case ('SelectBooleanCheckBox') {
-            <frm-select-boolean-check-box
-              [selectBooleanCheckBoxEntity]="$any(componentData)"
-              [verFormularioCmp]="verFormularioCmp"
-            ></frm-select-boolean-check-box>
-          }
-          @case ('SelectOneListBox') {
-            <frm-select-one-list-box
-              [selectOneListBoxEntity]="$any(componentData)"
-              [verFormularioCmp]="verFormularioCmp"
-            ></frm-select-one-list-box>
-          }
-          @case ('SelectInPutDate') {
-            <frm-select-in-put-date
-              [selectInPutDateEntity]="$any(componentData)"
-              [verFormularioCmp]="verFormularioCmp"
-            ></frm-select-in-put-date>
-          }
-          @case ('SelectOneListBoxCustomized') {
-            <frm-select-one-list-box-customized
-              [selectOneListBoxCustomizedEntity]="$any(componentData)"
-              [verFormularioCmp]="verFormularioCmp"
-            ></frm-select-one-list-box-customized>
-          }
-          @case ('Label') {
-            <frm-label
-              [labelEntity]="$any(componentData)"
-              [verFormularioCmp]="verFormularioCmp"
-            ></frm-label>
-          }
-          @case ('Separador') {
-            <frm-separador
-              [separadorEntity]="$any(componentData)"
-              [verFormularioCmp]="verFormularioCmp"
-            ></frm-separador>
-          }
-          @case ('LinkToAForm') {
-            <frm-link-to-a-form
-              [linkToAFormEntity]="$any(componentData)"
-              [verFormularioCmp]="verFormularioCmp"
-            ></frm-link-to-a-form>
-          }
-          @case ('LinkToDifferentForm') {
-            <frm-link-to-different-form
-              [linkToDifferentFormEntity]="$any(componentData)"
-              [verFormularioCmp]="verFormularioCmp"
-            ></frm-link-to-different-form>
-          }
-          @case ('LinkFormToIfaces') {
-            <frm-link-form-to-icefaces
-              [linkFormToIcefacesEntity]="$any(componentData)"
-              [verFormularioCmp]="verFormularioCmp"
-            ></frm-link-form-to-icefaces>
-          }
-          @case ('Mail') {
-            <frm-mail
-              [mailEntity]="$any(componentData)"
-              [verFormularioCmp]="verFormularioCmp"
-            ></frm-mail>
-          }
-          @case ('TablaDetalles') {
-            <frm-table-details
-              [tableDetailsEntity]="$any(componentData)"
-              [verFormularioCmp]="verFormularioCmp"
-            ></frm-table-details>
-          }
-          @case ('TableSQLQuery') {
-            <frm-table-s-q-l-query
-              [tableSQLQueryEntity]="$any(componentData)"
-              [verFormularioCmp]="verFormularioCmp"
-            ></frm-table-s-q-l-query>
-          }
-          @case ('OutPutLink') {
-            <frm-out-put-link
-              [outPutLinkEntity]="$any(componentData)"
-              [verFormularioCmp]="verFormularioCmp"
-            ></frm-out-put-link>
-          }
-          @case ('SelectOneRadioButton') {
-            <frm-select-one-radio
-              [selectOneRadioEntity]="$any(componentData)"
-              [verFormularioCmp]="verFormularioCmp"
-            ></frm-select-one-radio>
-          }
-          @case ('CargaMasiva') {
-            <frm-carga-masiva
-              [cargaMasivaEntity]="$any(componentData)"
-              [verFormularioCmp]="verFormularioCmp"
-            ></frm-carga-masiva>
-          }
-          @case ('ListaCompuesta') {
-            <frm-lista-compuesta
-              [listaCompuestaEntity]="$any(componentData)"
-              [verFormularioCmp]="verFormularioCmp"
-            ></frm-lista-compuesta>
-          }
-          @default {
-            <p>Tipo de componente desconocido: {{ componentData.tipoComponente }}</p>
-            <!-- Tipo de componente desconocido: {{componentData.tipoComponente}} -->
-          }
-        }
+        </div>
       }
       @if (componentData && isComponentArray(componentData)) {
         <div class="seccion-componentes">
           @for (componente of componentData; track componente) {
-            <div>
+            <div
+              class="component-render-wrapper"
+              [class.component-render-wrapper--drop-target]="isDropTarget(componente.nombre)"
+              draggable="true"
+              (click)="seleccionarComponente(componente.nombre)"
+              (dragstart)="dragComponent(componente.nombre, $event)"
+              (dragenter)="onComponentDragEnter(componente.nombre); allowDrop($event)"
+              (dragover)="allowDrop($event)"
+              (dragleave)="onComponentDragLeave(componente.nombre, $event)"
+              (drop)="dropComponent(componente.nombre, $event)"
+            >
               @switch (componente.tipoComponente) {
                 @case ('InPutText') {
                   <frm-in-put-text

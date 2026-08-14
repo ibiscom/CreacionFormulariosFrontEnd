@@ -1,7 +1,5 @@
 @if (formulario; as frm) {
   <div class="formulario-container">
-    <div class="enc-formulario">{{ frm.titulo }}</div>
-    <div class="ayuda-formulario"><button mat-button (click)="mostrarAyuda();">Ayuda</button></div>
     <div class="seccs-formulario">
       <frm-secciones-formulario
         [seccionesFormulario]="frm.seccionesFormulario"

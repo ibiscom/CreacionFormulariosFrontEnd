@@ -1,17 +1,118 @@
-<div class="cont-ver-formulario">
-  <div class="enc-ver-formulario">Ver formulario</div>
-  @if (mensaje) {
-    <div>
-      <mat-card class="card-msg-ver-formulario">
-        <mat-card-content>
-          <div class="msg-ver-formulario">
-            {{ mensaje }}
-          </div>
-        </mat-card-content>
-      </mat-card>
-      <p></p>
+<section class="captura-wrapper">
+  @if (mensajes.length > 0 || mensaje) {
+    <div class="message-zone">
+      @if (mensaje) {
+        <p class="alert-message-info">{{ mensaje }}</p>
+      }
+      @for (item of mensajes; track item) {
+        <p class="alert-message-info">{{ item }}</p>
+      }
     </div>
   }
-  <br />
-  <frm-visor></frm-visor>
-</div>
+
+  @if (mostrarFormulario && formulario) {
+    <section class="formulario-panel">
+      <header class="formulario-header">
+        <h2 class="superTitle">{{ formulario.titulo }}</h2>
+        <button type="button" class="iconFormLinkWithIcon" (click)="abrirVentanaAyuda()">Ayuda</button>
+      </header>
+
+      <frm-visor [formulario]="formulario"></frm-visor>
+
+      @if (hayCartas && mostrarCartas) {
+        <section class="cartas-zone">
+          <div>
+            <label class="normalLabelTexto" for="cartaCaptura">Plantilla</label>
+            <select id="cartaCaptura" class="comboField" [(ngModel)]="cartaSeleccionada">
+              <option value="cartaA">Carta A</option>
+              <option value="cartaB">Carta B</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="normalLabelTexto" for="hojaCaptura">Tamano de pagina</label>
+            <select id="hojaCaptura" class="comboField" [(ngModel)]="tipoHoja">
+              <option value="letter">Carta</option>
+              <option value="portrait">Retrato</option>
+              <option value="inherit">Inherit</option>
+              <option value="landscape">Landscape</option>
+              <option value="auto">Auto</option>
+            </select>
+          </div>
+
+          <button type="button" class="formButton" (click)="generarPlantilla()">Generar</button>
+
+          <div class="resource-row">
+            @if (hayRecurso) {
+              <a class="formButton" [href]="recursoPdfUrl" target="_blank" rel="noopener noreferrer">Ver PDF</a>
+            }
+            @if (firmable && hayRecurso) {
+              <button type="button" class="formButton compact" (click)="abrirPopUp()">Firmar</button>
+            }
+            @if (hayRecursoWord) {
+              <a class="formButton" [href]="recursoWordUrl" target="_blank" rel="noopener noreferrer">Ver WORD</a>
+            }
+          </div>
+
+          @if (hayRecurso && hayComponentesMail) {
+            <div class="mail-zone">
+              <label class="normalLabelTexto" for="mailSelectorCaptura">Envio de correo</label>
+              <select
+                id="mailSelectorCaptura"
+                class="comboField"
+                [ngModel]="idMailSeleccionado"
+                (ngModelChange)="seleccionarMail($event)">
+                @for (item of componentesMail; track item.value) {
+                  <option [value]="item.value">{{ item.label }}</option>
+                }
+              </select>
+              <button type="button" class="formButton" (click)="adjuntarPlantillaMail()">Adjuntar carta al envio correo</button>
+            </div>
+          }
+        </section>
+      }
+
+      <p class="smallLabelTexto form-description">{{ formulario.descripcion }}</p>
+
+      @if (mensajes.length > 0 || mensaje) {
+        <div class="message-zone duplicated-messages">
+          @if (mensaje) {
+            <p class="alert-message-info">{{ mensaje }}</p>
+          }
+          @for (item of mensajes; track item + '-footer') {
+            <p class="alert-message-info">{{ item }}</p>
+          }
+        </div>
+      }
+
+      <section class="actions-row">
+        @if (mostrarBotonNuevo) {
+          <button type="button" class="iconFormLinkWithIcon" (click)="guardarFormulario()">Guardar</button>
+        }
+        @if (mostrarBotonEdicion) {
+          <button type="button" class="iconFormLinkWithIcon" (click)="editarFormulario()">Editar</button>
+        }
+        @if (mostrarBotonEliminar) {
+          <button type="button" class="iconFormLinkWithIcon" (click)="eliminarRegistro()">Cancelar</button>
+        }
+        <button type="button" class="iconFormLinkWithIcon" (click)="nuevoRegistro()">Limpiar</button>
+        <button type="button" class="iconFormLinkWithIcon" (click)="refrescarPagina()">Refrescar</button>
+        @if (hayAnteriorFormulario) {
+          <button type="button" class="iconFormLinkWithIcon" (click)="regresarAnteriorFormulario()">Regresar</button>
+        }
+      </section>
+    </section>
+  }
+
+  @if (popupFirmaVisible) {
+    <div class="popup-overlay">
+      <div class="popup-card">
+        <div class="popup-header">
+          <h3>Firmar documento</h3>
+          <button type="button" class="iconFormLinkWithIcon" (click)="cerrarPopUp()">Cerrar</button>
+        </div>
+        <iframe class="firma-frame" [src]="urlPopupFirma" title="Firma de documento"></iframe>
+      </div>
+    </div>
+  }
+</section>
