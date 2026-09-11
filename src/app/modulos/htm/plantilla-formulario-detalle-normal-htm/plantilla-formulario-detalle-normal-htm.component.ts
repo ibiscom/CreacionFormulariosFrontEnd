@@ -270,6 +270,16 @@ export class PlantillaFormularioDetalleNormalHtmComponent {
     return values.flatMap((entry) => (Array.isArray(entry) ? entry : entry ? [entry] : []));
   }
 
+  public getColumnGridTemplate(seccion: SeccionEntity): string {
+    const occupiedColumns = [
+      seccion.componentesIzq,
+      seccion.componentesCent,
+      seccion.componentesDer,
+    ].filter((column) => this.getComponentList(column).length > 0).length;
+
+    return `repeat(${Math.max(occupiedColumns, 1)}, minmax(0, 1fr))`;
+  }
+
   public componentKey(componente: ComponenteBaseEntity): string {
     return componente.id ?? componente.nombre;
   }

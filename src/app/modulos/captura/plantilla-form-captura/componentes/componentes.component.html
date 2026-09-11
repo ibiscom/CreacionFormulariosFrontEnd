@@ -6,7 +6,9 @@
       @if (componentData && isComponent(componentData)) {
         <div
           class="component-render-wrapper"
+          [class.component-render-wrapper--modeling]="isModeling"
           [class.component-render-wrapper--drop-target]="isDropTarget(componentKey)"
+          [style]="isModeling ? componentData.styleContenedor : null"
           draggable="true"
           (click)="seleccionarComponente(componentKey)"
           (dragstart)="dragComponent(componentKey, $event)"
@@ -142,6 +144,12 @@
                 [verFormularioCmp]="verFormularioCmp"
               ></frm-select-one-radio>
             }
+            @case ('SelectOneRadio') {
+              <frm-select-one-radio
+                [selectOneRadioEntity]="$any(componentData)"
+                [verFormularioCmp]="verFormularioCmp"
+              ></frm-select-one-radio>
+            }
             @case ('CargaMasiva') {
               <frm-carga-masiva
                 [cargaMasivaEntity]="$any(componentData)"
@@ -166,7 +174,9 @@
           @for (componente of componentData; track componente) {
             <div
               class="component-render-wrapper"
+              [class.component-render-wrapper--modeling]="isModeling"
               [class.component-render-wrapper--drop-target]="isDropTarget(componente.nombre)"
+              [style]="isModeling ? componente.styleContenedor : null"
               draggable="true"
               (click)="seleccionarComponente(componente.nombre)"
               (dragstart)="dragComponent(componente.nombre, $event)"
@@ -297,6 +307,12 @@
                   ></frm-out-put-link>
                 }
                 @case ('SelectOneRadioButton') {
+                 <frm-select-one-radio
+                    [selectOneRadioEntity]="$any(componente)"
+                    [verFormularioCmp]="verFormularioCmp"
+                  ></frm-select-one-radio>
+                }
+                @case ('SelectOneRadio') {
                  <frm-select-one-radio
                     [selectOneRadioEntity]="$any(componente)"
                     [verFormularioCmp]="verFormularioCmp"

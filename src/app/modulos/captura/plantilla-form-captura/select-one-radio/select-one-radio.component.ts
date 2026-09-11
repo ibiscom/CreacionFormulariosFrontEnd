@@ -53,7 +53,22 @@ export class SelectOneRadioComponent implements OnChanges {
       return [];
     }
 
-    return this.fromItems(entity['items']);
+    const fromItems = this.fromItems(entity['items']);
+    if (  fromItems.length > 0) {
+      return fromItems;
+    }
+
+    const fromColumnas = this.fromColumnasMostrables(entity['columnasMostrablesSeleccionadas']);
+    if (fromColumnas.length > 0) {
+      return fromColumnas;
+    }
+
+    const fromOpciones = this.fromItems(entity['opciones']);
+    if (fromOpciones.length > 0) {
+      return fromOpciones;
+    }
+
+    return this.fromLabelIdentifierLists(entity['listaLabels'], entity['listaIdentificadores']);
   }
 
   private fromItems(raw: unknown): Array<{ label: string; value: string }> {
@@ -68,6 +83,50 @@ export class SelectOneRadioComponent implements OnChanges {
 
     const objectValues = Object.values(normalizedRaw as Record<string, unknown>);
     return this.fromArrayEntries(objectValues);
+  }
+
+  private fromColumnasMostrables(raw: unknown): Array<{ label: string; value: string }> {
+    if (!raw || typeof raw !== 'object') {
+      return [];
+    }
+
+    const options: Array<{ label: string; value: string }> = [];
+    const values = Object.values(raw as Record<string, unknown>);
+    for (const value of values) {
+      if (!Array.isArray(value)) {
+        continue;
+      }
+
+      for (const item of value) {
+        if (!item || typeof item !== 'object') {
+          continue;
+        }
+
+        const text = String((item as Record<string, unknown>)['string'] ?? '');
+        if (text) {
+          options.push({ label: text, value: text });
+        }
+      }
+    }
+
+    return options;
+  }
+
+  private fromLabelIdentifierLists(
+    labelsRaw: unknown,
+    identifiersRaw: unknown,
+  ): Array<{ label: string; value: string }> {
+    if (typeof labelsRaw !== 'string') {
+      return [];
+    }
+
+    const labels = this.splitCsvLike(labelsRaw);
+    const identifiers = typeof identifiersRaw === 'string' ? this.splitCsvLike(identifiersRaw) : [];
+
+    return labels.map((label, index) => ({
+      label,
+      value: identifiers[index] ?? label,
+    }));
   }
 
   private normalizeItemsRaw(raw: unknown): unknown {
@@ -105,6 +164,7 @@ export class SelectOneRadioComponent implements OnChanges {
         const label = String(
           entry['label'] ??
             entry['string'] ??
+            entry[''] ??
             entry['descripcion'] ??
             entry['text'] ??
             entry['value'] ??
@@ -114,6 +174,7 @@ export class SelectOneRadioComponent implements OnChanges {
           entry['value'] ??
             entry['id'] ??
             entry['codigo'] ??
+            entry[''] ??
             entry['string'] ??
             entry['label'] ??
             '',

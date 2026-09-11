@@ -19,7 +19,11 @@
 			</header>
 
 			@for (seccion of secciones; track seccion.titulo) {
-				<article class="seccion-wrap">
+				<frm-seccion
+					[seccion]="seccion"
+					[verFormularioCmp]="$any(this)"></frm-seccion>
+				
+				<!--<article class="seccion-wrap">
 					<button type="button" class="divTitleZone" (click)="toggleSeccion(seccion)">
 						<span class="section-icon">{{ asBool(seccion.expandido) ? '-' : '+' }}</span>
 						<span class="panelGridTitle">{{ seccion.titulo }}</span>
@@ -27,9 +31,10 @@
 
 					@if (asBool(seccion.expandido)) {
 						<div class="seccion-body">
-							<div class="columns-grid">
+							<div class="columns-grid" [style.grid-template-columns]="getColumnGridTemplate(seccion)">
 								@for (column of [seccion.componentesIzq, seccion.componentesCent, seccion.componentesDer]; track $index) {
-									<div class="column">
+										@if (getComponentList(column).length > 0) {
+										<div class="column">
 										@for (componente of getComponentList(column); track componentKey(componente)) {
 											@if (asBool(componente.visible)) {
 												<div class="componente-row" [class]="componente.styleClassContenedor">
@@ -152,13 +157,14 @@
 											}
 										}
 									</div>
+									}
 								}
 							</div>
 
 							<footer class="smallLabelTexto section-description">{{ seccion.descripcion }}</footer>
 						</div>
 					}
-				</article>
+				</article>-->
 			}
 
 			@if (hayCartas && mostrarCartas) {

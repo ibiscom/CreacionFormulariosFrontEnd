@@ -16,7 +16,10 @@
 		</header>
 
 		@for (seccion of secciones; track seccion.titulo) {
-			<article class="seccion-wrap">
+			<frm-seccion
+				[seccion]="seccion"
+				[verFormularioCmp]="$any(this)"></frm-seccion>
+			<!--<article class="seccion-wrap">
 				<button type="button" class="divTitleZone" (click)="toggleSeccion(seccion)">
 					<span class="section-icon">{{ asBool(seccion.expandido) ? '-' : '+' }}</span>
 					<span class="panelGridTitle">{{ seccion.titulo }}</span>
@@ -24,13 +27,14 @@
 
 				@if (asBool(seccion.expandido)) {
 					<div class="seccion-body">
-						<div class="columns-grid">
+						<div class="columns-grid" [style.grid-template-columns]="getColumnGridTemplate(seccion)">
 							@for (column of [seccion.componentesIzq, seccion.componentesCent, seccion.componentesDer]; track $index) {
-								<div class="column">
-									@for (componente of getComponentList(column); track componentKey(componente)) {
-										@if (asBool(componente.visible)) {
+								@if (getComponentList(column).length > 0) {
+									<div class="column">
+										@for (componente of getComponentList(column); track componentKey(componente)) {
+											@if (asBool(componente.visible)) {
 											<div class="componente-row" [class]="componente.styleClassContenedor">
-												@if (!asBool(componente.labelType) && !asBool(componente.linkType) && !asBool(componente.linkToAFormType) && !hasComponentFlag(componente, 'linkToDifferentFormType') && !asBool(componente.linkFormToIfacesType) && !asBool(componente.mailType)) {
+												@if (!asBool(componente.labelType) && !asBool(componente.linkType) && !asBool(componente.linkToAFormType) && !hasComponentFlag(componente, 'linkToDifferentFormType') && !asBool(componente.linkFormToIfacesType) && !asBool(componente.mailType) &&!asBool(componente.separadorType)) {
 													<label class="normalLabelTexto" [attr.title]="componente.descripcion">
 														{{ componente.nombre }}
 														@if (getMostrarAsteriscoRojo(componente)) {
@@ -125,17 +129,24 @@
 												@if (asBool(componente.mailType)) {
 													<frm-mail [mailEntity]="$any(componente)" [verFormularioCmp]="$any(this)"></frm-mail>
 												}
+												@if (componente.separadorType) {
+													<frm-separador [separadorEntity]="$any(componente)" [verFormularioCmp]="$any(this)"></frm-separador>
+												}
+												@if (componente.tablaDetalleType) {
+													<frm-table-details [tableDetailsEntity]="$any(componente)" [verFormularioCmp]="$any(this)"></frm-table-details>
+												}
 											</div>
 										}
 									}
 								</div>
 							}
+						}
 						</div>
 
 						<footer class="smallLabelTexto">{{ seccion.descripcion }}</footer>
 					</div>
 				}
-			</article>
+			</article>-->
 		}
 
 		@if (hayCartas && mostrarCartas) {

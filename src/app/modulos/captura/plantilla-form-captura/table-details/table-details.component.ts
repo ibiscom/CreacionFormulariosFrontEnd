@@ -46,11 +46,17 @@ export class TableDetailsComponent implements OnChanges {
     }
 
     if (Array.isArray(nombresOrganizados)) {
-      return nombresOrganizados.map((item) => String(item));
+      let headers: string[] = nombresOrganizados;
+      let headersWithDisplayNames = headers.map((header) => this.tableDetailsEntity?.nombresColumnas?.[header.trim()]?.toString() ?? header.trim());
+      console.log('Headers with display names:', headersWithDisplayNames);
+      return headersWithDisplayNames;
     }
 
     if (typeof nombresOrganizados === 'string') {
-      return this.splitHeaders(nombresOrganizados);
+       let headers = this.splitHeaders(nombresOrganizados);
+       let headersWithDisplayNames = headers.map((header) => this.tableDetailsEntity?.nombresColumnas?.[header.trim()]?.toString() ?? header.trim());
+       console.log('Headers with display names:', headersWithDisplayNames);
+       return headersWithDisplayNames;
     }
 
     const values = Object.values(nombresOrganizados as Record<string, unknown>);
@@ -67,7 +73,10 @@ export class TableDetailsComponent implements OnChanges {
       }
     }
 
-    return headers;
+    let headersWithDisplayNames = headers.map((header) => this.tableDetailsEntity?.nombresColumnas?.[header.trim()]?.toString() ?? header.trim());
+    console.log('Headers with display names:', headersWithDisplayNames);
+    return headersWithDisplayNames;
+
   }
 
   private splitHeaders(rawHeaders: string): string[] {

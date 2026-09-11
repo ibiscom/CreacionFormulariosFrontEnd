@@ -59,6 +59,7 @@ import { ComponenteBaseEntity } from '../../../../entidades/forms-captura/compon
 export class ComponentesComponent {
   @Input() public componentes: ComponentesEntity | '' = '';
   @Input() public verFormularioCmp?: PlantillaFormCapturaComponent;
+  @Input() public isModeling = false;
   @Input() public sectionKey = '';
   @Output() public componenteSeleccionado = new EventEmitter<string>();
   @Output() public componenteReordenado = new EventEmitter<{ sourceKey: string; targetKey: string; sectionKey: string }>();

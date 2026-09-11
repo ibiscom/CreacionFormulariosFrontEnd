@@ -29,10 +29,12 @@ import { RefreshButtonComponent } from '../../captura/plantilla-form-captura/ref
 import { MailComponent } from '../../captura/plantilla-form-captura/mail/mail.component';
 import { LinkToDifferentFormComponent } from '../../captura/plantilla-form-captura/link-to-different-form/link-to-different-form.component';
 import { LinkFormToIcefacesComponent } from '../../captura/plantilla-form-captura/link-form-to-icefaces/link-form-to-icefaces.component';
+import { SeccionComponent } from "../../captura/plantilla-form-captura/seccion/seccion.component";
+import { PlantillaFormularioNormalHtmService } from './plantilla-formulario-normal-htm.service';
 
 @Component({
   selector: 'htm-plantilla-formulario-normal-htm',
-  imports: [CommonModule, FormsModule, InPutTextComponent,  InPutTextAreaComponent, SelectInPutDateComponent, SelectOneListBoxComponent, SelectBooleanCheckBoxComponent, OutPutLinkComponent, LabelComponent, CargaMasivaComponent, SelectOneRadioComponent, SelectOneListBoxCustomizedComponent, LinkToAFormComponent, RefreshButtonComponent, MailComponent, LinkToDifferentFormComponent, SaveButtonComponent, LinkFormToIcefacesComponent, LinkToDifferentFormComponent, SearchButtonComponent],
+  imports: [CommonModule, FormsModule, InPutTextComponent, InPutTextAreaComponent, SelectInPutDateComponent, SelectOneListBoxComponent, SelectBooleanCheckBoxComponent, OutPutLinkComponent, LabelComponent, CargaMasivaComponent, SelectOneRadioComponent, SelectOneListBoxCustomizedComponent, LinkToAFormComponent, RefreshButtonComponent, MailComponent, LinkToDifferentFormComponent, SaveButtonComponent, LinkFormToIcefacesComponent, LinkToDifferentFormComponent, SearchButtonComponent, SeccionComponent],
   templateUrl: './plantilla-formulario-normal-htm.component.html',
   styleUrl: './plantilla-formulario-normal-htm.component.scss',
 })
@@ -195,6 +197,7 @@ export class PlantillaFormularioNormalHtmComponent extends PlantillaFormCapturaC
     protected override plantillaFormCapturaService: PlantillaFormCapturaService,
     protected override route: ActivatedRoute,
     protected override router: Router,
+    protected plantillaFormularioNormalHtmService: PlantillaFormularioNormalHtmService,
   ) {
     super(plantillaFormCapturaService, route, router, dialog);
   }
@@ -294,20 +297,45 @@ export class PlantillaFormularioNormalHtmComponent extends PlantillaFormCapturaC
     if (this.prevencionDobleClic()) {
       return;
     }
-
-    this.addMensaje('Formulario guardado y trazabilidad local actualizada.');
-  }
+1
+    this.plantillaFormularioNormalHtmService.guardarFormularioNormalHTM(this.formulario).subscribe({
+      next: (response) => {
+        if (response) {
+          this.addMensaje('Formulario guardado exitósamente.');
+        }}, error: (error) => {  
+          this.addMensaje('Error al guardar el formulario: ' + (error?.message || 'Error desconocido'));
+        }
+      });
+    }
 
   public override editarFormulario(): void {
     if (this.prevencionDobleClic()) {
       return;
     }
 
-    this.addMensaje('Registro editado correctamente.');
+    this.plantillaFormularioNormalHtmService.editarFormularioNormalHTM(this.formulario).subscribe({
+      next: (response) => {
+        if (response) {
+          this.addMensaje('Formulario editado correctamente.');
+        }}, error: (error) => {  
+          this.addMensaje('Error al editar el formulario: ' + (error?.message || 'Error desconocido'));
+        }
+      });
   }
 
   public override eliminarRegistro(): void {
-    this.addMensaje('Registro eliminado.');
+     if (this.prevencionDobleClic()) {
+      return;
+    }
+
+    this.plantillaFormularioNormalHtmService.eliminarRegistroFormularioNormalHTM(this.formulario).subscribe({
+      next: (response) => {
+        if (response) {
+          this.addMensaje('Registro eliminado correctamente.');
+        }}, error: (error) => {
+          this.addMensaje('Error al eliminar el registro: ' + (error?.message || 'Error desconocido'));
+        }
+      });
   }
 
   public override nuevoRegistro(): void {

@@ -39,6 +39,7 @@ export interface ComponenteBaseEntity {
   saveButtonType: BooleanString;
   linkType: BooleanString;
   linkToAFormType: BooleanString;
+  linkToDifferentFormType?: BooleanString;
   linkFormToIfacesType: BooleanString;
   validacionesExpresiones: string;
   style: string;
@@ -60,6 +61,7 @@ export interface ComponenteBaseEntity {
   operadorAritmetico: string;
   formato?: string;
   formatoMoneda?: string;
+  soloTexto?: BooleanString;
 
   // List and query-related properties
   orientacion?: string;
@@ -118,4 +120,10 @@ export interface ComponenteBaseEntity {
   textoHTMLTabla?: string;
   listValuesForSortQuery?: { [key: string]: any };
   valueSelectedSort?: string;
+  archivoConfString?: string;
+  nameArchivoConf?: string;
+  nombreClaseCarga?: string;
+  atributosSeleccionadosTransportar?: string[];
+  nombreAtributoLista?: string;
+  nombreAtributoSeleccionado?: string;
 }

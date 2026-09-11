@@ -85,6 +85,61 @@ describe('ModelarFormCapturaComponent', () => {
     expect(selected?.where).toBe('');
   });
 
+  it('should apply the legacy default layout when creating a component', () => {
+    component.addSection();
+    component.addComponentToSelectedSection();
+
+    const selected = component.getSelectedComponent();
+    expect(selected?.style).toBe('width:90%;');
+    expect(selected?.styleContenedor).toBe('width:50%;');
+    expect(selected?.columnClasses).toBe('width30,width70');
+    expect(component.getSelectedComponentWidth('container')).toBe('50');
+    expect(component.getSelectedComponentWidth('field')).toBe('90');
+    expect(component.getSelectedComponentColumnWidth('label')).toBe('30');
+    expect(component.getSelectedComponentColumnWidth('field')).toBe('70');
+  });
+
+  it('should prioritize layout values received in the JSON over screen defaults', () => {
+    component.addSection();
+    component.addComponentToSelectedSection();
+
+    const selected = component.getSelectedComponent()!;
+    selected.style = 'width:65%;height:240px;';
+    selected.styleContenedor = 'width:40%;height:180px;';
+    selected.columnClasses = 'width20,width80';
+
+    expect(component.getSelectedComponentWidth('container')).toBe('40');
+    expect(component.getSelectedComponentHeight('container')).toBe('180');
+    expect(component.getSelectedComponentWidth('field')).toBe('65');
+    expect(component.getSelectedComponentHeight('field')).toBe('240');
+    expect(component.getSelectedComponentColumnWidth('label')).toBe('20');
+    expect(component.getSelectedComponentColumnWidth('field')).toBe('80');
+  });
+
+  it('should save a logical validation using the legacy component fields', () => {
+    component.addSection();
+    component.addComponentToSelectedSection();
+    const baseKey = component.selectedComponentKey;
+    component.selectedComponentType = 'InPutTextArea';
+    component.addComponentToSelectedSection();
+    const relatedKey = component.selectedComponentKey;
+
+    component.setValidationBaseComponent(baseKey);
+    component.validationAttributeKey = relatedKey;
+    component.validationAttributeValue = 'ACTIVO';
+    component.addValidationAttribute();
+    component.validationErrorMessage = 'La condición no se cumple.';
+    component.toggleValidationBlockedComponent(relatedKey);
+    component.saveLogicalValidation();
+
+    component.selectComponent(baseKey);
+    const base = component.getSelectedComponent();
+    expect(base?.componentesNuevaValidacionEntreComponentes).toBe(`${relatedKey}=[ACTIVO]`);
+    expect(base?.componentesRelacionados).toBe(relatedKey);
+    expect(base?.esOrigenValidacion).toBe('true');
+    expect(base?.arbolesExpresionNuevaValidacionEntreComponentes).toContain('La condición no se cumple.');
+  });
+
   it('should move the dragged component after the target component', () => {
     component.addSection();
     component.addComponentToSelectedSection();

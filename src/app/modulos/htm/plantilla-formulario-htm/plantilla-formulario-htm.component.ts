@@ -26,6 +26,9 @@ import { SaveButtonComponent } from '../../captura/plantilla-form-captura/save-b
 import { SearchButtonComponent } from '../../captura/plantilla-form-captura/search-button/search-button.component';
 import { RefreshButtonComponent } from '../../captura/plantilla-form-captura/refresh-button/refresh-button.component';
 import { MailComponent } from '../../captura/plantilla-form-captura/mail/mail.component';
+import { SeparadorComponent } from "../../captura/plantilla-form-captura/separador/separador.component";
+import { TableDetailsComponent } from '../../captura/plantilla-form-captura/table-details/table-details.component';
+import { SeccionComponent } from "../../captura/plantilla-form-captura/seccion/seccion.component";
 
 @Component({
   selector: 'htm-plantilla-formulario-htm',
@@ -49,7 +52,10 @@ import { MailComponent } from '../../captura/plantilla-form-captura/mail/mail.co
     SearchButtonComponent,
     RefreshButtonComponent,
     MailComponent,
-  ],
+    SeparadorComponent,
+    TableDetailsComponent,
+    SeccionComponent
+],
   templateUrl: './plantilla-formulario-htm.component.html',
   styleUrl: './plantilla-formulario-htm.component.scss',
 })
@@ -180,6 +186,16 @@ export class PlantillaFormularioHtmComponent {
 
     const values = Object.values(componentes);
     return values.flatMap((entry) => (Array.isArray(entry) ? entry : entry ? [entry] : []));
+  }
+
+  public getColumnGridTemplate(seccion: SeccionEntity): string {
+    const occupiedColumns = [
+      seccion.componentesIzq,
+      seccion.componentesCent,
+      seccion.componentesDer,
+    ].filter((column) => this.getComponentList(column).length > 0).length;
+
+    return `repeat(${Math.max(occupiedColumns, 1)}, minmax(0, 1fr))`;
   }
 
   public componentKey(componente: ComponenteBaseEntity): string {

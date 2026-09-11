@@ -186,6 +186,10 @@ export class InvocarComponenteCapturaComponent {
   }
 
   private enviarAltura(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     const height = Math.max(
       document.body?.scrollHeight ?? 0,
       document.documentElement?.scrollHeight ?? 0,

@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogAyudaComponent } from './dialog-ayuda/dialog-ayuda.component';
 import { ComponentesEntity } from '../../../entidades/forms-captura/componentes.entity';
 import { ComponenteBaseEntity } from '../../../entidades/forms-captura/componente-base.entity';
+import { SeccionEntity } from '../../../entidades/forms-captura/seccion.entity';
 
 @Component({
   selector: 'frm-plantilla-form-captura',
@@ -300,5 +301,15 @@ export class PlantillaFormCapturaComponent {
     }
 
     return Object.values(componentes).flatMap((entry) => (Array.isArray(entry) ? entry : entry ? [entry] : []));
+  }
+
+  public getColumnGridTemplate(seccion: SeccionEntity): string {
+    const occupiedColumns = [
+      seccion.componentesIzq,
+      seccion.componentesCent,
+      seccion.componentesDer,
+    ].filter((column) => this.getComponentList(column).length > 0).length;
+
+    return `repeat(${Math.max(occupiedColumns, 1)}, minmax(0, 1fr))`;
   }
 }

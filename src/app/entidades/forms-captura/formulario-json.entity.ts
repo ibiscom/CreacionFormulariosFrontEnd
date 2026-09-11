@@ -5,6 +5,8 @@ import { EntidadesRelacionadasEntity } from './entidades-relacionadas.entity';
 
 /** Raíz del JSON de formulario */
 export interface FormularioJSONEntity {
+  id?: string; // Nuevo campo para almacenar el ID del formulario
+  nombreUnicoFormulario?: string;
   titulo: string;
   descripcion: string;
   seccionesFormulario: SeccionesFormularioEntity;

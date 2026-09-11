@@ -1,6 +1,8 @@
-
-  <mat-form-field [class]="'base-inputtext-field ' + matInputClasses" [style]="inPutTextEntity!.styleContenedor"  subscriptSizing="dynamic">  
-    <mat-label [class]="matLabelClasses">{{ inPutTextEntity?.nombre }}</mat-label>
+<div [style]="inPutTextEntity!.styleContenedor" [class]="inPutTextEntity?.styleClassContenedor">
+    <span [class]="matLabelClasses">{{ inPutTextEntity?.nombre }}</span>
+  
+  <mat-form-field [class]="'base-inputtext-field ' + matInputClasses" [style]="inPutTextEntity!.style"  subscriptSizing="dynamic">  
+    <mat-label [class]="matLabelClasses">{{ inPutTextEntity?.nombre }}</mat-label>|
     <input
       matInput
       [placeholder]="inPutTextEntity!.nombre"
@@ -11,3 +13,4 @@
       [class]="inPutTextEntity?.claseEstilo"
     />
   </mat-form-field>
+</div>

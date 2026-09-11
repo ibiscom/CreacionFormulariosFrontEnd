@@ -22,8 +22,14 @@ frm-in-put-rich-text {
   cursor: pointer;
 }
 
-.component-render-wrapper:hover,
-.component-render-wrapper--drop-target {
+.component-render-wrapper--modeling {
+  display: inline-block;
+  vertical-align: top;
+  width: auto;
+}
+
+.component-render-wrapper--modeling:hover,
+.component-render-wrapper--modeling.component-render-wrapper--drop-target {
   outline: 2px dashed #1976d2;
   outline-offset: 2px;
   background: #eef6ff;

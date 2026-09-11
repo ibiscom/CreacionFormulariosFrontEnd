@@ -27,9 +27,10 @@
 
 					@if (asBool(seccion.expandido)) {
 						<div class="seccion-body">
-							<div class="columns-grid">
+							<div class="columns-grid" [style.grid-template-columns]="getColumnGridTemplate(seccion)">
 								@for (column of [seccion.componentesIzq, seccion.componentesCent, seccion.componentesDer]; track $index) {
-									<div class="column">
+										@if (getComponentList(column).length > 0) {
+										<div class="column">
 										@for (componente of getComponentList(column); track componentKey(componente)) {
 											@if (asBool(componente.visible)) {
 												<div class="componente-row" [class]="componente.styleClassContenedor">
@@ -119,6 +120,7 @@
 											}
 										}
 									</div>
+									}
 								}
 							</div>
 
