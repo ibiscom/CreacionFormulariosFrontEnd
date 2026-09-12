@@ -54,4 +54,27 @@ export class InPutTextAreaComponent {
       (this.inPutTextAreaEntity as any).valor = nuevoValor;
     }
   }
+
+  public get matLabelClasses(): string {
+      return this.obtenerColumnClasses()[0] ?? '';
+   }
+
+    private obtenerColumnClasses(): string[] {
+    const columnClasses = this.inPutTextAreaEntity?.columnClasses;
+
+    if (!columnClasses) {
+      return [];
+    }
+
+    return columnClasses
+      .split(',')
+      .map((cssClass) => cssClass.trim())
+      .filter((cssClass) => cssClass.length > 0);
+  }
+
+  public get matInputClasses(): string {
+    const classes = this.obtenerColumnClasses();
+    // Backward compatibility: if only one class is sent, keep applying it to input.
+    return classes[1] ?? classes[0] ?? '';
+  }
 }

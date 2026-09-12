@@ -91,6 +91,8 @@ export interface ComponenteBaseEntity {
   expresionLogicaFiltro?: string;
   nombreEntidad?: string;
   mostrarLink?: BooleanString;
+  dirigeFormularioConsulta?: BooleanString;
+  idCampoDependiente?: string;
 
   // Table-specific properties
   columnaRelacion?: string;

@@ -4,28 +4,60 @@
   min-width: 0;
 }
 
+/*
+ * Los componentes fluyen en línea y saltan de renglón cuando la suma de sus
+ * anchos supera el 100% de la sección, como el panelGrid del modelador legado.
+ */
 .seccion-componentes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
   width: 100%;
   min-width: 0;
 }
 
 .tbl-componentes,
-.celda-componente,
-frm-in-put-rich-text {
+.celda-componente {
   display: block;
   width: 100%;
   min-width: 0;
 }
 
+/*
+ * El wrapper es el ítem del flex y es quien lleva el ancho de contenedor
+ * (styleContenedor, ej. "width:50%"). Debe estar aquí y no en el componente
+ * interno: un porcentaje solo se resuelve bien contra la sección, no contra
+ * una caja que a su vez se mide por su contenido.
+ */
 .component-render-wrapper {
-  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
   cursor: pointer;
 }
 
+/* El host del componente ocupa todo el wrapper. */
+.component-render-wrapper > * {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+/*
+ * styleContenedor llega duplicado desde el legado: lo aplica el wrapper y también
+ * el div raíz de cada componente. Se neutraliza el del hijo para que el porcentaje
+ * no se anide (50% de 50% = 25%). Necesita !important porque compite con un style inline.
+ */
+.component-render-wrapper > * > * {
+  width: 100% !important;
+}
+
+/* El separador es solo un <hr>, sin ancho propio: ocupa el renglón completo. */
+.component-render-wrapper--full {
+  width: 100%;
+}
+
 .component-render-wrapper--modeling {
-  display: inline-block;
   vertical-align: top;
-  width: auto;
 }
 
 .component-render-wrapper--modeling:hover,

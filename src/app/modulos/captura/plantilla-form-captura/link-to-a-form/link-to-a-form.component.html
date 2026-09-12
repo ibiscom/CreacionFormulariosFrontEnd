@@ -1,12 +1,7 @@
-<div [style]="linkToAFormEntity?.styleContenedor">
+<div style="display: inline-flex; flex-direction: row; width: calc(100% - 10px);">
   <a
     [href]="hrefValue"
     [class]="linkToAFormEntity?.columnClasses?.replaceAll(',', ' ')"
     target="_blank"
     >{{linkToAFormEntity?.nombre}}</a>
 </div>
-
-
-														<!--<button type="button" class="formButton" (click)="ejecutarAccionComponente(componente)">
-															{{ componente.nombre }}
-													  </button>-->

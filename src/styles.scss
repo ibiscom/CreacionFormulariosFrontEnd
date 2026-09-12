@@ -1,1 +1,33 @@
 /* You can add global styles to this file, and also import other style files */
+
+/*
+ * Clases de layout heredadas del modelador JSF/IceFaces: llegan desde el JSON en
+ * `columnClasses` (ej. "width30,width70") y se aplican dentro de los componentes hoja
+ * (in-put-text, label, ...). Deben ser globales: si se declaran en el SCSS de un
+ * componente, la encapsulación de Angular impide que alcancen a los hijos.
+ */
+
+// Anchos dinámicos .width1, .width2, ..., .width100
+@for $i from 1 through 100 {
+  .width#{$i} {
+    width: $i * 1%;
+  }
+}
+
+.columnaAlineacionVertical {
+  vertical-align: top;
+}
+
+.columnaAlineacionVertical1 {
+  vertical-align: top;
+  width: 30%;
+}
+
+.columnaAlineacionVertical2 {
+  vertical-align: top;
+  width: 70%;
+}
+
+.columnaAlineacionCentro {
+  vertical-align: middle;
+}

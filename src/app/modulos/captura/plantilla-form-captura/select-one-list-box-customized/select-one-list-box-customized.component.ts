@@ -21,4 +21,29 @@ export class SelectOneListBoxCustomizedComponent {
   public selected(opcion: any): boolean {
     return this.selectOneListBoxCustomizedEntity?.valor === opcion;
   }
+
+  
+  public get matLabelClasses(): string {
+    return this.obtenerColumnClasses()[0] ?? '';
+  }
+
+  public get matInputClasses(): string {
+    const classes = this.obtenerColumnClasses();
+    // Backward compatibility: if only one class is sent, keep applying it to input.
+    return classes[1] ?? classes[0] ?? '';
+  }
+
+  
+  private obtenerColumnClasses(): string[] {
+    const columnClasses = this.selectOneListBoxCustomizedEntity?.columnClasses;
+
+    if (!columnClasses) {
+      return [];
+    }
+
+    return columnClasses
+      .split(',')
+      .map((cssClass) => cssClass.trim())
+      .filter((cssClass) => cssClass.length > 0);
+  }
 }

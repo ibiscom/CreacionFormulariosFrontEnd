@@ -6,9 +6,12 @@ import { SeccionEntity } from '../../../../entidades/forms-captura/seccion.entit
 import { ComponenteBaseEntity } from '../../../../entidades/forms-captura/componente-base.entity';
 import { EntidadCatalogoEntity } from '../../../../entidades/forms-captura/entidad-catalogo.entity';
 import { ColumnaEntidadEntity } from '../../../../entidades/forms-captura/columna-entidad.entity';
+import { ValidacionExpresionRegularEntity } from '../../../../entidades/forms-captura/validacion-expresion-regular.entity';
+import { ObservadorComponenteEntity } from '../../../../entidades/forms-captura/observador-componente.entity';
 import { ComponentesComponent } from '../../plantilla-form-captura/componentes/componentes.component';
 import { PlantillaFormCapturaService } from '../../plantilla-form-captura/plantilla-form-captura.service';
 import { EntidadCatalogoService } from '../entidad-catalogo.service';
+import { ModeladorCatalogoService } from '../modelador-catalogo.service';
 import { MessageUtil } from '../../../../utilidades/message.util';
 
 @Component({
@@ -42,10 +45,59 @@ export class ModelarFormCapturaComponent implements OnInit {
   public entidadesRelacionadasCatalogo: EntidadCatalogoEntity[] = [];
   public atributoSeleccionado: { entidad: string; columna: string } | null = null;
 
+  public estilosComponente: string[] = [];
+  public clasesCargaMasiva: string[] = [];
+  public formulariosDisponibles: string[] = [];
+  public formulariosConsultaDisponibles: string[] = [];
+  public tiposOrdenamientoTabla: string[] = [];
+  public atributosTipoLista: string[] = [];
+  public atributosRuta: string[] = [];
+  public nombresEntidadesRelacionadas: string[] = [];
+
+  public validacionExp: ValidacionExpresionRegularEntity = this.createValidacionDraft();
+  public mensajeValidaciones = '';
+
+  public idObservadorSeleccionado = '';
+  public nombreColumnaDeRelacionSeleccionada = '';
+  public mensajesObservadores: string[] = [];
+
+  public filtroComponenteKey = '';
+  public filtroOperador = '=';
+  public filtroColumna = '';
+
+  public tablaDetalleTablaPrincipal = '';
+  public nombreColumnaRelacionSeleccionada = '';
+  public nombreColumnaNueva = '';
+
+  public mostrarVentanaConfiguracionMail = false;
+  public tipoParametroMail = 'Destinos';
+  public readonly tiposParametroMail = ['Destinos', 'DestinosCC', 'DestinosCCO', 'Asunto', 'Mensaje'];
+  public mapaRutasMail: Record<string, string[]> = {};
+  public atributoRutaSeleccionado = '';
+
+  public mostrarVentanaConfLinkToDifferentForm = false;
+  public tipoFormularioEscogido = 'captura';
+  public nombreFormularioLink = '';
+  public nombreFormularioConsultaLink = '';
+  public formulariosLinkAgregados: string[] = [];
+
+  public mostrarVentanaAyuda = false;
+  public mostrarVentanaOrganizacionSecciones = false;
+
+  public mostrarVentanaSeleccionEntidad = false;
+  public entidadForaneaSeleccionada: EntidadCatalogoEntity | null = null;
+  public columnaForaneaOrigen = '';
+  public columnasMostrablesSeleccionadas: Record<string, boolean> = {};
+  public condicionesEntidad: Array<{ identificador: string; atributo: string; operador: string; valor: string }> = [];
+  public whereEntidad = '';
+  public mensajeCondiciones = '';
+  public readonly operadoresCondiciones = ['=', '!=', '<', '>', '<=', '>=', '= NULL', '!= NULL'];
+
   public constructor(
     private cdr: ChangeDetectorRef,
     private plantillaFormCapturaService: PlantillaFormCapturaService,
     private entidadCatalogoService: EntidadCatalogoService,
+    private modeladorCatalogoService: ModeladorCatalogoService,
   ) {}
   public formulario: FormularioJSONEntity = this.createDefaultForm();
   public selectedSectionKey = '';
@@ -91,6 +143,26 @@ export class ModelarFormCapturaComponent implements OnInit {
       this.nombresEntidadesPrincipales = nombres;
       this.cdr.detectChanges();
     });
+    this.modeladorCatalogoService.getEstilosComponente().subscribe((estilos) => {
+      this.estilosComponente = estilos;
+      this.cdr.detectChanges();
+    });
+    this.modeladorCatalogoService.getClasesCargaMasiva().subscribe((clases) => {
+      this.clasesCargaMasiva = clases;
+      this.cdr.detectChanges();
+    });
+    this.modeladorCatalogoService.getFormularios().subscribe((formularios) => {
+      this.formulariosDisponibles = formularios;
+      this.cdr.detectChanges();
+    });
+    this.modeladorCatalogoService.getFormulariosConsulta().subscribe((formularios) => {
+      this.formulariosConsultaDisponibles = formularios;
+      this.cdr.detectChanges();
+    });
+    this.modeladorCatalogoService.getTiposOrdenamientoTabla().subscribe((tipos) => {
+      this.tiposOrdenamientoTabla = tipos;
+      this.cdr.detectChanges();
+    });
   }
 
   public cambiarEntidadPrincipal(): void {
@@ -109,6 +181,21 @@ export class ModelarFormCapturaComponent implements OnInit {
     this.entidadCatalogoService.getEntidadesRelacionadasUnoAUno(this.nombreEntidadPrincipalStaged).subscribe((relacionadas) => {
       this.entidadesRelacionadasCatalogo = relacionadas;
       this.actualizarEntidadesDelFormulario();
+      this.cdr.detectChanges();
+    });
+
+    this.entidadCatalogoService.getAtributosTipoLista(this.nombreEntidadPrincipalStaged).subscribe((atributos) => {
+      this.atributosTipoLista = atributos;
+      this.cdr.detectChanges();
+    });
+
+    this.entidadCatalogoService.getAtributosRuta(this.nombreEntidadPrincipalStaged).subscribe((atributos) => {
+      this.atributosRuta = atributos;
+      this.cdr.detectChanges();
+    });
+
+    this.entidadCatalogoService.getNombresEntidadesRelacionadas(this.nombreEntidadPrincipalStaged).subscribe((nombres) => {
+      this.nombresEntidadesRelacionadas = nombres;
       this.cdr.detectChanges();
     });
   }
@@ -364,21 +451,26 @@ export class ModelarFormCapturaComponent implements OnInit {
     this.selectedComponentKey = '';
   }
 
-  public selectComponent(key: string): void {
-    this.selectedComponentKey = key;
-    this.selectedComponentColumn = 'componentesIzq';
-    const section = this.formulario.seccionesFormulario?.[this.selectedSectionKey];
-    if (!section) {
-      return;
-    }
+  /**
+   * Las claves de componente se repiten entre secciones (Componente_1, Componente_2...),
+   * por eso la selección desde el visualizador debe indicar en qué sección ocurrió el clic.
+   */
+  public selectComponent(key: string, sectionKey?: string): void {
+    const targetSectionKey = sectionKey || this.selectedSectionKey;
+    const section = this.formulario.seccionesFormulario?.[targetSectionKey];
+    const components = section?.componentesIzq;
 
-    const components = section.componentesIzq;
     if (!components || typeof components === 'string' || !(key in components)) {
       this.selectedComponentKey = '';
       return;
     }
 
+    this.selectedSectionKey = targetSectionKey;
+    this.selectedComponentKey = key;
+    this.selectedComponentColumn = 'componentesIzq';
+
     this.loadLogicalValidationDraft(components[key] as ComponenteBaseEntity, key);
+    this.cdr.detectChanges();
   }
 
   public getValidationComponentEntries(): Array<{ key: string; value: ComponenteBaseEntity }> {
@@ -562,8 +654,7 @@ export class ModelarFormCapturaComponent implements OnInit {
 
   public reorderComponent(event: { sourceKey: string; targetKey: string; sectionKey: string }): void {
     this.moveComponentInSection(event.sectionKey, event.sourceKey, event.targetKey);
-    this.selectedComponentKey = event.targetKey;
-    this.cdr.detectChanges();
+    this.selectComponent(event.targetKey, event.sectionKey);
   }
 
   public moveComponentInSection(sectionKey: string, sourceKey: string, targetKey: string): void {
@@ -628,11 +719,22 @@ export class ModelarFormCapturaComponent implements OnInit {
     const booleanProperties = new Set([
       'cambiado', 'obligatorio', 'obligatorioFuncional', 'readOnly', 'guardado',
       'cumpleValidaciones', 'opcionExtra', 'visible', 'filtro', 'utilizaImagen',
-      'mostrarLink', 'estaSujeto', 'esOrigenValidacion',
+      'mostrarLink', 'estaSujeto', 'esOrigenValidacion', 'dirigeFormularioConsulta',
+      'mostrarBotonAgregar', 'mostrarBotonBuscar', 'mostrarBotonEliminar', 'soloTexto', 'labelOrganizable',
     ]);
     (selected as unknown as Record<string, unknown>)[property] = booleanProperties.has(property)
-      ? value === 'true'
+      ? (value === 'true' ? 'true' : 'false')
       : value;
+  }
+
+  /** Los multi-select entregan el arreglo directamente (atributos a transportar). */
+  public updateSelectedComponentArrayProperty(property: string, values: string[]): void {
+    const selected = this.getSelectedComponent();
+    if (!selected) {
+      return;
+    }
+
+    (selected as unknown as Record<string, unknown>)[property] = values ?? [];
   }
 
   public updateFormProperty(property: keyof FormularioJSONEntity, value: string): void {
@@ -641,7 +743,7 @@ export class ModelarFormCapturaComponent implements OnInit {
     ]);
     this.formulario = {
       ...this.formulario,
-      [property]: booleanProperties.has(property) ? value === 'true' : value,
+      [property]: booleanProperties.has(property) ? (value === 'true' ? 'true' : 'false') : value,
     } as FormularioJSONEntity;
   }
 
@@ -762,7 +864,7 @@ export class ModelarFormCapturaComponent implements OnInit {
   }
 
   public guardarFormulario(): void {
-    if (!this.formulario) {
+    if (!this.formulario || !this.validarCamposObligatorios()) {
       return;
     }
 
@@ -814,6 +916,702 @@ export class ModelarFormCapturaComponent implements OnInit {
     return Object.entries(components as Record<string, ComponenteBaseEntity | undefined>)
       .filter((entry): entry is [string, ComponenteBaseEntity] => !!entry[1])
       .map(([key, value]) => ({ key, value }));
+  }
+
+
+  // ---------------------------------------------------------------- Componente: identificación
+
+  /** El legado muestra "Asignado a" (id de solo lectura) para componentes ligados a una columna. */
+  public isComponenteLigadoAColumna(component: ComponenteBaseEntity | null): boolean {
+    if (!component) {
+      return false;
+    }
+    const tiposConIdentificadorLibre = [
+      'ListaCompuesta', 'Separador', 'OutPutLink', 'LinkToAForm', 'LinkToDifferentForm',
+      'LinkFormToIfaces', 'Label', 'TablaDetalles', 'CargaMasiva', 'FileUpload', 'Mail',
+      'SearchButton', 'RefreshButton', 'SaveButton', 'SelectOneListBoxCustomized',
+    ];
+    return !tiposConIdentificadorLibre.includes(component.tipoComponente);
+  }
+
+  public isLabelComponent(component: ComponenteBaseEntity | null): boolean {
+    return !!component && component.tipoComponente === 'Label';
+  }
+
+  public isMailComponent(component: ComponenteBaseEntity | null): boolean {
+    return !!component && component.tipoComponente === 'Mail';
+  }
+
+  public isSearchButtonComponent(component: ComponenteBaseEntity | null): boolean {
+    return !!component && component.tipoComponente === 'SearchButton';
+  }
+
+  public isTablaDetalleComponent(component: ComponenteBaseEntity | null): boolean {
+    return !!component && component.tipoComponente === 'TablaDetalles';
+  }
+
+  public isListaCompuestaComponent(component: ComponenteBaseEntity | null): boolean {
+    return !!component && component.tipoComponente === 'ListaCompuesta';
+  }
+
+  public isLinkToAFormComponent(component: ComponenteBaseEntity | null): boolean {
+    return !!component && component.tipoComponente === 'LinkToAForm';
+  }
+
+  public isLinkToDifferentFormComponent(component: ComponenteBaseEntity | null): boolean {
+    return !!component && component.tipoComponente === 'LinkToDifferentForm';
+  }
+
+  public isListBoxCustomizedComponent(component: ComponenteBaseEntity | null): boolean {
+    return !!component && component.tipoComponente === 'SelectOneListBoxCustomized';
+  }
+
+  public isRichTextComponent(component: ComponenteBaseEntity | null): boolean {
+    return !!component && component.tipoComponente === 'InPutRichText';
+  }
+
+  public isRadioButtonComponent(component: ComponenteBaseEntity | null): boolean {
+    return !!component && component.tipoComponente === 'SelectOneRadioButton';
+  }
+
+  public isDateOrTextComponent(component: ComponenteBaseEntity | null): boolean {
+    return !!component && ['SelectInPutDate', 'InPutText', 'InPutTextArea'].includes(component.tipoComponente);
+  }
+
+  public isFiltrableComponent(component: ComponenteBaseEntity | null): boolean {
+    return this.isTablaDetalleComponent(component) || this.isSearchButtonComponent(component);
+  }
+
+  /** Columna del título de filtros: "Columnas" para tabla detalle, "Atributos" para botón consulta. */
+  public getTituloColumnaFiltro(): string {
+    return this.isTablaDetalleComponent(this.getSelectedComponent()) ? 'Columnas' : 'Atributos';
+  }
+
+  /** obtenerOperadoresComponentes del bean: la tabla detalle admite todos, el botón consulta solo igualdad. */
+  public getOperadoresComponentes(): string[] {
+    return this.isTablaDetalleComponent(this.getSelectedComponent())
+      ? ['=', '!=', '<', '>', '<=', '>=']
+      : ['='];
+  }
+
+  // ---------------------------------------------------------------- Nuevo componente / guardar atributos
+
+  public nuevoComponente(): void {
+    this.selectedComponentKey = '';
+    this.selectedComponentType = 'InPutText';
+    this.atributoSeleccionado = null;
+    this.validacionExp = this.createValidacionDraft();
+    this.mensajeValidaciones = '';
+    this.mensajesObservadores = [];
+    this.addMensaje('Listo para configurar un nuevo componente.');
+  }
+
+  public guardarAtributosComponente(): void {
+    if (!this.getSelectedComponent()) {
+      this.addMensaje('Seleccione un componente para actualizar sus atributos.');
+      return;
+    }
+    this.addMensaje('Atributos del componente actualizados.');
+    this.cdr.detectChanges();
+  }
+
+  // ---------------------------------------------------------------- Validaciones de expresión regular
+
+  private createValidacionDraft(): ValidacionExpresionRegularEntity {
+    return { nombre: '', ejemplo: '', entrada: '', expresion: '', mensajeValidacion: '', cumple: false };
+  }
+
+  public getValidacionesComponente(): ValidacionExpresionRegularEntity[] {
+    const selected = this.getSelectedComponent();
+    if (!selected?.validacionesExpresiones) {
+      return [];
+    }
+    try {
+      const parsed = JSON.parse(selected.validacionesExpresiones);
+      return Array.isArray(parsed) ? (parsed as ValidacionExpresionRegularEntity[]) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  private setValidacionesComponente(validaciones: ValidacionExpresionRegularEntity[]): void {
+    const selected = this.getSelectedComponent();
+    if (!selected) {
+      return;
+    }
+    selected.validacionesExpresiones = validaciones.length ? JSON.stringify(validaciones) : '';
+  }
+
+  public probarValidacion(): void {
+    if (!this.validacionExp.entrada || !this.validacionExp.expresion) {
+      this.mensajeValidaciones = 'Ingrese el valor de prueba y/o la expresión a validar';
+      return;
+    }
+    try {
+      const patron = new RegExp(`^(?:${this.validacionExp.expresion})$`);
+      this.validacionExp.cumple = patron.test(this.validacionExp.entrada);
+      this.mensajeValidaciones = this.validacionExp.cumple
+        ? 'Concuerda'
+        : this.validacionExp.mensajeValidacion || 'No concuerda';
+    } catch {
+      this.validacionExp.cumple = false;
+      this.mensajeValidaciones = 'No se puede compilar la expresión regular';
+    }
+  }
+
+  public agregarValidacion(): void {
+    if (
+      !this.validacionExp.nombre ||
+      !this.validacionExp.ejemplo ||
+      !this.validacionExp.expresion ||
+      !this.validacionExp.mensajeValidacion
+    ) {
+      this.mensajeValidaciones = 'No ha diligenciado los campos obligatorios de la validación';
+      return;
+    }
+
+    const validaciones = [...this.getValidacionesComponente(), { ...this.validacionExp, entrada: '', cumple: false }];
+    this.setValidacionesComponente(validaciones);
+    this.validacionExp = this.createValidacionDraft();
+    this.mensajeValidaciones = '';
+  }
+
+  public eliminarValidacion(nombre: string): void {
+    this.setValidacionesComponente(this.getValidacionesComponente().filter((item) => item.nombre !== nombre));
+  }
+
+  public cargarValidacionesBD(): void {
+    this.modeladorCatalogoService.getValidacionesBD().subscribe((validaciones) => {
+      const existentes = this.getValidacionesComponente();
+      const nuevas = validaciones.filter((item) => !existentes.some((actual) => actual.nombre === item.nombre));
+      this.setValidacionesComponente([...existentes, ...nuevas]);
+      this.mensajeValidaciones = `Se cargaron ${nuevas.length} validaciones del catálogo.`;
+      this.cdr.detectChanges();
+    });
+  }
+
+  public guardarValidacionesBD(): void {
+    const validaciones = this.getValidacionesComponente();
+    if (!validaciones.length) {
+      this.mensajeValidaciones = 'No hay validaciones para guardar.';
+      return;
+    }
+    this.modeladorCatalogoService.guardarValidacionesBD(validaciones).subscribe((mensaje) => {
+      this.mensajeValidaciones = mensaje;
+      this.cdr.detectChanges();
+    });
+  }
+
+  // ---------------------------------------------------------------- Observadores
+
+  /** itemsListasDesplegables del bean: solo listas y radios distintos del componente en edición. */
+  public getItemsListasDesplegables(): Array<{ key: string; value: ComponenteBaseEntity }> {
+    return this.getAllComponentEntries().filter(
+      ({ key, value }) =>
+        key !== this.selectedComponentKey &&
+        ['SelectOneListBox', 'SelectOneRadioButton'].includes(value.tipoComponente),
+    );
+  }
+
+  public getItemsColumnasDeRelacion(): string[] {
+    return (this.entidadPrincipalCatalogo?.columnas ?? [])
+      .filter((columna) => columna.esLlaveForanea)
+      .map((columna) => columna.nombre);
+  }
+
+  public getObservadoresComponente(): ObservadorComponenteEntity[] {
+    const selected = this.getSelectedComponent();
+    if (!selected?.observadores) {
+      return [];
+    }
+
+    let relaciones: Record<string, string> = {};
+    try {
+      relaciones = selected.relacionObservadorColumna ? JSON.parse(selected.relacionObservadorColumna) : {};
+    } catch {
+      relaciones = {};
+    }
+
+    return selected.observadores
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean)
+      .map((claveComponente) => {
+        const observador = this.getAllComponentEntries().find((entry) => entry.key === claveComponente)?.value;
+        return {
+          claveComponente,
+          nombre: observador?.nombre ?? claveComponente,
+          idColumna: observador?.idColumna ?? '',
+          atributoUnion: relaciones[claveComponente] ?? '',
+        };
+      });
+  }
+
+  public asignarObservador(): void {
+    this.mensajesObservadores = [];
+    const selected = this.getSelectedComponent();
+    if (!selected) {
+      return;
+    }
+    if (!this.idObservadorSeleccionado) {
+      this.mensajesObservadores = ['Seleccione un componente observador'];
+      return;
+    }
+    if (!this.nombreColumnaDeRelacionSeleccionada) {
+      this.mensajesObservadores = ['Seleccione una columna que relacione los componentes.'];
+      return;
+    }
+
+    const observadores = this.getObservadoresComponente();
+    if (observadores.some((item) => item.claveComponente === this.idObservadorSeleccionado)) {
+      this.mensajesObservadores = ['Este componente ya contiene ese observador.'];
+      return;
+    }
+
+    const claves = [...observadores.map((item) => item.claveComponente), this.idObservadorSeleccionado];
+    const relaciones: Record<string, string> = {};
+    observadores.forEach((item) => (relaciones[item.claveComponente] = item.atributoUnion));
+    relaciones[this.idObservadorSeleccionado] = this.nombreColumnaDeRelacionSeleccionada;
+
+    selected.observadores = claves.join(',');
+    selected.relacionObservadorColumna = JSON.stringify(relaciones);
+    this.idObservadorSeleccionado = '';
+    this.nombreColumnaDeRelacionSeleccionada = '';
+  }
+
+  public eliminarObservador(claveComponente: string): void {
+    const selected = this.getSelectedComponent();
+    if (!selected) {
+      return;
+    }
+
+    const observadores = this.getObservadoresComponente().filter((item) => item.claveComponente !== claveComponente);
+    const relaciones: Record<string, string> = {};
+    observadores.forEach((item) => (relaciones[item.claveComponente] = item.atributoUnion));
+
+    selected.observadores = observadores.map((item) => item.claveComponente).join(',');
+    selected.relacionObservadorColumna = observadores.length ? JSON.stringify(relaciones) : '';
+  }
+
+  // ---------------------------------------------------------------- Filtros (tabla detalle / botón consulta)
+
+  public getColumnasFiltroDisponibles(): string[] {
+    const selected = this.getSelectedComponent();
+    if (this.isTablaDetalleComponent(selected)) {
+      return this.getColumnasOrganizadas();
+    }
+    const entidad = selected?.nombreEntidad || this.formulario.entidadPrincipal;
+    if (entidad === this.entidadPrincipalCatalogo?.nombre) {
+      return (this.entidadPrincipalCatalogo?.columnas ?? []).map((columna) => columna.nombre);
+    }
+    const relacionada = this.entidadesRelacionadasCatalogo.find((item) => item.nombre === entidad);
+    return (relacionada?.columnas ?? []).map((columna) => columna.nombre);
+  }
+
+  public agregarAtributoFiltro(): void {
+    const selected = this.getSelectedComponent();
+    if (!selected) {
+      return;
+    }
+    if (!this.filtroComponenteKey || !this.filtroColumna) {
+      this.addMensaje('Seleccione el componente y la columna del filtro.');
+      return;
+    }
+
+    const atributo = `${this.filtroComponenteKey}${this.filtroOperador}[${this.filtroColumna}]`;
+    selected.expresionLogicaFiltro = selected.expresionLogicaFiltro
+      ? `${selected.expresionLogicaFiltro}${atributo}`
+      : atributo;
+  }
+
+  public appendFiltroToken(token: 'AND' | 'OR' | 'NOT' | '()'): void {
+    const selected = this.getSelectedComponent();
+    if (!selected) {
+      return;
+    }
+    const texto = token === 'AND' ? '() AND ()' : token === 'OR' ? '() OR ()' : token === 'NOT' ? 'NOT()' : '()';
+    selected.expresionLogicaFiltro = selected.expresionLogicaFiltro
+      ? `${selected.expresionLogicaFiltro} ${texto}`
+      : texto;
+  }
+
+  // ---------------------------------------------------------------- Tabla detalle
+
+  public getEntidadesTablaDetalle(): string[] {
+    return this.entidadesRelacionadasCatalogo.map((entidad) => entidad.nombre);
+  }
+
+  public getColumnasTablaDetalle(): string[] {
+    const entidad = this.entidadesRelacionadasCatalogo.find(
+      (item) => item.nombre === this.tablaDetalleTablaPrincipal,
+    );
+    return (entidad?.columnas ?? []).map((columna) => columna.nombre);
+  }
+
+  public getColumnasForaneasPrincipal(): string[] {
+    return (this.entidadPrincipalCatalogo?.columnas ?? [])
+      .filter((columna) => columna.esLlaveForanea)
+      .map((columna) => columna.nombre);
+  }
+
+  public getColumnasEntidadPrincipal(): string[] {
+    return (this.entidadPrincipalCatalogo?.columnas ?? []).map((columna) => columna.nombre);
+  }
+
+  public escucharCambioTablaDetalle(nombreTabla: string): void {
+    this.tablaDetalleTablaPrincipal = nombreTabla;
+    const selected = this.getSelectedComponent();
+    if (selected) {
+      selected.idColumna = `${nombreTabla}|id`;
+    }
+  }
+
+  /** nombresOrganizados del legado: mapa indexado que conserva el orden de las columnas de la tabla. */
+  public getColumnasOrganizadas(): string[] {
+    const selected = this.getSelectedComponent();
+    const organizadas = selected?.nombresOrganizados ?? {};
+    return Object.keys(organizadas)
+      .sort((a, b) => Number(a) - Number(b))
+      .map((key) => organizadas[key]);
+  }
+
+  private setColumnasOrganizadas(columnas: string[]): void {
+    const selected = this.getSelectedComponent();
+    if (!selected) {
+      return;
+    }
+    const organizadas: Record<string, string> = {};
+    columnas.forEach((columna, index) => (organizadas[String(index)] = columna));
+    selected.nombresOrganizados = organizadas;
+  }
+
+  public agregarColumnaOrganizada(nombreColumna: string): void {
+    if (!nombreColumna) {
+      return;
+    }
+    const columnas = this.getColumnasOrganizadas();
+    if (columnas.includes(nombreColumna)) {
+      this.addMensaje('Esa columna ya fue agregada a la tabla.');
+      return;
+    }
+    this.setColumnasOrganizadas([...columnas, nombreColumna]);
+  }
+
+  public eliminarColumnaOrganizada(nombreColumna: string): void {
+    this.setColumnasOrganizadas(this.getColumnasOrganizadas().filter((item) => item !== nombreColumna));
+  }
+
+  public moverColumnaOrganizada(nombreColumna: string, direccion: -1 | 1): void {
+    const columnas = this.getColumnasOrganizadas();
+    const indice = columnas.indexOf(nombreColumna);
+    const destino = indice + direccion;
+    if (indice < 0 || destino < 0 || destino >= columnas.length) {
+      return;
+    }
+    [columnas[indice], columnas[destino]] = [columnas[destino], columnas[indice]];
+    this.setColumnasOrganizadas(columnas);
+  }
+
+  public getTituloColumnaTabla(nombreColumna: string): string {
+    const selected = this.getSelectedComponent();
+    return (selected?.nombresColumnas ?? {})[nombreColumna] ?? '';
+  }
+
+  public updateTituloColumnaTabla(nombreColumna: string, titulo: string): void {
+    const selected = this.getSelectedComponent();
+    if (!selected) {
+      return;
+    }
+    selected.nombresColumnas = { ...(selected.nombresColumnas ?? {}), [nombreColumna]: titulo };
+  }
+
+  public getFormatoColumnaTabla(nombreColumna: string): string {
+    const selected = this.getSelectedComponent();
+    return (selected?.formatosColumnas ?? {})[nombreColumna] ?? '';
+  }
+
+  public updateFormatoColumnaTabla(nombreColumna: string, formato: string): void {
+    const selected = this.getSelectedComponent();
+    if (!selected) {
+      return;
+    }
+    selected.formatosColumnas = { ...(selected.formatosColumnas ?? {}), [nombreColumna]: formato };
+  }
+
+  // ---------------------------------------------------------------- Lista compuesta (consulta SQL)
+
+  public getColumnasConsulta(): string[] {
+    const selected = this.getSelectedComponent();
+    const columnas = selected?.nombresColumnas ?? {};
+    return Object.keys(columnas)
+      .sort((a, b) => Number(a) - Number(b))
+      .map((key) => columnas[key]);
+  }
+
+  private setColumnasConsulta(columnas: string[]): void {
+    const selected = this.getSelectedComponent();
+    if (!selected) {
+      return;
+    }
+    const mapa: Record<string, string> = {};
+    columnas.forEach((columna, index) => (mapa[String(index)] = columna));
+    selected.nombresColumnas = mapa;
+  }
+
+  public agregarColumnaConsulta(): void {
+    if (!this.nombreColumnaNueva) {
+      this.addMensaje('No ha digitado el nombre de la columna');
+      return;
+    }
+    const columnas = this.getColumnasConsulta();
+    if (columnas.includes(this.nombreColumnaNueva)) {
+      this.addMensaje('Ya existe una columna con el mismo nombre, por favor escriba uno diferente');
+      return;
+    }
+    this.setColumnasConsulta([...columnas, this.nombreColumnaNueva]);
+    this.nombreColumnaNueva = '';
+  }
+
+  public eliminarColumnaConsulta(nombreColumna: string): void {
+    this.setColumnasConsulta(this.getColumnasConsulta().filter((item) => item !== nombreColumna));
+  }
+
+  public ejecutarConsultaGenerica(): void {
+    const selected = this.getSelectedComponent();
+    if (!selected?.query) {
+      this.addMensaje('No ha digitado la sentencia SQL para el componente');
+      return;
+    }
+    this.addMensaje('Consulta enviada (simulada): el microservicio de ejecución aún no está disponible.');
+  }
+
+  // ---------------------------------------------------------------- Configuración de Mail
+
+  public abrirVentanaConfiguracionMail(): void {
+    this.tiposParametroMail.forEach((tipo) => {
+      if (!this.mapaRutasMail[tipo]) {
+        this.mapaRutasMail[tipo] = this.formulario.entidadPrincipal ? [this.formulario.entidadPrincipal] : [];
+      }
+    });
+    this.mostrarVentanaConfiguracionMail = true;
+  }
+
+  public cerrarVentanaConfiguracionMail(): void {
+    this.mostrarVentanaConfiguracionMail = false;
+  }
+
+  public getRutaMailActual(): string[] {
+    return this.mapaRutasMail[this.tipoParametroMail] ?? [];
+  }
+
+  public agregarRutaMail(): void {
+    if (!this.atributoRutaSeleccionado) {
+      return;
+    }
+    this.mapaRutasMail = {
+      ...this.mapaRutasMail,
+      [this.tipoParametroMail]: [...this.getRutaMailActual(), this.atributoRutaSeleccionado],
+    };
+    this.atributoRutaSeleccionado = '';
+  }
+
+  public eliminarUltimoTramoRutaMail(): void {
+    const ruta = this.getRutaMailActual();
+    if (ruta.length <= 1) {
+      return;
+    }
+    this.mapaRutasMail = { ...this.mapaRutasMail, [this.tipoParametroMail]: ruta.slice(0, -1) };
+  }
+
+  public guardarRutasParametrosMail(): void {
+    const selected = this.getSelectedComponent();
+    if (!selected) {
+      return;
+    }
+    selected.mapaAtributos = JSON.stringify(this.mapaRutasMail);
+    this.mostrarVentanaConfiguracionMail = false;
+    this.addMensaje('Parámetros del correo guardados en el componente.');
+  }
+
+  // ---------------------------------------------------------------- Configuración LinkToDifferentForm
+
+  public abrirVentanaConfiguracionLink(): void {
+    const selected = this.getSelectedComponent();
+    this.formulariosLinkAgregados = selected?.nombreFormulario
+      ? selected.nombreFormulario.split(',').map((item) => item.trim()).filter(Boolean)
+      : [];
+    this.mostrarVentanaConfLinkToDifferentForm = true;
+  }
+
+  public cerrarVentanaConfiguracionLink(): void {
+    this.mostrarVentanaConfLinkToDifferentForm = false;
+  }
+
+  public agregarFormularioLink(): void {
+    const nombre = this.tipoFormularioEscogido === 'consulta'
+      ? this.nombreFormularioConsultaLink
+      : this.nombreFormularioLink;
+    if (!nombre || this.formulariosLinkAgregados.includes(nombre)) {
+      return;
+    }
+    this.formulariosLinkAgregados = [...this.formulariosLinkAgregados, nombre];
+  }
+
+  public eliminarFormularioLink(nombre: string): void {
+    this.formulariosLinkAgregados = this.formulariosLinkAgregados.filter((item) => item !== nombre);
+  }
+
+  public guardarFormulariosLink(): void {
+    const selected = this.getSelectedComponent();
+    if (selected) {
+      selected.nombreFormulario = this.formulariosLinkAgregados.join(',');
+    }
+    this.mostrarVentanaConfLinkToDifferentForm = false;
+  }
+
+  // ---------------------------------------------------------------- Ayuda y organización de secciones
+
+  public abrirVentanaAyuda(): void {
+    this.mostrarVentanaAyuda = true;
+  }
+
+  public cerrarVentanaAyuda(): void {
+    this.mostrarVentanaAyuda = false;
+  }
+
+  public abrirVentanaOrganizacionSecciones(): void {
+    this.mostrarVentanaOrganizacionSecciones = true;
+  }
+
+  public cerrarVentanaOrganizacionSecciones(): void {
+    this.mostrarVentanaOrganizacionSecciones = false;
+  }
+
+  public moverSeccion(sectionKey: string, direccion: -1 | 1): void {
+    const entries = Object.entries(this.formulario.seccionesFormulario ?? {});
+    const indice = entries.findIndex(([key]) => key === sectionKey);
+    const destino = indice + direccion;
+    if (indice < 0 || destino < 0 || destino >= entries.length) {
+      return;
+    }
+    [entries[indice], entries[destino]] = [entries[destino], entries[indice]];
+    this.formulario = { ...this.formulario, seccionesFormulario: Object.fromEntries(entries) };
+    this.cdr.detectChanges();
+  }
+
+  // ---------------------------------------------------------------- Ventana de selección de entidad foránea
+
+  public abrirVentanaSeleccionEntidad(nombreEntidad: string, columna: ColumnaEntidadEntity): void {
+    if (!columna.esLlaveForanea || !columna.entidadRelacionada) {
+      return;
+    }
+
+    this.columnaForaneaOrigen = `${nombreEntidad}|${columna.nombre}`;
+    this.mensajeCondiciones = '';
+    this.whereEntidad = '';
+    this.condicionesEntidad = [];
+    this.columnasMostrablesSeleccionadas = {};
+
+    this.entidadCatalogoService.getEntidadPorNombre(columna.entidadRelacionada).subscribe((entidad) => {
+      this.entidadForaneaSeleccionada = entidad ?? null;
+      (entidad?.columnas ?? []).forEach((item) => (this.columnasMostrablesSeleccionadas[item.nombre] = false));
+      this.mostrarVentanaSeleccionEntidad = true;
+      this.cdr.detectChanges();
+    });
+  }
+
+  public agregarCondicionEntidad(columna: ColumnaEntidadEntity): void {
+    const existentes = this.condicionesEntidad.filter((item) => item.atributo === columna.nombre).length;
+    this.condicionesEntidad = [
+      ...this.condicionesEntidad,
+      {
+        identificador: `-${columna.nombre}${existentes + 1}-`,
+        atributo: columna.nombre,
+        operador: '=',
+        valor: '',
+      },
+    ];
+  }
+
+  public eliminarCondicionEntidad(identificador: string): void {
+    this.condicionesEntidad = this.condicionesEntidad.filter((item) => item.identificador !== identificador);
+  }
+
+  public cerrarVentanaSeleccionEntidad(): void {
+    this.mensajeCondiciones = '';
+    if (this.condicionesEntidad.length > 0 && !this.whereEntidad.trim()) {
+      this.mensajeCondiciones = 'Debe digitar la sentencia WHERE para las condiciones seleccionadas';
+      return;
+    }
+
+    const selected = this.getSelectedComponent();
+    if (selected && this.entidadForaneaSeleccionada) {
+      const labels = Object.keys(this.columnasMostrablesSeleccionadas).filter(
+        (nombre) => this.columnasMostrablesSeleccionadas[nombre],
+      );
+      selected.idColumna = this.columnaForaneaOrigen;
+      selected.query = `SELECT model FROM ${this.entidadForaneaSeleccionada.nombre} as model`;
+      selected.where = this.whereEntidad;
+      selected.listaLabels = labels.join(',');
+      selected.condiciones = this.condicionesEntidad.length ? JSON.stringify(this.condicionesEntidad) : '';
+    }
+
+    this.mostrarVentanaSeleccionEntidad = false;
+  }
+
+  // ---------------------------------------------------------------- Acciones globales del formulario
+
+  public verFormulario(): void {
+    this.addMensaje('Vista previa disponible en la zona de diseño de esta misma pantalla.');
+  }
+
+  public crearCopiaFormulario(): void {
+    if (!this.formulario.nombreUnicoFormulario) {
+      this.addMensaje('Debe escribir un nombre único antes de crear una copia.');
+      return;
+    }
+    this.formulario = {
+      ...this.formulario,
+      id: undefined,
+      nombreUnicoFormulario: `${this.formulario.nombreUnicoFormulario}_copia`,
+    };
+    this.guardarFormulario();
+  }
+
+  public limpiarCampos(): void {
+    this.mensajes = [];
+    this.mensaje = '';
+    this.mensajeValidaciones = '';
+    this.mensajesObservadores = [];
+    this.validacionExp = this.createValidacionDraft();
+    this.atributoSeleccionado = null;
+    this.selectedComponentKey = '';
+  }
+
+  public volver(): void {
+    this.addMensaje('Regresar al listado de formularios (navegación pendiente de integrar).');
+  }
+
+  /** validarCamposObligatorios del bean: título y nombre único con el patrón heredado. */
+  public validarCamposObligatorios(): boolean {
+    this.mensajes = [];
+    if (!this.formulario.titulo) {
+      this.addMensaje('Debe escribir un título para el formulario');
+      return false;
+    }
+    if (!this.formulario.nombreUnicoFormulario) {
+      this.addMensaje('Debe escribir un nombre único que identifique al formulario');
+      return false;
+    }
+    if (!/^[a-zA-Z\-_0-9]+$/.test(this.formulario.nombreUnicoFormulario)) {
+      this.addMensaje('El nombre único del formulario solo puede tener caracteres de la a-z, A-Z, 0-9, "-" ó "_".');
+      return false;
+    }
+    if (!this.formulario.entidadPrincipal) {
+      this.addMensaje('Debe seleccionar la entidad principal del formulario');
+      return false;
+    }
+    return true;
   }
 
   private buildComponentEntity(componentType: string, componentKey: string): ComponenteBaseEntity {

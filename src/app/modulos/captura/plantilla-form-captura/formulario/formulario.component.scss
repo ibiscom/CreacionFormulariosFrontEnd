@@ -8,10 +8,3 @@
   flex-direction: column;
   gap: 1rem;
 }
-
-//Estilos para las clases de ancho dinámico .width1, .width2, ..., .width100
-@for $i from 1 through 100 {
-  .width#{$i} {
-    width: $i * 1%;
-  }
-}   

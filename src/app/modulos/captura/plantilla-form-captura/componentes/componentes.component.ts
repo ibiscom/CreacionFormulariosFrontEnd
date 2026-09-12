@@ -120,6 +120,14 @@ export class ComponentesComponent {
     );
   }
 
+  /**
+   * Componentes que no traen ancho propio en styleContenedor y por tanto no pueden
+   * medirse por su contenido: el separador es solo un <hr>, cuyo ancho intrínseco es 0.
+   */
+  public ocupaAnchoCompleto(tipoComponente: string): boolean {
+    return tipoComponente === 'Separador';
+  }
+
   public seleccionarComponente(key: string): void {
     this.componenteSeleccionado.emit(key);
   }

@@ -1,12 +1,16 @@
-<mat-form-field class="base-select-one-list-box-customized-field" [style]="selectOneListBoxCustomizedEntity!.styleContenedor">
-  <mat-label>{{ selectOneListBoxCustomizedEntity!.nombre }}</mat-label>
-  <mat-select [panelClass]="'frm-purple-select-panel'">
-    @for (opcion of selectOneListBoxCustomizedEntity!.opciones; track opcion) {
-      @if (selected(opcion)) {
-        <mat-option [value]="opcion" selected>{{ opcion }}</mat-option>
-      } @else {
-        <mat-option [value]="opcion">{{ opcion }}</mat-option>
-      }
-    }
-  </mat-select>
-</mat-form-field>
+  <div style="display: inline-flex; flex-direction: row; width: calc(100% - 10px);">
+    <span [class]="matLabelClasses">{{ selectOneListBoxCustomizedEntity?.nombre }}</span>
+
+    <mat-form-field [class]="'base-select-one-list-box-customized-field ' + matInputClasses" [style]="selectOneListBoxCustomizedEntity!.styleContenedor">
+      <mat-label>{{ selectOneListBoxCustomizedEntity!.nombre }}</mat-label>
+      <mat-select [panelClass]="'frm-purple-select-panel'">
+        @for (opcion of selectOneListBoxCustomizedEntity!.opciones; track opcion) {
+          @if (selected(opcion)) {
+            <mat-option [value]="opcion" selected>{{ opcion }}</mat-option>
+          } @else {
+            <mat-option [value]="opcion">{{ opcion }}</mat-option>
+          }
+        }
+      </mat-select>
+    </mat-form-field>
+</div>

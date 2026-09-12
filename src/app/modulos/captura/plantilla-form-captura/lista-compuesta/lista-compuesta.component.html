@@ -1,4 +1,5 @@
-<div class="listaCompuestaEntity" [style]="listaCompuestaEntity?.styleContenedor">
+<div style="display: inline-flex; flex-direction: column; width: calc(100% - 10px);">
+  <span>{{ listaCompuestaEntity?.nombre }}</span>
   @if (displayedColumns.length > 0 && dataSource.length > 0) {
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z1">
       @for (column of displayedColumns; track column) {

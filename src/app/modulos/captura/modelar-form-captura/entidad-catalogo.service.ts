@@ -72,4 +72,34 @@ export class EntidadCatalogoService {
     const relacionadas = CATALOGO_ENTIDADES.filter((entidad) => nombresRelacionados.includes(entidad.nombre));
     return of(relacionadas).pipe(delay(this.latenciaSimuladaMs));
   }
+
+  /** Atributos de tipo lista (List<SelectItem>) usados por SelectOneListBoxCustomized. */
+  public getAtributosTipoLista(nombreEntidad: string): Observable<string[]> {
+    const entidad = CATALOGO_ENTIDADES.find((item) => item.nombre === nombreEntidad);
+    const atributos = (entidad?.columnas ?? [])
+      .filter((columna) => !columna.esLlavePrimaria)
+      .map((columna) => `lista${columna.nombre.charAt(0).toUpperCase()}${columna.nombre.slice(1)}`);
+
+    return of(atributos).pipe(delay(this.latenciaSimuladaMs));
+  }
+
+  /** Atributos planos de la entidad, usados como ruta en el componente Mail y como atributo de selección. */
+  public getAtributosRuta(nombreEntidad: string): Observable<string[]> {
+    const entidad = CATALOGO_ENTIDADES.find((item) => item.nombre === nombreEntidad);
+    return of((entidad?.columnas ?? []).map((columna) => columna.nombre)).pipe(delay(this.latenciaSimuladaMs));
+  }
+
+  /** Nombres de la entidad principal y sus relacionadas: alimenta el combo "Entidad" del SearchButton. */
+  public getNombresEntidadesRelacionadas(nombreEntidadPrincipal: string): Observable<string[]> {
+    const principal = CATALOGO_ENTIDADES.find((item) => item.nombre === nombreEntidadPrincipal);
+    if (!principal) {
+      return of([]).pipe(delay(this.latenciaSimuladaMs));
+    }
+
+    const relacionadas = principal.columnas
+      .filter((columna) => columna.esLlaveForanea && columna.entidadRelacionada)
+      .map((columna) => columna.entidadRelacionada as string);
+
+    return of([principal.nombre, ...Array.from(new Set(relacionadas))]).pipe(delay(this.latenciaSimuladaMs));
+  }
 }

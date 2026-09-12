@@ -1,6 +1,6 @@
-<div class="base-select-one-radio-field" [style]="selectOneRadioEntity?.styleContenedor">
-    <mat-label class="label-select-one-radio" >{{ selectOneRadioEntity!.nombre }}</mat-label>
-	<mat-radio-group [aria-label]="selectOneRadioEntity!.nombre" [value]="selectedValue" (change)="updateValue($event.value)">
+  <div style="display: inline-flex; flex-direction: row; width: calc(100% - 10px);">
+    <span [class]="matLabelClasses">{{ selectOneRadioEntity?.nombre }}</span>
+	<mat-radio-group [class]="matInputClasses" [style]="selectOneRadioEntity?.style" [aria-label]="selectOneRadioEntity!.nombre" [value]="selectedValue" (change)="updateValue($event.value)">
       @for (opcion of radioOptions; track opcion.value) {
 		<mat-radio-button [value]="opcion.value" [checked]="selected(opcion)">{{ opcion.label }}</mat-radio-button>
       }

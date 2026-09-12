@@ -1,8 +1,6 @@
-<div [style]="inPutTextEntity!.styleContenedor" [class]="inPutTextEntity?.styleClassContenedor">
-    <span [class]="matLabelClasses">{{ inPutTextEntity?.nombre }}</span>
-  
-  <mat-form-field [class]="'base-inputtext-field ' + matInputClasses" [style]="inPutTextEntity!.style"  subscriptSizing="dynamic">  
-    <mat-label [class]="matLabelClasses">{{ inPutTextEntity?.nombre }}</mat-label>|
+<div style="display: inline-flex; flex-direction: row; width: calc(100% - 10px);">
+  <span [class]="matLabelClasses">{{ inPutTextEntity?.nombre }}</span>
+  <mat-form-field [class]="'base-inputtext-field ' + matInputClasses" subscriptSizing="dynamic">
     <input
       matInput
       [placeholder]="inPutTextEntity!.nombre"

@@ -9,53 +9,11 @@ import { SeccionEntity } from '../../../entidades/forms-captura/seccion.entity';
 import { SeccionesFormularioEntity } from '../../../entidades/forms-captura/secciones-formulario.entity';
 import { SelectItemEntity } from '../../../entidades/forms-captura/select-item.entity';
 import { getFieldPayloadValue, setFieldPayloadValue } from '../../../utilidades/field-value.util';
-import { InPutTextComponent } from '../../captura/plantilla-form-captura/in-put-text/in-put-text.component';
-import { InPutTextAreaComponent } from '../../captura/plantilla-form-captura/in-put-text-area/in-put-text-area.component';
-import { SelectInPutDateComponent } from '../../captura/plantilla-form-captura/select-in-put-date/select-in-put-date.component';
-import { SelectOneListBoxComponent } from '../../captura/plantilla-form-captura/select-one-list-box/select-one-list-box.component';
-import { SelectOneListBoxCustomizedComponent } from '../../captura/plantilla-form-captura/select-one-list-box-customized/select-one-list-box-customized.component';
-import { SelectBooleanCheckBoxComponent } from '../../captura/plantilla-form-captura/select-boolean-check-box/select-boolean-check-box.component';
-import { SelectOneRadioComponent } from '../../captura/plantilla-form-captura/select-one-radio/select-one-radio.component';
-import { CargaMasivaComponent } from '../../captura/plantilla-form-captura/carga-masiva/carga-masiva.component';
-import { LabelComponent } from '../../captura/plantilla-form-captura/label/label.component';
-import { OutPutLinkComponent } from '../../captura/plantilla-form-captura/out-put-link/out-put-link.component';
-import { LinkToAFormComponent } from '../../captura/plantilla-form-captura/link-to-a-form/link-to-a-form.component';
-import { LinkToDifferentFormComponent } from '../../captura/plantilla-form-captura/link-to-different-form/link-to-different-form.component';
-import { LinkFormToIcefacesComponent } from '../../captura/plantilla-form-captura/link-form-to-icefaces/link-form-to-icefaces.component';
-import { SaveButtonComponent } from '../../captura/plantilla-form-captura/save-button/save-button.component';
-import { SearchButtonComponent } from '../../captura/plantilla-form-captura/search-button/search-button.component';
-import { RefreshButtonComponent } from '../../captura/plantilla-form-captura/refresh-button/refresh-button.component';
-import { MailComponent } from '../../captura/plantilla-form-captura/mail/mail.component';
-import { SeparadorComponent } from "../../captura/plantilla-form-captura/separador/separador.component";
-import { TableDetailsComponent } from '../../captura/plantilla-form-captura/table-details/table-details.component';
 import { SeccionComponent } from "../../captura/plantilla-form-captura/seccion/seccion.component";
 
 @Component({
   selector: 'htm-plantilla-formulario-htm',
-  imports: [
-    CommonModule,
-    FormsModule,
-    InPutTextComponent,
-    InPutTextAreaComponent,
-    SelectInPutDateComponent,
-    SelectOneListBoxComponent,
-    SelectOneListBoxCustomizedComponent,
-    SelectBooleanCheckBoxComponent,
-    SelectOneRadioComponent,
-    CargaMasivaComponent,
-    LabelComponent,
-    OutPutLinkComponent,
-    LinkToAFormComponent,
-    LinkToDifferentFormComponent,
-    LinkFormToIcefacesComponent,
-    SaveButtonComponent,
-    SearchButtonComponent,
-    RefreshButtonComponent,
-    MailComponent,
-    SeparadorComponent,
-    TableDetailsComponent,
-    SeccionComponent
-],
+  imports: [CommonModule, FormsModule, SeccionComponent],
   templateUrl: './plantilla-formulario-htm.component.html',
   styleUrl: './plantilla-formulario-htm.component.scss',
 })
