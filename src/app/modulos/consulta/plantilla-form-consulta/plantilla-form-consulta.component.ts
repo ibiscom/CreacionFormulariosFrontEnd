@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ComponenteBaseEntity } from '../../../entidades/forms-captura/componente-base.entity';
@@ -33,7 +32,6 @@ import { SeccionesFormularioEntity } from '../../../entidades/forms-captura/secc
 @Component({
   selector: 'frm-plantilla-form-consulta',
   imports: [
-    CommonModule,
     FormsModule,
     InPutTextComponent,
     InPutTextAreaComponent,
@@ -77,7 +75,6 @@ export class PlantillaFormConsultaComponent {
 
   public constructor(private plantillaFormConsultaService: PlantillaFormConsultaService) {}
 
-
   ngOnInit(): void {
     if (!this.modo) {
       this.modo = 'ver'; // Valor predeterminado si no se proporciona un modo
@@ -86,28 +83,25 @@ export class PlantillaFormConsultaComponent {
   }
 
   private consultarFormulario(): void {
-  if (!this.id) {
-        console.error('No se proporcionó un ID de formulario.');
-        return;
-      }
+    if (!this.id) {
+      console.error('No se proporcionó un ID de formulario.');
+      return;
+    }
 
-      this.plantillaFormConsultaService.getFormulario(this.id).subscribe({
-        next: (response) => {
-          this.formularioInput = this.parseFormularioResponse(this.extractPayload(response));
-          console.debug('Formulario cargado:', this.formularioInput?.titulo);
-          console.debug('Secciones', this.formularioInput?.seccionesFormularioConsulta);
-        },
-        error: (error) => {
-          console.error('Error al cargar el formulario:', error);
-          this.formularioInput = undefined;
-          this.mensajes.push(
-            MessageUtil.buildErrorMessageFrmResponse(
-              Constants.ERR_VER_FORMULARIO,
-              error,
-            ),
-          );
-        },
-      });
+    this.plantillaFormConsultaService.getFormulario(this.id).subscribe({
+      next: (response) => {
+        this.formularioInput = this.parseFormularioResponse(this.extractPayload(response));
+        console.debug('Formulario cargado:', this.formularioInput?.titulo);
+        console.debug('Secciones', this.formularioInput?.seccionesFormularioConsulta);
+      },
+      error: (error) => {
+        console.error('Error al cargar el formulario:', error);
+        this.formularioInput = undefined;
+        this.mensajes.push(
+          MessageUtil.buildErrorMessageFrmResponse(Constants.ERR_VER_FORMULARIO, error),
+        );
+      },
+    });
   }
 
   @Input() public set formularioInput(value: FormularioConsultaJSONEntity | undefined) {
@@ -172,16 +166,14 @@ export class PlantillaFormConsultaComponent {
         diligenciable: 'true',
         consultable: 'true',
         plantillasMostrables: 'true',
-        htmlAyuda: '<p>Ayuda de ejemplo.</p><p>Este contenido se puede reemplazar con la ayuda real del backend.</p>',
-      };      
+        htmlAyuda:
+          '<p>Ayuda de ejemplo.</p><p>Este contenido se puede reemplazar con la ayuda real del backend.</p>',
+      };
     } else {
-        this.formulario = value;
+      this.formulario = value;
     }
-    this.seedComponentValues();    
+    this.seedComponentValues();
   }
-
-  
-
 
   public get secciones(): SeccionEntity[] {
     return Object.values(this.formulario.seccionesFormularioConsulta ?? {});
@@ -199,7 +191,9 @@ export class PlantillaFormConsultaComponent {
     return this.asBool((componente as unknown as Record<string, unknown>)[flagName]);
   }
 
-  public getComponentList(componentes: ComponentesEntity | '' | null | undefined): ComponenteBaseEntity[] {
+  public getComponentList(
+    componentes: ComponentesEntity | '' | null | undefined,
+  ): ComponenteBaseEntity[] {
     if (!componentes) {
       return [];
     }
@@ -251,7 +245,10 @@ export class PlantillaFormConsultaComponent {
 
       return {
         label: safeItem.label ?? '',
-        value: typeof rawValue === 'object' && rawValue ? String(rawValue.value ?? '') : String(rawValue ?? ''),
+        value:
+          typeof rawValue === 'object' && rawValue
+            ? String(rawValue.value ?? '')
+            : String(rawValue ?? ''),
       };
     });
   }
@@ -362,7 +359,8 @@ export class PlantillaFormConsultaComponent {
       return;
     }
 
-    this.componentValues[key] = defaultValue !== undefined && defaultValue !== null ? String(defaultValue) : '';
+    this.componentValues[key] =
+      defaultValue !== undefined && defaultValue !== null ? String(defaultValue) : '';
   }
 
   private createComponent(partial: {
@@ -433,7 +431,6 @@ export class PlantillaFormConsultaComponent {
       items: partial.items,
     };
   }
-
 
   private parseFormularioResponse(payload: unknown): FormularioConsultaJSONEntity {
     if (typeof payload === 'string') {
@@ -507,9 +504,7 @@ export class PlantillaFormConsultaComponent {
 
     if (typeof seccionesRaw === 'object') {
       const result: SeccionesFormularioEntity = {};
-      for (const [key, seccionValue] of Object.entries(
-        seccionesRaw as Record<string, unknown>,
-      )) {
+      for (const [key, seccionValue] of Object.entries(seccionesRaw as Record<string, unknown>)) {
         result[key] = this.normalizeSeccionConsulta(seccionValue as Record<string, unknown>);
       }
       return result;
@@ -534,13 +529,13 @@ export class PlantillaFormConsultaComponent {
       expandido: this.asBool(seccionRaw['expandido']) ? 'true' : 'false',
       componentesIzq: hasExplicitColumns
         ? (componentesIzq ?? '')
-        : (componentesDesdeCondiciones.componentesIzq || ''),
+        : componentesDesdeCondiciones.componentesIzq || '',
       componentesCent: hasExplicitColumns
         ? (componentesCent ?? '')
-        : (componentesDesdeCondiciones.componentesCent || ''),
+        : componentesDesdeCondiciones.componentesCent || '',
       componentesDer: hasExplicitColumns
         ? (componentesDer ?? '')
-        : (componentesDesdeCondiciones.componentesDer || ''),
+        : componentesDesdeCondiciones.componentesDer || '',
     };
   }
 
@@ -640,8 +635,9 @@ export class PlantillaFormConsultaComponent {
       (normalized as unknown as { valor: unknown }).valor = this.normalizeDatePayload(
         normalized.valor,
       );
-      (normalized as unknown as { valorDefecto: unknown }).valorDefecto =
-        this.normalizeDatePayload(normalized.valorDefecto);
+      (normalized as unknown as { valorDefecto: unknown }).valorDefecto = this.normalizeDatePayload(
+        normalized.valorDefecto,
+      );
     }
 
     return normalized;
@@ -669,7 +665,7 @@ export class PlantillaFormConsultaComponent {
     return setFieldPayloadValue(payload, formatted);
   }
 
-    private extractPayload(response: unknown): unknown {
+  private extractPayload(response: unknown): unknown {
     if (response && typeof response === 'object' && 'respuesta' in response) {
       return (response as Record<string, unknown>)['respuesta'];
     }

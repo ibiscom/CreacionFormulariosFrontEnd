@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ComponenteBaseEntity } from '../../../entidades/forms-captura/componente-base.entity';
@@ -12,18 +11,18 @@ import { PlantillaFormCapturaComponent } from '../../captura/plantilla-form-capt
 import { ActivatedRoute, Router } from '@angular/router';
 import { PlantillaFormCapturaService } from '../../captura/plantilla-form-captura/plantilla-form-captura.service';
 import { getFieldPayloadValue, setFieldPayloadValue } from '../../../utilidades/field-value.util';
-import { SeccionComponent } from "../../captura/plantilla-form-captura/seccion/seccion.component";
+import { SeccionComponent } from '../../captura/plantilla-form-captura/seccion/seccion.component';
 import { PlantillaFormularioNormalHtmService } from './plantilla-formulario-normal-htm.service';
 
 @Component({
   selector: 'htm-plantilla-formulario-normal-htm',
-  imports: [CommonModule, FormsModule, SeccionComponent],
+  imports: [FormsModule, SeccionComponent],
   templateUrl: './plantilla-formulario-normal-htm.component.html',
   styleUrl: './plantilla-formulario-normal-htm.component.scss',
 })
 export class PlantillaFormularioNormalHtmComponent extends PlantillaFormCapturaComponent {
   @Input() public padre?: any;
- 
+
   @Input() public set formularioInput(value: FormularioJSONEntity | undefined) {
     if (!value) {
       return;
@@ -246,13 +245,19 @@ export class PlantillaFormularioNormalHtmComponent extends PlantillaFormCapturaC
 
       return {
         label: safeItem.label ?? '',
-        value: typeof rawValue === 'object' && rawValue ? String(rawValue.value ?? '') : String(rawValue ?? ''),
+        value:
+          typeof rawValue === 'object' && rawValue
+            ? String(rawValue.value ?? '')
+            : String(rawValue ?? ''),
       };
     });
   }
 
   public getMostrarAsteriscoRojo(componente: ComponenteBaseEntity): boolean {
-    return this.asBool(componente.obligatorio) || (this.hayAnteriorFormulario && this.asBool(componente.obligatorioFuncional));
+    return (
+      this.asBool(componente.obligatorio) ||
+      (this.hayAnteriorFormulario && this.asBool(componente.obligatorioFuncional))
+    );
   }
 
   public getMostrarAsteriscoVerde(componente: ComponenteBaseEntity): boolean {
@@ -264,14 +269,15 @@ export class PlantillaFormularioNormalHtmComponent extends PlantillaFormCapturaC
   }
 
   public override abrirVentanaAyuda(): void {
-     const dialogRef = this.dialog.open(DialogAyudaComponent, {
+    const dialogRef = this.dialog.open(DialogAyudaComponent, {
       width: '400px',
-      data: { nombreFormulario: this.formulario?.titulo || 'Formulario',
-              contenidoAyuda: this.formulario?.htmlAyuda || '' 
-       } 
+      data: {
+        nombreFormulario: this.formulario?.titulo || 'Formulario',
+        contenidoAyuda: this.formulario?.htmlAyuda || '',
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       console.debug('Diálogo de ayuda cerrado', result);
     });
   }
@@ -280,16 +286,20 @@ export class PlantillaFormularioNormalHtmComponent extends PlantillaFormCapturaC
     if (this.prevencionDobleClic()) {
       return;
     }
-1
+    1;
     this.plantillaFormularioNormalHtmService.guardarFormularioNormalHTM(this.formulario).subscribe({
       next: (response) => {
         if (response) {
           this.addMensaje('Formulario guardado exitósamente.');
-        }}, error: (error) => {  
-          this.addMensaje('Error al guardar el formulario: ' + (error?.message || 'Error desconocido'));
         }
-      });
-    }
+      },
+      error: (error) => {
+        this.addMensaje(
+          'Error al guardar el formulario: ' + (error?.message || 'Error desconocido'),
+        );
+      },
+    });
+  }
 
   public override editarFormulario(): void {
     if (this.prevencionDobleClic()) {
@@ -300,24 +310,34 @@ export class PlantillaFormularioNormalHtmComponent extends PlantillaFormCapturaC
       next: (response) => {
         if (response) {
           this.addMensaje('Formulario editado correctamente.');
-        }}, error: (error) => {  
-          this.addMensaje('Error al editar el formulario: ' + (error?.message || 'Error desconocido'));
         }
-      });
+      },
+      error: (error) => {
+        this.addMensaje(
+          'Error al editar el formulario: ' + (error?.message || 'Error desconocido'),
+        );
+      },
+    });
   }
 
   public override eliminarRegistro(): void {
-     if (this.prevencionDobleClic()) {
+    if (this.prevencionDobleClic()) {
       return;
     }
 
-    this.plantillaFormularioNormalHtmService.eliminarRegistroFormularioNormalHTM(this.formulario).subscribe({
-      next: (response) => {
-        if (response) {
-          this.addMensaje('Registro eliminado correctamente.');
-        }}, error: (error) => {
-          this.addMensaje('Error al eliminar el registro: ' + (error?.message || 'Error desconocido'));
-        }
+    this.plantillaFormularioNormalHtmService
+      .eliminarRegistroFormularioNormalHTM(this.formulario)
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.addMensaje('Registro eliminado correctamente.');
+          }
+        },
+        error: (error) => {
+          this.addMensaje(
+            'Error al eliminar el registro: ' + (error?.message || 'Error desconocido'),
+          );
+        },
       });
   }
 
@@ -345,7 +365,9 @@ export class PlantillaFormularioNormalHtmComponent extends PlantillaFormCapturaC
 
   public adjuntarPlantillaPDF(): void {
     if (!this.hayRecurso) {
-      this.addMensaje('No se permite anexar el documento al proceso. No se ha generado el archivo digital.');
+      this.addMensaje(
+        'No se permite anexar el documento al proceso. No se ha generado el archivo digital.',
+      );
       return;
     }
 
@@ -387,8 +409,6 @@ export class PlantillaFormularioNormalHtmComponent extends PlantillaFormCapturaC
     }
   }
 
-
-
   private seedComponentValues(): void {
     for (const seccion of this.secciones) {
       for (const componente of this.getComponentList(seccion.componentesIzq)) {
@@ -415,7 +435,8 @@ export class PlantillaFormularioNormalHtmComponent extends PlantillaFormCapturaC
       return;
     }
 
-    this.componentValues[key] = defaultValue !== undefined && defaultValue !== null ? String(defaultValue) : '';
+    this.componentValues[key] =
+      defaultValue !== undefined && defaultValue !== null ? String(defaultValue) : '';
   }
 
   private createComponent(partial: {
@@ -494,9 +515,7 @@ export class PlantillaFormularioNormalHtmComponent extends PlantillaFormCapturaC
     };
   }
 
-  
   ngAfterViewChecked(): void {
     this.padre?.refrescarAltura?.();
   }
-
 }

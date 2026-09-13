@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ComponenteBaseEntity } from '../../../entidades/forms-captura/componente-base.entity';
@@ -31,7 +30,6 @@ import { TableDetailsComponent } from '../../captura/plantilla-form-captura/tabl
 @Component({
   selector: 'app-plantilla-form-detalle',
   imports: [
-    CommonModule,
     FormsModule,
     InPutTextComponent,
     InPutTextAreaComponent,
@@ -143,7 +141,8 @@ export class PlantillaFormDetalleComponent {
             nombre: 'Información',
             tipoComponente: 'Label',
             labelType: 'true',
-            valor: 'La sección detalle admite acciones de agregar, edición, recursos PDF/Word y navegación.',
+            valor:
+              'La sección detalle admite acciones de agregar, edición, recursos PDF/Word y navegación.',
           }),
         },
         componentesDer: {
@@ -296,7 +295,10 @@ export class PlantillaFormDetalleComponent {
 
       return {
         label: safeItem.label ?? '',
-        value: typeof rawValue === 'object' && rawValue ? String(rawValue.value ?? '') : String(rawValue ?? ''),
+        value:
+          typeof rawValue === 'object' && rawValue
+            ? String(rawValue.value ?? '')
+            : String(rawValue ?? ''),
       };
     });
   }
@@ -382,7 +384,9 @@ export class PlantillaFormDetalleComponent {
   public generarPlantilla(): void {
     this.hayRecurso = true;
     this.hayRecursoWord = true;
-    this.addMensaje(`Plantilla generada para ${this.cartaSeleccionada} en formato ${this.tipoHoja}.`);
+    this.addMensaje(
+      `Plantilla generada para ${this.cartaSeleccionada} en formato ${this.tipoHoja}.`,
+    );
   }
 
   public adjuntarPlantillaPDF(): void {
@@ -424,7 +428,8 @@ export class PlantillaFormDetalleComponent {
       return;
     }
 
-    this.componentValues[key] = defaultValue !== undefined && defaultValue !== null ? String(defaultValue) : '';
+    this.componentValues[key] =
+      defaultValue !== undefined && defaultValue !== null ? String(defaultValue) : '';
   }
 
   private createListaCompuestaHtml(): string {
@@ -527,5 +532,4 @@ export class PlantillaFormDetalleComponent {
       pagSize: partial.pagSize,
     } as ComponenteBaseEntity;
   }
-
 }

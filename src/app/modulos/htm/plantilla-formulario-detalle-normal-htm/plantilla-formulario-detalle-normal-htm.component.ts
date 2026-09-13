@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ComponenteBaseEntity } from '../../../entidades/forms-captura/componente-base.entity';
@@ -32,7 +31,6 @@ import { TableDetailsComponent } from '../../captura/plantilla-form-captura/tabl
   selector: 'app-plantilla-formulario-detalle-normal-htm',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     InPutTextComponent,
     InPutTextAreaComponent,
@@ -319,7 +317,10 @@ export class PlantillaFormularioDetalleNormalHtmComponent {
 
       return {
         label: safeItem.label ?? '',
-        value: typeof rawValue === 'object' && rawValue ? String(rawValue.value ?? '') : String(rawValue ?? ''),
+        value:
+          typeof rawValue === 'object' && rawValue
+            ? String(rawValue.value ?? '')
+            : String(rawValue ?? ''),
       };
     });
   }
@@ -425,7 +426,9 @@ export class PlantillaFormularioDetalleNormalHtmComponent {
 
   public adjuntarPlantillaPDF(): void {
     if (!this.hayRecurso) {
-      this.addMensaje('No se permite anexar el documento al proceso, no se ha generado el archivo digital.');
+      this.addMensaje(
+        'No se permite anexar el documento al proceso, no se ha generado el archivo digital.',
+      );
       return;
     }
 
@@ -448,7 +451,14 @@ export class PlantillaFormularioDetalleNormalHtmComponent {
       componentes.push(...this.getComponentList(seccion.componentesDer));
     }
 
-    const tiposPermitidos = ['InPutText', 'InPutTextArea', 'SelectInPutDate', 'SelectOneListBox', 'SelectBooleanCheckBox', 'SelectOneRadio'];
+    const tiposPermitidos = [
+      'InPutText',
+      'InPutTextArea',
+      'SelectInPutDate',
+      'SelectOneListBox',
+      'SelectBooleanCheckBox',
+      'SelectOneRadio',
+    ];
     this.datosRetorno = componentes
       .filter((comp) => tiposPermitidos.includes(comp.tipoComponente))
       .map((comp) => {
@@ -457,7 +467,9 @@ export class PlantillaFormularioDetalleNormalHtmComponent {
 
         if (comp.tipoComponente === 'SelectInPutDate' && rawValue) {
           const parsed = new Date(String(rawValue));
-          const valorFormateado = Number.isNaN(parsed.getTime()) ? String(rawValue) : this.formatearFecha(parsed, 'yyyy-MM-dd');
+          const valorFormateado = Number.isNaN(parsed.getTime())
+            ? String(rawValue)
+            : this.formatearFecha(parsed, 'yyyy-MM-dd');
           return [nombre, valorFormateado] as [string, string | null];
         }
 
@@ -536,7 +548,8 @@ export class PlantillaFormularioDetalleNormalHtmComponent {
       return;
     }
 
-    this.componentValues[key] = defaultValue !== undefined && defaultValue !== null ? String(defaultValue) : '';
+    this.componentValues[key] =
+      defaultValue !== undefined && defaultValue !== null ? String(defaultValue) : '';
   }
 
   private createListaCompuestaHtml(): string {
@@ -639,5 +652,4 @@ export class PlantillaFormularioDetalleNormalHtmComponent {
       pagSize: partial.pagSize,
     } as ComponenteBaseEntity;
   }
-
 }

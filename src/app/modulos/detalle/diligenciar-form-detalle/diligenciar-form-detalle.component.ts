@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ComponenteBaseEntity } from '../../../entidades/forms-captura/componente-base.entity';
@@ -32,7 +31,6 @@ import { TableDetailsComponent } from '../../captura/plantilla-form-captura/tabl
   selector: 'app-diligenciar-form-detalle',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     InPutTextComponent,
     InPutTextAreaComponent,
@@ -144,7 +142,8 @@ export class DiligenciarFormDetalleComponent {
             nombre: 'Información',
             tipoComponente: 'Label',
             labelType: 'true',
-            valor: 'La sección detalle admite acciones de agregar, edición, recursos PDF/WORD y navegación.',
+            valor:
+              'La sección detalle admite acciones de agregar, edición, recursos PDF/WORD y navegación.',
           }),
         },
         componentesDer: {
@@ -297,7 +296,10 @@ export class DiligenciarFormDetalleComponent {
 
       return {
         label: safeItem.label ?? '',
-        value: typeof rawValue === 'object' && rawValue ? String(rawValue.value ?? '') : String(rawValue ?? ''),
+        value:
+          typeof rawValue === 'object' && rawValue
+            ? String(rawValue.value ?? '')
+            : String(rawValue ?? ''),
       };
     });
   }
@@ -385,7 +387,9 @@ export class DiligenciarFormDetalleComponent {
   public generarPlantilla(): void {
     this.hayRecurso = true;
     this.hayRecursoWord = true;
-    this.addMensaje(`Plantilla generada para ${this.cartaSeleccionada} en formato ${this.tipoHoja}.`);
+    this.addMensaje(
+      `Plantilla generada para ${this.cartaSeleccionada} en formato ${this.tipoHoja}.`,
+    );
   }
 
   public adjuntarPlantillaPDF(): void {
@@ -427,7 +431,8 @@ export class DiligenciarFormDetalleComponent {
       return;
     }
 
-    this.componentValues[key] = defaultValue !== undefined && defaultValue !== null ? String(defaultValue) : '';
+    this.componentValues[key] =
+      defaultValue !== undefined && defaultValue !== null ? String(defaultValue) : '';
   }
 
   private createListaCompuestaHtml(): string {
@@ -530,5 +535,4 @@ export class DiligenciarFormDetalleComponent {
       pagSize: partial.pagSize,
     } as ComponenteBaseEntity;
   }
-
 }

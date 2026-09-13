@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { FormularioJSONEntity } from '../../../../entidades/forms-captura/formulario-json.entity';
 import { SeccionEntity } from '../../../../entidades/forms-captura/seccion.entity';
 import { ComponenteBaseEntity } from '../../../../entidades/forms-captura/componente-base.entity';
@@ -16,7 +16,7 @@ import { MessageUtil } from '../../../../utilidades/message.util';
 
 @Component({
   selector: 'app-modelar-form-captura',
-  imports: [CommonModule, FormsModule, ComponentesComponent],
+  imports: [FormsModule, ComponentesComponent],
   templateUrl: './modelar-form-captura.component.html',
   styleUrl: './modelar-form-captura.component.scss',
 })
@@ -71,7 +71,13 @@ export class ModelarFormCapturaComponent implements OnInit {
 
   public mostrarVentanaConfiguracionMail = false;
   public tipoParametroMail = 'Destinos';
-  public readonly tiposParametroMail = ['Destinos', 'DestinosCC', 'DestinosCCO', 'Asunto', 'Mensaje'];
+  public readonly tiposParametroMail = [
+    'Destinos',
+    'DestinosCC',
+    'DestinosCCO',
+    'Asunto',
+    'Mensaje',
+  ];
   public mapaRutasMail: Record<string, string[]> = {};
   public atributoRutaSeleccionado = '';
 
@@ -88,7 +94,12 @@ export class ModelarFormCapturaComponent implements OnInit {
   public entidadForaneaSeleccionada: EntidadCatalogoEntity | null = null;
   public columnaForaneaOrigen = '';
   public columnasMostrablesSeleccionadas: Record<string, boolean> = {};
-  public condicionesEntidad: Array<{ identificador: string; atributo: string; operador: string; valor: string }> = [];
+  public condicionesEntidad: Array<{
+    identificador: string;
+    atributo: string;
+    operador: string;
+    valor: string;
+  }> = [];
   public whereEntidad = '';
   public mensajeCondiciones = '';
   public readonly operadoresCondiciones = ['=', '!=', '<', '>', '<=', '>=', '= NULL', '!= NULL'];
@@ -103,7 +114,8 @@ export class ModelarFormCapturaComponent implements OnInit {
   public selectedSectionKey = '';
   public selectedComponentKey = '';
   public selectedComponentType = 'InPutText';
-  public selectedComponentColumn: 'componentesIzq' | 'componentesCent' | 'componentesDer' = 'componentesIzq';
+  public selectedComponentColumn: 'componentesIzq' | 'componentesCent' | 'componentesDer' =
+    'componentesIzq';
   public draggedComponentType = '';
   public activeDropSectionKey = '';
   public readonly componentColumns = [
@@ -112,7 +124,10 @@ export class ModelarFormCapturaComponent implements OnInit {
     { key: 'componentesDer' as const, label: 'Derecha' },
   ];
   public readonly widthOptions = Array.from({ length: 20 }, (_, index) => String((index + 1) * 5));
-  public readonly heightOptions = ['Normal', ...Array.from({ length: 35 }, (_, index) => String((index + 1) * 20))];
+  public readonly heightOptions = [
+    'Normal',
+    ...Array.from({ length: 35 }, (_, index) => String((index + 1) * 20)),
+  ];
   public componentTypes = [
     'InPutText',
     'InPutTextArea',
@@ -173,31 +188,41 @@ export class ModelarFormCapturaComponent implements OnInit {
     this.formulario = { ...this.formulario, entidadPrincipal: this.nombreEntidadPrincipalStaged };
     this.atributoSeleccionado = null;
 
-    this.entidadCatalogoService.getEntidadPorNombre(this.nombreEntidadPrincipalStaged).subscribe((entidad) => {
-      this.entidadPrincipalCatalogo = entidad ?? null;
-      this.cdr.detectChanges();
-    });
+    this.entidadCatalogoService
+      .getEntidadPorNombre(this.nombreEntidadPrincipalStaged)
+      .subscribe((entidad) => {
+        this.entidadPrincipalCatalogo = entidad ?? null;
+        this.cdr.detectChanges();
+      });
 
-    this.entidadCatalogoService.getEntidadesRelacionadasUnoAUno(this.nombreEntidadPrincipalStaged).subscribe((relacionadas) => {
-      this.entidadesRelacionadasCatalogo = relacionadas;
-      this.actualizarEntidadesDelFormulario();
-      this.cdr.detectChanges();
-    });
+    this.entidadCatalogoService
+      .getEntidadesRelacionadasUnoAUno(this.nombreEntidadPrincipalStaged)
+      .subscribe((relacionadas) => {
+        this.entidadesRelacionadasCatalogo = relacionadas;
+        this.actualizarEntidadesDelFormulario();
+        this.cdr.detectChanges();
+      });
 
-    this.entidadCatalogoService.getAtributosTipoLista(this.nombreEntidadPrincipalStaged).subscribe((atributos) => {
-      this.atributosTipoLista = atributos;
-      this.cdr.detectChanges();
-    });
+    this.entidadCatalogoService
+      .getAtributosTipoLista(this.nombreEntidadPrincipalStaged)
+      .subscribe((atributos) => {
+        this.atributosTipoLista = atributos;
+        this.cdr.detectChanges();
+      });
 
-    this.entidadCatalogoService.getAtributosRuta(this.nombreEntidadPrincipalStaged).subscribe((atributos) => {
-      this.atributosRuta = atributos;
-      this.cdr.detectChanges();
-    });
+    this.entidadCatalogoService
+      .getAtributosRuta(this.nombreEntidadPrincipalStaged)
+      .subscribe((atributos) => {
+        this.atributosRuta = atributos;
+        this.cdr.detectChanges();
+      });
 
-    this.entidadCatalogoService.getNombresEntidadesRelacionadas(this.nombreEntidadPrincipalStaged).subscribe((nombres) => {
-      this.nombresEntidadesRelacionadas = nombres;
-      this.cdr.detectChanges();
-    });
+    this.entidadCatalogoService
+      .getNombresEntidadesRelacionadas(this.nombreEntidadPrincipalStaged)
+      .subscribe((nombres) => {
+        this.nombresEntidadesRelacionadas = nombres;
+        this.cdr.detectChanges();
+      });
   }
 
   private actualizarEntidadesDelFormulario(): void {
@@ -265,7 +290,10 @@ export class ModelarFormCapturaComponent implements OnInit {
   }
 
   public isAtributoSeleccionado(nombreEntidad: string, nombreColumna: string): boolean {
-    return this.atributoSeleccionado?.entidad === nombreEntidad && this.atributoSeleccionado?.columna === nombreColumna;
+    return (
+      this.atributoSeleccionado?.entidad === nombreEntidad &&
+      this.atributoSeleccionado?.columna === nombreColumna
+    );
   }
 
   public addSection(): void {
@@ -326,7 +354,11 @@ export class ModelarFormCapturaComponent implements OnInit {
       return;
     }
 
-    this.addComponentToSection(this.selectedSectionKey, this.selectedComponentType, 'componentesIzq');
+    this.addComponentToSection(
+      this.selectedSectionKey,
+      this.selectedComponentType,
+      'componentesIzq',
+    );
   }
 
   public addComponentToSection(
@@ -403,11 +435,29 @@ export class ModelarFormCapturaComponent implements OnInit {
   }
 
   public isInputLikeComponent(component: ComponenteBaseEntity | null): boolean {
-    return !!component && ['InPutText', 'InPutTextArea', 'SelectOneListBox', 'SelectOneListBoxCustomized', 'SelectOneRadioButton', 'SelectBooleanCheckBox', 'SelectInPutDate', 'InPutRichText', 'FileUpload'].includes(component.tipoComponente);
+    return (
+      !!component &&
+      [
+        'InPutText',
+        'InPutTextArea',
+        'SelectOneListBox',
+        'SelectOneListBoxCustomized',
+        'SelectOneRadioButton',
+        'SelectBooleanCheckBox',
+        'SelectInPutDate',
+        'InPutRichText',
+        'FileUpload',
+      ].includes(component.tipoComponente)
+    );
   }
 
   public isListLikeComponent(component: ComponenteBaseEntity | null): boolean {
-    return !!component && ['SelectOneListBox', 'SelectOneListBoxCustomized', 'SelectOneRadioButton'].includes(component.tipoComponente);
+    return (
+      !!component &&
+      ['SelectOneListBox', 'SelectOneListBoxCustomized', 'SelectOneRadioButton'].includes(
+        component.tipoComponente,
+      )
+    );
   }
 
   public isFileUploadComponent(component: ComponenteBaseEntity | null): boolean {
@@ -415,15 +465,26 @@ export class ModelarFormCapturaComponent implements OnInit {
   }
 
   public isTableLikeComponent(component: ComponenteBaseEntity | null): boolean {
-    return !!component && ['TablaDetalles', 'TableSQLQuery', 'ListaCompuesta'].includes(component.tipoComponente);
+    return (
+      !!component &&
+      ['TablaDetalles', 'TableSQLQuery', 'ListaCompuesta'].includes(component.tipoComponente)
+    );
   }
 
   public isButtonLikeComponent(component: ComponenteBaseEntity | null): boolean {
-    return !!component && ['SaveButton', 'RefreshButton', 'SearchButton'].includes(component.tipoComponente);
+    return (
+      !!component &&
+      ['SaveButton', 'RefreshButton', 'SearchButton'].includes(component.tipoComponente)
+    );
   }
 
   public isLinkLikeComponent(component: ComponenteBaseEntity | null): boolean {
-    return !!component && ['OutPutLink', 'LinkToAForm', 'LinkToDifferentForm', 'LinkFormToIfaces'].includes(component.tipoComponente);
+    return (
+      !!component &&
+      ['OutPutLink', 'LinkToAForm', 'LinkToDifferentForm', 'LinkFormToIfaces'].includes(
+        component.tipoComponente,
+      )
+    );
   }
 
   public dropComponent(sectionKey: string, event: DragEvent): void {
@@ -474,7 +535,9 @@ export class ModelarFormCapturaComponent implements OnInit {
   }
 
   public getValidationComponentEntries(): Array<{ key: string; value: ComponenteBaseEntity }> {
-    return this.getAllComponentEntries().filter(({ key }) => key !== this.validationBaseComponentKey);
+    return this.getAllComponentEntries().filter(
+      ({ key }) => key !== this.validationBaseComponentKey,
+    );
   }
 
   public getAllComponentEntries(): Array<{ key: string; value: ComponenteBaseEntity }> {
@@ -495,7 +558,9 @@ export class ModelarFormCapturaComponent implements OnInit {
 
   public setValidationBaseComponent(key: string): void {
     this.validationBaseComponentKey = key;
-    this.validationBlockedComponentKeys = this.validationBlockedComponentKeys.filter((item) => item !== key);
+    this.validationBlockedComponentKeys = this.validationBlockedComponentKeys.filter(
+      (item) => item !== key,
+    );
     const component = this.getAllComponentEntries().find((entry) => entry.key === key)?.value;
     if (component) {
       this.loadLogicalValidationDraft(component, key);
@@ -509,13 +574,16 @@ export class ModelarFormCapturaComponent implements OnInit {
   }
 
   public getValidationBlockedEntries(): Array<{ key: string; value: ComponenteBaseEntity }> {
-    return this.getValidationComponentEntries().filter(
-      ({ key }) => this.validationBlockedComponentKeys.includes(key),
+    return this.getValidationComponentEntries().filter(({ key }) =>
+      this.validationBlockedComponentKeys.includes(key),
     );
   }
 
   public addValidationBlockedComponent(): void {
-    if (!this.validationAvailableComponentKey || this.validationAvailableComponentKey === this.validationBaseComponentKey) {
+    if (
+      !this.validationAvailableComponentKey ||
+      this.validationAvailableComponentKey === this.validationBaseComponentKey
+    ) {
       return;
     }
     if (!this.validationBlockedComponentKeys.includes(this.validationAvailableComponentKey)) {
@@ -552,7 +620,14 @@ export class ModelarFormCapturaComponent implements OnInit {
   }
 
   public appendValidationToken(token: 'AND' | 'OR' | 'NOT' | '()'): void {
-    const tokenText = token === 'AND' ? '() AND ()' : token === 'OR' ? '() OR ()' : token === 'NOT' ? 'NOT()' : '()';
+    const tokenText =
+      token === 'AND'
+        ? '() AND ()'
+        : token === 'OR'
+          ? '() OR ()'
+          : token === 'NOT'
+            ? 'NOT()'
+            : '()';
     this.validationExpression = this.validationExpression
       ? `${this.validationExpression} ${tokenText}`
       : tokenText;
@@ -560,7 +635,9 @@ export class ModelarFormCapturaComponent implements OnInit {
 
   public toggleValidationBlockedComponent(key: string): void {
     if (this.validationBlockedComponentKeys.includes(key)) {
-      this.validationBlockedComponentKeys = this.validationBlockedComponentKeys.filter((item) => item !== key);
+      this.validationBlockedComponentKeys = this.validationBlockedComponentKeys.filter(
+        (item) => item !== key,
+      );
       return;
     }
     this.validationBlockedComponentKeys = [...this.validationBlockedComponentKeys, key];
@@ -571,7 +648,9 @@ export class ModelarFormCapturaComponent implements OnInit {
   }
 
   public saveLogicalValidation(): void {
-    const baseComponent = this.getAllComponentEntries().find(({ key }) => key === this.validationBaseComponentKey)?.value;
+    const baseComponent = this.getAllComponentEntries().find(
+      ({ key }) => key === this.validationBaseComponentKey,
+    )?.value;
     if (!baseComponent || !this.validationExpression.trim()) {
       this.addMensaje('Seleccione el componente base y construya una expresión lógica.');
       return;
@@ -605,9 +684,13 @@ export class ModelarFormCapturaComponent implements OnInit {
         expression: value.componentesNuevaValidacionEntreComponentes,
         blockedNames: value.componentesRelacionados
           ? value.componentesRelacionados
-            .split(',')
-            .map((blockedKey) => this.getAllComponentEntries().find((entry) => entry.key === blockedKey)?.value.nombre ?? blockedKey)
-            .join(', ')
+              .split(',')
+              .map(
+                (blockedKey) =>
+                  this.getAllComponentEntries().find((entry) => entry.key === blockedKey)?.value
+                    .nombre ?? blockedKey,
+              )
+              .join(', ')
           : '',
       }));
   }
@@ -632,7 +715,10 @@ export class ModelarFormCapturaComponent implements OnInit {
     this.validationBaseComponentKey = componentKey;
     this.validationExpression = component.componentesNuevaValidacionEntreComponentes || '';
     this.validationBlockedComponentKeys = component.componentesRelacionados
-      ? component.componentesRelacionados.split(',').map((item) => item.trim()).filter(Boolean)
+      ? component.componentesRelacionados
+          .split(',')
+          .map((item) => item.trim())
+          .filter(Boolean)
       : [];
     this.validationErrorMessage = '';
 
@@ -646,13 +732,18 @@ export class ModelarFormCapturaComponent implements OnInit {
         componentesBloqueados?: string[];
       };
       this.validationErrorMessage = validation.mensajeError ?? '';
-      this.validationBlockedComponentKeys = validation.componentesBloqueados ?? this.validationBlockedComponentKeys;
+      this.validationBlockedComponentKeys =
+        validation.componentesBloqueados ?? this.validationBlockedComponentKeys;
     } catch {
       this.addMensaje('No fue posible interpretar la validación lógica existente.');
     }
   }
 
-  public reorderComponent(event: { sourceKey: string; targetKey: string; sectionKey: string }): void {
+  public reorderComponent(event: {
+    sourceKey: string;
+    targetKey: string;
+    sectionKey: string;
+  }): void {
     this.moveComponentInSection(event.sectionKey, event.sourceKey, event.targetKey);
     this.selectComponent(event.targetKey, event.sectionKey);
   }
@@ -672,14 +763,15 @@ export class ModelarFormCapturaComponent implements OnInit {
     }
 
     const withoutSource = entries.filter(([key]) => key !== sourceKey);
-    const targetIndex = targetKey
-      ? withoutSource.findIndex(([key]) => key === targetKey)
-      : -1;
+    const targetIndex = targetKey ? withoutSource.findIndex(([key]) => key === targetKey) : -1;
     const insertIndex = targetIndex >= 0 ? targetIndex + 1 : withoutSource.length;
 
     withoutSource.splice(insertIndex, 0, sourceEntry);
 
-    const reorderedComponents = Object.fromEntries(withoutSource) as Record<string, ComponenteBaseEntity>;
+    const reorderedComponents = Object.fromEntries(withoutSource) as Record<
+      string,
+      ComponenteBaseEntity
+    >;
     const updatedSection: SeccionEntity = {
       ...section,
       [column]: reorderedComponents,
@@ -707,7 +799,10 @@ export class ModelarFormCapturaComponent implements OnInit {
       return null;
     }
 
-    return (components as Record<string, ComponenteBaseEntity | undefined>)[this.selectedComponentKey] ?? null;
+    return (
+      (components as Record<string, ComponenteBaseEntity | undefined>)[this.selectedComponentKey] ??
+      null
+    );
   }
 
   public updateSelectedComponentProperty(property: string, value: string): void {
@@ -717,13 +812,30 @@ export class ModelarFormCapturaComponent implements OnInit {
     }
 
     const booleanProperties = new Set([
-      'cambiado', 'obligatorio', 'obligatorioFuncional', 'readOnly', 'guardado',
-      'cumpleValidaciones', 'opcionExtra', 'visible', 'filtro', 'utilizaImagen',
-      'mostrarLink', 'estaSujeto', 'esOrigenValidacion', 'dirigeFormularioConsulta',
-      'mostrarBotonAgregar', 'mostrarBotonBuscar', 'mostrarBotonEliminar', 'soloTexto', 'labelOrganizable',
+      'cambiado',
+      'obligatorio',
+      'obligatorioFuncional',
+      'readOnly',
+      'guardado',
+      'cumpleValidaciones',
+      'opcionExtra',
+      'visible',
+      'filtro',
+      'utilizaImagen',
+      'mostrarLink',
+      'estaSujeto',
+      'esOrigenValidacion',
+      'dirigeFormularioConsulta',
+      'mostrarBotonAgregar',
+      'mostrarBotonBuscar',
+      'mostrarBotonEliminar',
+      'soloTexto',
+      'labelOrganizable',
     ]);
     (selected as unknown as Record<string, unknown>)[property] = booleanProperties.has(property)
-      ? (value === 'true' ? 'true' : 'false')
+      ? value === 'true'
+        ? 'true'
+        : 'false'
       : value;
   }
 
@@ -739,7 +851,12 @@ export class ModelarFormCapturaComponent implements OnInit {
 
   public updateFormProperty(property: keyof FormularioJSONEntity, value: string): void {
     const booleanProperties = new Set([
-      'nuevo', 'edicion', 'eliminable', 'diligenciable', 'consultable', 'plantillasMostrables',
+      'nuevo',
+      'edicion',
+      'eliminable',
+      'diligenciable',
+      'consultable',
+      'plantillasMostrables',
     ]);
     this.formulario = {
       ...this.formulario,
@@ -797,7 +914,13 @@ export class ModelarFormCapturaComponent implements OnInit {
   }
 
   public updateSelectedComponentLayout(
-    property: 'containerWidth' | 'containerHeight' | 'fieldWidth' | 'fieldHeight' | 'labelWidth' | 'fieldColumnWidth',
+    property:
+      | 'containerWidth'
+      | 'containerHeight'
+      | 'fieldWidth'
+      | 'fieldHeight'
+      | 'labelWidth'
+      | 'fieldColumnWidth',
     value: string,
   ): void {
     const selected = this.getSelectedComponent();
@@ -806,8 +929,10 @@ export class ModelarFormCapturaComponent implements OnInit {
     }
 
     if (property === 'containerWidth' || property === 'containerHeight') {
-      const width = property === 'containerWidth' ? value : this.getSelectedComponentWidth('container');
-      const height = property === 'containerHeight' ? value : this.getSelectedComponentHeight('container');
+      const width =
+        property === 'containerWidth' ? value : this.getSelectedComponentWidth('container');
+      const height =
+        property === 'containerHeight' ? value : this.getSelectedComponentHeight('container');
       selected.styleContenedor = `width:${width}%;${height !== 'Normal' ? `height:${height}px;` : ''}`;
       return;
     }
@@ -874,7 +999,10 @@ export class ModelarFormCapturaComponent implements OnInit {
         this.mensajes = [this.mensaje, ...this.mensajes].slice(0, 5);
       },
       error: (error) => {
-        this.mensaje = MessageUtil.buildErrorMessageFrmResponse('No fue posible guardar el formulario.', error);
+        this.mensaje = MessageUtil.buildErrorMessageFrmResponse(
+          'No fue posible guardar el formulario.',
+          error,
+        );
         this.mensajes = [this.mensaje, ...this.mensajes].slice(0, 5);
       },
     });
@@ -895,7 +1023,9 @@ export class ModelarFormCapturaComponent implements OnInit {
     }));
   }
 
-  public getComponentEntries(sectionKey: string): Array<{ key: string; value: ComponenteBaseEntity }> {
+  public getComponentEntries(
+    sectionKey: string,
+  ): Array<{ key: string; value: ComponenteBaseEntity }> {
     const section = this.formulario.seccionesFormulario?.[sectionKey];
     if (!section) {
       return [];
@@ -918,7 +1048,6 @@ export class ModelarFormCapturaComponent implements OnInit {
       .map(([key, value]) => ({ key, value }));
   }
 
-
   // ---------------------------------------------------------------- Componente: identificación
 
   /** El legado muestra "Asignado a" (id de solo lectura) para componentes ligados a una columna. */
@@ -927,9 +1056,21 @@ export class ModelarFormCapturaComponent implements OnInit {
       return false;
     }
     const tiposConIdentificadorLibre = [
-      'ListaCompuesta', 'Separador', 'OutPutLink', 'LinkToAForm', 'LinkToDifferentForm',
-      'LinkFormToIfaces', 'Label', 'TablaDetalles', 'CargaMasiva', 'FileUpload', 'Mail',
-      'SearchButton', 'RefreshButton', 'SaveButton', 'SelectOneListBoxCustomized',
+      'ListaCompuesta',
+      'Separador',
+      'OutPutLink',
+      'LinkToAForm',
+      'LinkToDifferentForm',
+      'LinkFormToIfaces',
+      'Label',
+      'TablaDetalles',
+      'CargaMasiva',
+      'FileUpload',
+      'Mail',
+      'SearchButton',
+      'RefreshButton',
+      'SaveButton',
+      'SelectOneListBoxCustomized',
     ];
     return !tiposConIdentificadorLibre.includes(component.tipoComponente);
   }
@@ -975,7 +1116,10 @@ export class ModelarFormCapturaComponent implements OnInit {
   }
 
   public isDateOrTextComponent(component: ComponenteBaseEntity | null): boolean {
-    return !!component && ['SelectInPutDate', 'InPutText', 'InPutTextArea'].includes(component.tipoComponente);
+    return (
+      !!component &&
+      ['SelectInPutDate', 'InPutText', 'InPutTextArea'].includes(component.tipoComponente)
+    );
   }
 
   public isFiltrableComponent(component: ComponenteBaseEntity | null): boolean {
@@ -1018,7 +1162,14 @@ export class ModelarFormCapturaComponent implements OnInit {
   // ---------------------------------------------------------------- Validaciones de expresión regular
 
   private createValidacionDraft(): ValidacionExpresionRegularEntity {
-    return { nombre: '', ejemplo: '', entrada: '', expresion: '', mensajeValidacion: '', cumple: false };
+    return {
+      nombre: '',
+      ejemplo: '',
+      entrada: '',
+      expresion: '',
+      mensajeValidacion: '',
+      cumple: false,
+    };
   }
 
   public getValidacionesComponente(): ValidacionExpresionRegularEntity[] {
@@ -1070,20 +1221,27 @@ export class ModelarFormCapturaComponent implements OnInit {
       return;
     }
 
-    const validaciones = [...this.getValidacionesComponente(), { ...this.validacionExp, entrada: '', cumple: false }];
+    const validaciones = [
+      ...this.getValidacionesComponente(),
+      { ...this.validacionExp, entrada: '', cumple: false },
+    ];
     this.setValidacionesComponente(validaciones);
     this.validacionExp = this.createValidacionDraft();
     this.mensajeValidaciones = '';
   }
 
   public eliminarValidacion(nombre: string): void {
-    this.setValidacionesComponente(this.getValidacionesComponente().filter((item) => item.nombre !== nombre));
+    this.setValidacionesComponente(
+      this.getValidacionesComponente().filter((item) => item.nombre !== nombre),
+    );
   }
 
   public cargarValidacionesBD(): void {
     this.modeladorCatalogoService.getValidacionesBD().subscribe((validaciones) => {
       const existentes = this.getValidacionesComponente();
-      const nuevas = validaciones.filter((item) => !existentes.some((actual) => actual.nombre === item.nombre));
+      const nuevas = validaciones.filter(
+        (item) => !existentes.some((actual) => actual.nombre === item.nombre),
+      );
       this.setValidacionesComponente([...existentes, ...nuevas]);
       this.mensajeValidaciones = `Se cargaron ${nuevas.length} validaciones del catálogo.`;
       this.cdr.detectChanges();
@@ -1127,7 +1285,9 @@ export class ModelarFormCapturaComponent implements OnInit {
 
     let relaciones: Record<string, string> = {};
     try {
-      relaciones = selected.relacionObservadorColumna ? JSON.parse(selected.relacionObservadorColumna) : {};
+      relaciones = selected.relacionObservadorColumna
+        ? JSON.parse(selected.relacionObservadorColumna)
+        : {};
     } catch {
       relaciones = {};
     }
@@ -1137,7 +1297,9 @@ export class ModelarFormCapturaComponent implements OnInit {
       .map((item) => item.trim())
       .filter(Boolean)
       .map((claveComponente) => {
-        const observador = this.getAllComponentEntries().find((entry) => entry.key === claveComponente)?.value;
+        const observador = this.getAllComponentEntries().find(
+          (entry) => entry.key === claveComponente,
+        )?.value;
         return {
           claveComponente,
           nombre: observador?.nombre ?? claveComponente,
@@ -1168,7 +1330,10 @@ export class ModelarFormCapturaComponent implements OnInit {
       return;
     }
 
-    const claves = [...observadores.map((item) => item.claveComponente), this.idObservadorSeleccionado];
+    const claves = [
+      ...observadores.map((item) => item.claveComponente),
+      this.idObservadorSeleccionado,
+    ];
     const relaciones: Record<string, string> = {};
     observadores.forEach((item) => (relaciones[item.claveComponente] = item.atributoUnion));
     relaciones[this.idObservadorSeleccionado] = this.nombreColumnaDeRelacionSeleccionada;
@@ -1185,7 +1350,9 @@ export class ModelarFormCapturaComponent implements OnInit {
       return;
     }
 
-    const observadores = this.getObservadoresComponente().filter((item) => item.claveComponente !== claveComponente);
+    const observadores = this.getObservadoresComponente().filter(
+      (item) => item.claveComponente !== claveComponente,
+    );
     const relaciones: Record<string, string> = {};
     observadores.forEach((item) => (relaciones[item.claveComponente] = item.atributoUnion));
 
@@ -1229,7 +1396,14 @@ export class ModelarFormCapturaComponent implements OnInit {
     if (!selected) {
       return;
     }
-    const texto = token === 'AND' ? '() AND ()' : token === 'OR' ? '() OR ()' : token === 'NOT' ? 'NOT()' : '()';
+    const texto =
+      token === 'AND'
+        ? '() AND ()'
+        : token === 'OR'
+          ? '() OR ()'
+          : token === 'NOT'
+            ? 'NOT()'
+            : '()';
     selected.expresionLogicaFiltro = selected.expresionLogicaFiltro
       ? `${selected.expresionLogicaFiltro} ${texto}`
       : texto;
@@ -1298,7 +1472,9 @@ export class ModelarFormCapturaComponent implements OnInit {
   }
 
   public eliminarColumnaOrganizada(nombreColumna: string): void {
-    this.setColumnasOrganizadas(this.getColumnasOrganizadas().filter((item) => item !== nombreColumna));
+    this.setColumnasOrganizadas(
+      this.getColumnasOrganizadas().filter((item) => item !== nombreColumna),
+    );
   }
 
   public moverColumnaOrganizada(nombreColumna: string, direccion: -1 | 1): void {
@@ -1382,7 +1558,9 @@ export class ModelarFormCapturaComponent implements OnInit {
       this.addMensaje('No ha digitado la sentencia SQL para el componente');
       return;
     }
-    this.addMensaje('Consulta enviada (simulada): el microservicio de ejecución aún no está disponible.');
+    this.addMensaje(
+      'Consulta enviada (simulada): el microservicio de ejecución aún no está disponible.',
+    );
   }
 
   // ---------------------------------------------------------------- Configuración de Mail
@@ -1390,7 +1568,9 @@ export class ModelarFormCapturaComponent implements OnInit {
   public abrirVentanaConfiguracionMail(): void {
     this.tiposParametroMail.forEach((tipo) => {
       if (!this.mapaRutasMail[tipo]) {
-        this.mapaRutasMail[tipo] = this.formulario.entidadPrincipal ? [this.formulario.entidadPrincipal] : [];
+        this.mapaRutasMail[tipo] = this.formulario.entidadPrincipal
+          ? [this.formulario.entidadPrincipal]
+          : [];
       }
     });
     this.mostrarVentanaConfiguracionMail = true;
@@ -1438,7 +1618,10 @@ export class ModelarFormCapturaComponent implements OnInit {
   public abrirVentanaConfiguracionLink(): void {
     const selected = this.getSelectedComponent();
     this.formulariosLinkAgregados = selected?.nombreFormulario
-      ? selected.nombreFormulario.split(',').map((item) => item.trim()).filter(Boolean)
+      ? selected.nombreFormulario
+          .split(',')
+          .map((item) => item.trim())
+          .filter(Boolean)
       : [];
     this.mostrarVentanaConfLinkToDifferentForm = true;
   }
@@ -1448,9 +1631,10 @@ export class ModelarFormCapturaComponent implements OnInit {
   }
 
   public agregarFormularioLink(): void {
-    const nombre = this.tipoFormularioEscogido === 'consulta'
-      ? this.nombreFormularioConsultaLink
-      : this.nombreFormularioLink;
+    const nombre =
+      this.tipoFormularioEscogido === 'consulta'
+        ? this.nombreFormularioConsultaLink
+        : this.nombreFormularioLink;
     if (!nombre || this.formulariosLinkAgregados.includes(nombre)) {
       return;
     }
@@ -1512,16 +1696,22 @@ export class ModelarFormCapturaComponent implements OnInit {
     this.condicionesEntidad = [];
     this.columnasMostrablesSeleccionadas = {};
 
-    this.entidadCatalogoService.getEntidadPorNombre(columna.entidadRelacionada).subscribe((entidad) => {
-      this.entidadForaneaSeleccionada = entidad ?? null;
-      (entidad?.columnas ?? []).forEach((item) => (this.columnasMostrablesSeleccionadas[item.nombre] = false));
-      this.mostrarVentanaSeleccionEntidad = true;
-      this.cdr.detectChanges();
-    });
+    this.entidadCatalogoService
+      .getEntidadPorNombre(columna.entidadRelacionada)
+      .subscribe((entidad) => {
+        this.entidadForaneaSeleccionada = entidad ?? null;
+        (entidad?.columnas ?? []).forEach(
+          (item) => (this.columnasMostrablesSeleccionadas[item.nombre] = false),
+        );
+        this.mostrarVentanaSeleccionEntidad = true;
+        this.cdr.detectChanges();
+      });
   }
 
   public agregarCondicionEntidad(columna: ColumnaEntidadEntity): void {
-    const existentes = this.condicionesEntidad.filter((item) => item.atributo === columna.nombre).length;
+    const existentes = this.condicionesEntidad.filter(
+      (item) => item.atributo === columna.nombre,
+    ).length;
     this.condicionesEntidad = [
       ...this.condicionesEntidad,
       {
@@ -1534,13 +1724,16 @@ export class ModelarFormCapturaComponent implements OnInit {
   }
 
   public eliminarCondicionEntidad(identificador: string): void {
-    this.condicionesEntidad = this.condicionesEntidad.filter((item) => item.identificador !== identificador);
+    this.condicionesEntidad = this.condicionesEntidad.filter(
+      (item) => item.identificador !== identificador,
+    );
   }
 
   public cerrarVentanaSeleccionEntidad(): void {
     this.mensajeCondiciones = '';
     if (this.condicionesEntidad.length > 0 && !this.whereEntidad.trim()) {
-      this.mensajeCondiciones = 'Debe digitar la sentencia WHERE para las condiciones seleccionadas';
+      this.mensajeCondiciones =
+        'Debe digitar la sentencia WHERE para las condiciones seleccionadas';
       return;
     }
 
@@ -1553,7 +1746,9 @@ export class ModelarFormCapturaComponent implements OnInit {
       selected.query = `SELECT model FROM ${this.entidadForaneaSeleccionada.nombre} as model`;
       selected.where = this.whereEntidad;
       selected.listaLabels = labels.join(',');
-      selected.condiciones = this.condicionesEntidad.length ? JSON.stringify(this.condicionesEntidad) : '';
+      selected.condiciones = this.condicionesEntidad.length
+        ? JSON.stringify(this.condicionesEntidad)
+        : '';
     }
 
     this.mostrarVentanaSeleccionEntidad = false;
@@ -1604,7 +1799,9 @@ export class ModelarFormCapturaComponent implements OnInit {
       return false;
     }
     if (!/^[a-zA-Z\-_0-9]+$/.test(this.formulario.nombreUnicoFormulario)) {
-      this.addMensaje('El nombre único del formulario solo puede tener caracteres de la a-z, A-Z, 0-9, "-" ó "_".');
+      this.addMensaje(
+        'El nombre único del formulario solo puede tener caracteres de la a-z, A-Z, 0-9, "-" ó "_".',
+      );
       return false;
     }
     if (!this.formulario.entidadPrincipal) {
@@ -1646,7 +1843,9 @@ export class ModelarFormCapturaComponent implements OnInit {
       searchButtonType: componentType === 'SearchButton' ? 'true' : 'false',
       refreshButtonType: componentType === 'RefreshButton' ? 'true' : 'false',
       saveButtonType: componentType === 'SaveButton' ? 'true' : 'false',
-      linkType: ['OutPutLink', 'LinkToAForm', 'LinkToDifferentForm', 'LinkFormToIfaces'].includes(componentType)
+      linkType: ['OutPutLink', 'LinkToAForm', 'LinkToDifferentForm', 'LinkFormToIfaces'].includes(
+        componentType,
+      )
         ? 'true'
         : 'false',
       linkToAFormType: componentType === 'LinkToAForm' ? 'true' : 'false',

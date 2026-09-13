@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ComponenteBaseEntity } from '../../../entidades/forms-captura/componente-base.entity';
@@ -24,7 +23,6 @@ import { SelectOneRadioComponent } from '../../captura/plantilla-form-captura/se
   selector: 'app-plantilla-formulario-consulta-htm',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     InPutTextComponent,
     InPutTextAreaComponent,
@@ -221,7 +219,9 @@ export class PlantillaFormularioConsultaHtmComponent {
       return [];
     }
 
-    return Object.values(componentes).flatMap((entry) => (Array.isArray(entry) ? entry : entry ? [entry] : []));
+    return Object.values(componentes).flatMap((entry) =>
+      Array.isArray(entry) ? entry : entry ? [entry] : [],
+    );
   }
 
   public getColumnGridTemplate(seccion: SeccionEntity): string {
@@ -273,13 +273,19 @@ export class PlantillaFormularioConsultaHtmComponent {
 
       return {
         label: safeItem.label ?? '',
-        value: typeof rawValue === 'object' && rawValue ? String(rawValue.value ?? '') : String(rawValue ?? ''),
+        value:
+          typeof rawValue === 'object' && rawValue
+            ? String(rawValue.value ?? '')
+            : String(rawValue ?? ''),
       };
     });
   }
 
   public getMostrarAsteriscoRojo(componente: ComponenteBaseEntity): boolean {
-    return this.asBool(componente.obligatorio) || (this.hayAnteriorFormulario && this.asBool(componente.obligatorioFuncional));
+    return (
+      this.asBool(componente.obligatorio) ||
+      (this.hayAnteriorFormulario && this.asBool(componente.obligatorioFuncional))
+    );
   }
 
   public getMostrarAsteriscoVerde(componente: ComponenteBaseEntity): boolean {
@@ -417,7 +423,8 @@ export class PlantillaFormularioConsultaHtmComponent {
 
       for (const componente of componentes) {
         const valor = this.getComponentValue(componente);
-        this.datosRetorno[componente.nombre] = valor !== null && valor !== undefined ? String(valor) : '';
+        this.datosRetorno[componente.nombre] =
+          valor !== null && valor !== undefined ? String(valor) : '';
       }
     }
   }
@@ -495,7 +502,8 @@ export class PlantillaFormularioConsultaHtmComponent {
       return;
     }
 
-    this.componentValues[key] = defaultValue !== undefined && defaultValue !== null ? String(defaultValue) : '';
+    this.componentValues[key] =
+      defaultValue !== undefined && defaultValue !== null ? String(defaultValue) : '';
   }
 
   private createListaCompuestaHtml(): string {

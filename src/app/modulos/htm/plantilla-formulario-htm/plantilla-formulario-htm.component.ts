@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FormularioJSONEntity } from '../../../entidades/forms-captura/formulario-json.entity';
@@ -9,16 +8,15 @@ import { SeccionEntity } from '../../../entidades/forms-captura/seccion.entity';
 import { SeccionesFormularioEntity } from '../../../entidades/forms-captura/secciones-formulario.entity';
 import { SelectItemEntity } from '../../../entidades/forms-captura/select-item.entity';
 import { getFieldPayloadValue, setFieldPayloadValue } from '../../../utilidades/field-value.util';
-import { SeccionComponent } from "../../captura/plantilla-form-captura/seccion/seccion.component";
+import { SeccionComponent } from '../../captura/plantilla-form-captura/seccion/seccion.component';
 
 @Component({
   selector: 'htm-plantilla-formulario-htm',
-  imports: [CommonModule, FormsModule, SeccionComponent],
+  imports: [FormsModule, SeccionComponent],
   templateUrl: './plantilla-formulario-htm.component.html',
   styleUrl: './plantilla-formulario-htm.component.scss',
 })
 export class PlantillaFormularioHtmComponent {
-  
   @Input() public padre?: any;
 
   @Input() public set formularioInput(
@@ -200,7 +198,10 @@ export class PlantillaFormularioHtmComponent {
 
       return {
         label: safeItem.label ?? '',
-        value: typeof rawValue === 'object' && rawValue ? String(rawValue.value ?? '') : String(rawValue ?? ''),
+        value:
+          typeof rawValue === 'object' && rawValue
+            ? String(rawValue.value ?? '')
+            : String(rawValue ?? ''),
       };
     });
   }
@@ -311,7 +312,8 @@ export class PlantillaFormularioHtmComponent {
       return;
     }
 
-    this.componentValues[key] = defaultValue !== undefined && defaultValue !== null ? String(defaultValue) : '';
+    this.componentValues[key] =
+      defaultValue !== undefined && defaultValue !== null ? String(defaultValue) : '';
   }
 
   private createComponent(partial: {
@@ -434,7 +436,9 @@ export class PlantillaFormularioHtmComponent {
     return value;
   }
 
-  private hasSeccionesFormulario(payload: unknown): payload is { seccionesFormulario: SeccionesFormularioEntity } {
+  private hasSeccionesFormulario(
+    payload: unknown,
+  ): payload is { seccionesFormulario: SeccionesFormularioEntity } {
     return !!payload && typeof payload === 'object' && 'seccionesFormulario' in payload;
   }
 

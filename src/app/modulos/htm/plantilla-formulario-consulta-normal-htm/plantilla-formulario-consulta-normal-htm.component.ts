@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ComponenteBaseEntity } from '../../../entidades/forms-captura/componente-base.entity';
@@ -24,7 +23,6 @@ import { SelectOneRadioComponent } from '../../captura/plantilla-form-captura/se
   selector: 'app-plantilla-formulario-consulta-normal-htm',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     InPutTextComponent,
     InPutTextAreaComponent,
@@ -43,7 +41,7 @@ import { SelectOneRadioComponent } from '../../captura/plantilla-form-captura/se
   styleUrl: './plantilla-formulario-consulta-normal-htm.component.scss',
 })
 export class PlantillaFormularioConsultaNormalHtmComponent {
- //@Input() public id?: string;
+  //@Input() public id?: string;
   //@Input() public modo: 'ver' | 'editar' | 'nuevo' = 'ver';
 
   @Input() public formulario: FormularioJSONEntity = {
@@ -260,7 +258,10 @@ export class PlantillaFormularioConsultaNormalHtmComponent {
 
       return {
         label: safeItem.label ?? '',
-        value: typeof rawValue === 'object' && rawValue ? String(rawValue.value ?? '') : String(rawValue ?? ''),
+        value:
+          typeof rawValue === 'object' && rawValue
+            ? String(rawValue.value ?? '')
+            : String(rawValue ?? ''),
       };
     });
   }
@@ -394,7 +395,8 @@ export class PlantillaFormularioConsultaNormalHtmComponent {
       return;
     }
 
-    this.componentValues[key] = defaultValue !== undefined && defaultValue !== null ? String(defaultValue) : '';
+    this.componentValues[key] =
+      defaultValue !== undefined && defaultValue !== null ? String(defaultValue) : '';
   }
 
   private createListaCompuestaHtml(): string {
@@ -479,8 +481,9 @@ export class PlantillaFormularioConsultaNormalHtmComponent {
       arbolesExpresionNuevaValidacionEntreComponentes: '',
       operadorAritmetico: '',
       items: partial.items,
-      textoHTMLTabla: partial.textoHTMLTabla ?? (partial.listCompuestaType ? this.createListaCompuestaHtml() : undefined),
+      textoHTMLTabla:
+        partial.textoHTMLTabla ??
+        (partial.listCompuestaType ? this.createListaCompuestaHtml() : undefined),
     };
   }
-
 }
