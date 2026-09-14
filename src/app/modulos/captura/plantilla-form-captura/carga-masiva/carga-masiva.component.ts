@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,6 +11,7 @@ import { ComponenteBaseEntity } from '../../../../entidades/forms-captura/compon
   selector: 'frm-carga-masiva',
   imports: [MatInputModule, MatButtonModule, MatFormFieldModule, MatIconModule],
   templateUrl: './carga-masiva.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './carga-masiva.component.scss',
 })
 export class CargaMasivaComponent {
@@ -36,6 +37,6 @@ export class CargaMasivaComponent {
   }
 
   public componentKey(componente: CargaMasivaEntity): string {
-      return componente.id ?? componente.nombre;
+    return componente.id ?? componente.nombre;
   }
 }

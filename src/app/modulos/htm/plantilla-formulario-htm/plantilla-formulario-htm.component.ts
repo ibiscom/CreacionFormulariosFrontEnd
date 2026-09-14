@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FormularioJSONEntity } from '../../../entidades/forms-captura/formulario-json.entity';
 import { FormularioConsultaJSONEntity } from '../../../entidades/forms-consulta/formulario-consulta-json.entity';
@@ -14,6 +14,7 @@ import { SeccionComponent } from '../../captura/plantilla-form-captura/seccion/s
   selector: 'htm-plantilla-formulario-htm',
   imports: [FormsModule, SeccionComponent],
   templateUrl: './plantilla-formulario-htm.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './plantilla-formulario-htm.component.scss',
 })
 export class PlantillaFormularioHtmComponent {

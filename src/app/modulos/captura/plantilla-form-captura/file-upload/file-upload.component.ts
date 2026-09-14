@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
@@ -10,6 +10,7 @@ import { FileUploadEntity } from '../../../../entidades/forms-captura/file-uploa
   selector: 'frm-file-upload',
   imports: [MatFormFieldModule, MatInputModule, MatIconModule],
   templateUrl: './file-upload.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './file-upload.component.scss',
 })
 export class FileUploadComponent {

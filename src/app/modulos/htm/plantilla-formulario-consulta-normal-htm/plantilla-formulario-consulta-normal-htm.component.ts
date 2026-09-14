@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ComponenteBaseEntity } from '../../../entidades/forms-captura/componente-base.entity';
 import { ComponentesEntity } from '../../../entidades/forms-captura/componentes.entity';
@@ -38,6 +38,7 @@ import { SelectOneRadioComponent } from '../../captura/plantilla-form-captura/se
     ListaCompuestaComponent,
   ],
   templateUrl: './plantilla-formulario-consulta-normal-htm.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './plantilla-formulario-consulta-normal-htm.component.scss',
 })
 export class PlantillaFormularioConsultaNormalHtmComponent {

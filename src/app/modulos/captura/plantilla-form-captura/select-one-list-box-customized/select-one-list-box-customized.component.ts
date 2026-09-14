@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,6 +10,7 @@ import { SelectOneListBoxCustomizedEntity } from '../../../../entidades/forms-ca
   selector: 'frm-select-one-list-box-customized',
   imports: [MatOptionModule, MatFormFieldModule, FormsModule, MatSelectModule],
   templateUrl: './select-one-list-box-customized.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './select-one-list-box-customized.component.scss',
 })
 export class SelectOneListBoxCustomizedComponent {
@@ -22,7 +23,6 @@ export class SelectOneListBoxCustomizedComponent {
     return this.selectOneListBoxCustomizedEntity?.valor === opcion;
   }
 
-  
   public get matLabelClasses(): string {
     return this.obtenerColumnClasses()[0] ?? '';
   }
@@ -33,7 +33,6 @@ export class SelectOneListBoxCustomizedComponent {
     return classes[1] ?? classes[0] ?? '';
   }
 
-  
   private obtenerColumnClasses(): string[] {
     const columnClasses = this.selectOneListBoxCustomizedEntity?.columnClasses;
 

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -53,6 +53,7 @@ import { SelectOneRadioComponent } from '../../captura/plantilla-form-captura/se
     SearchButtonComponent,
   ],
   templateUrl: './plantilla-formulario-evt-inicio-htm.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './plantilla-formulario-evt-inicio-htm.component.scss',
 })
 export class PlantillaFormularioEvtInicioHtmComponent extends PlantillaFormCapturaComponent {

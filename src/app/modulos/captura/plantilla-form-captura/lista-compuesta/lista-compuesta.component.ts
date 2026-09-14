@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { ListaCompuestaEntity } from '../../../../entidades/forms-captura/lista-compuesta.entity';
@@ -7,6 +7,7 @@ import { ListaCompuestaEntity } from '../../../../entidades/forms-captura/lista-
   selector: 'frm-lista-compuesta',
   imports: [MatTableModule],
   templateUrl: './lista-compuesta.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './lista-compuesta.component.scss',
 })
 export class ListaCompuestaComponent implements OnInit {

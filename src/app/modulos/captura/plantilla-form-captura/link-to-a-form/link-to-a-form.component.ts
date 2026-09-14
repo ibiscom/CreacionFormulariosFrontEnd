@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
@@ -9,6 +9,7 @@ import { getFieldPayloadValue } from '../../../../utilidades/field-value.util';
   selector: 'frm-link-to-a-form',
   imports: [MatButtonModule, FormsModule],
   templateUrl: './link-to-a-form.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './link-to-a-form.component.scss',
 })
 export class LinkToAFormComponent {

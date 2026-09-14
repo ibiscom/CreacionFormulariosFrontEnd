@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { KeyValue, KeyValuePipe } from '@angular/common';
 import { SeccionComponent } from '../seccion/seccion.component';
 import { SeccionesFormularioEntity } from '../../../../entidades/forms-captura/secciones-formulario.entity';
@@ -8,6 +8,7 @@ import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.compone
   selector: 'frm-secciones-formulario',
   imports: [SeccionComponent, KeyValuePipe],
   templateUrl: './secciones-formulario.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './secciones-formulario.component.scss',
 })
 export class SeccionesFormularioComponent {

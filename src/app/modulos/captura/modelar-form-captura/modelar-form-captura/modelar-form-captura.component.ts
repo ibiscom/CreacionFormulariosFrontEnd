@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { FormularioJSONEntity } from '../../../../entidades/forms-captura/formulario-json.entity';
@@ -18,6 +18,7 @@ import { MessageUtil } from '../../../../utilidades/message.util';
   selector: 'app-modelar-form-captura',
   imports: [FormsModule, ComponentesComponent],
   templateUrl: './modelar-form-captura.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './modelar-form-captura.component.scss',
 })
 export class ModelarFormCapturaComponent implements OnInit {

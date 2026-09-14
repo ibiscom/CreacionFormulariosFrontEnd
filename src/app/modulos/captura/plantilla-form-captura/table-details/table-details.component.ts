@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { TableDetailsEntity } from '../../../../entidades/forms-captura/table-details.entity';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { MatInputModule } from '@angular/material/input';
@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
   selector: 'frm-table-details',
   imports: [MatInputModule],
   templateUrl: './table-details.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './table-details.component.scss',
 })
 export class TableDetailsComponent implements OnChanges {
@@ -47,16 +48,22 @@ export class TableDetailsComponent implements OnChanges {
 
     if (Array.isArray(nombresOrganizados)) {
       let headers: string[] = nombresOrganizados;
-      let headersWithDisplayNames = headers.map((header) => this.tableDetailsEntity?.nombresColumnas?.[header.trim()]?.toString() ?? header.trim());
+      let headersWithDisplayNames = headers.map(
+        (header) =>
+          this.tableDetailsEntity?.nombresColumnas?.[header.trim()]?.toString() ?? header.trim(),
+      );
       console.log('Headers with display names:', headersWithDisplayNames);
       return headersWithDisplayNames;
     }
 
     if (typeof nombresOrganizados === 'string') {
-       let headers = this.splitHeaders(nombresOrganizados);
-       let headersWithDisplayNames = headers.map((header) => this.tableDetailsEntity?.nombresColumnas?.[header.trim()]?.toString() ?? header.trim());
-       console.log('Headers with display names:', headersWithDisplayNames);
-       return headersWithDisplayNames;
+      let headers = this.splitHeaders(nombresOrganizados);
+      let headersWithDisplayNames = headers.map(
+        (header) =>
+          this.tableDetailsEntity?.nombresColumnas?.[header.trim()]?.toString() ?? header.trim(),
+      );
+      console.log('Headers with display names:', headersWithDisplayNames);
+      return headersWithDisplayNames;
     }
 
     const values = Object.values(nombresOrganizados as Record<string, unknown>);
@@ -73,10 +80,12 @@ export class TableDetailsComponent implements OnChanges {
       }
     }
 
-    let headersWithDisplayNames = headers.map((header) => this.tableDetailsEntity?.nombresColumnas?.[header.trim()]?.toString() ?? header.trim());
+    let headersWithDisplayNames = headers.map(
+      (header) =>
+        this.tableDetailsEntity?.nombresColumnas?.[header.trim()]?.toString() ?? header.trim(),
+    );
     console.log('Headers with display names:', headersWithDisplayNames);
     return headersWithDisplayNames;
-
   }
 
   private splitHeaders(rawHeaders: string): string[] {

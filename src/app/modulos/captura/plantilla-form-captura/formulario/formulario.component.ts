@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { SeccionesFormularioComponent } from '../secciones-formulario/secciones-formulario.component';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { FormularioJSONEntity } from '../../../../entidades/forms-captura/formulario-json.entity';
@@ -7,10 +7,10 @@ import { FormularioJSONEntity } from '../../../../entidades/forms-captura/formul
   selector: 'frm-formulario',
   imports: [SeccionesFormularioComponent],
   templateUrl: './formulario.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './formulario.component.scss',
 })
 export class FormularioComponent {
-
   @Input() public formulario?: FormularioJSONEntity;
   @Input() public verFormularioCmp?: PlantillaFormCapturaComponent;
 

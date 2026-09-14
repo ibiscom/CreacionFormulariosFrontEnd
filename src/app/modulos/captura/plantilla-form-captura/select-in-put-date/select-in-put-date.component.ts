@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -7,7 +7,10 @@ import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.compone
 import { SelectInPutDateEntity } from '../../../../entidades/forms-captura/select-in-put-date.entity';
 import { FormsModule } from '@angular/forms';
 import { CustomDateAdapter } from '../../../../utilidades/custom-date-adapter';
-import { getFieldPayloadValue, setFieldPayloadValue } from '../../../../utilidades/field-value.util';
+import {
+  getFieldPayloadValue,
+  setFieldPayloadValue,
+} from '../../../../utilidades/field-value.util';
 
 // Configuración del formato de fecha
 export const MY_DATE_FORMATS = {
@@ -30,6 +33,7 @@ export const MY_DATE_FORMATS = {
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
   ],
   templateUrl: './select-in-put-date.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './select-in-put-date.component.scss',
 })
 export class SelectInPutDateComponent {
@@ -114,7 +118,6 @@ export class SelectInPutDateComponent {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
 
-  
   public get matLabelClasses(): string {
     return this.obtenerColumnClasses()[0] ?? '';
   }
@@ -125,7 +128,6 @@ export class SelectInPutDateComponent {
     return classes[1] ?? classes[0] ?? '';
   }
 
-  
   private obtenerColumnClasses(): string[] {
     const columnClasses = this.selectInPutDateEntity?.columnClasses;
 
@@ -138,5 +140,4 @@ export class SelectInPutDateComponent {
       .map((cssClass) => cssClass.trim())
       .filter((cssClass) => cssClass.length > 0);
   }
-
 }

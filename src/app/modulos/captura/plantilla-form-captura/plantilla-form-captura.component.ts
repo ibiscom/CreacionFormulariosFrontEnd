@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { PlantillaFormCapturaService } from './plantilla-form-captura.service';
@@ -17,10 +17,10 @@ import { SeccionEntity } from '../../../entidades/forms-captura/seccion.entity';
   selector: 'frm-plantilla-form-captura',
   imports: [MatCardModule, RouterModule, VisorComponent, FormsModule],
   templateUrl: './plantilla-form-captura.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './plantilla-form-captura.component.scss',
 })
 export class PlantillaFormCapturaComponent {
-
   public mensaje: string = '';
   public mensajes: string[] = [];
   public formulario?: FormularioJSONEntity;
@@ -141,7 +141,9 @@ export class PlantillaFormCapturaComponent {
         this.resetPrevencionDobleClic();
       },
       error: (error) => {
-        this.addMensaje(MessageUtil.buildErrorMessageFrmResponse('No fue posible guardar el formulario.', error));
+        this.addMensaje(
+          MessageUtil.buildErrorMessageFrmResponse('No fue posible guardar el formulario.', error),
+        );
         this.resetPrevencionDobleClic();
       },
     });
@@ -239,7 +241,7 @@ export class PlantillaFormCapturaComponent {
   }
 
   public limpiarFormulario() {
-   /* if (this.formulario)  {
+    /* if (this.formulario)  {
   
      for (seccionEntry of  this.formulario?.seccionesFormulario | keyvalue: keepOrder; track seccionEntry.key) {
         const seccion = seccionEntry.value;
@@ -300,7 +302,9 @@ export class PlantillaFormCapturaComponent {
       return [];
     }
 
-    return Object.values(componentes).flatMap((entry) => (Array.isArray(entry) ? entry : entry ? [entry] : []));
+    return Object.values(componentes).flatMap((entry) =>
+      Array.isArray(entry) ? entry : entry ? [entry] : [],
+    );
   }
 
   public getColumnGridTemplate(seccion: SeccionEntity): string {

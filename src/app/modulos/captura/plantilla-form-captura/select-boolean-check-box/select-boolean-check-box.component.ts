@@ -1,16 +1,20 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { SelectBooleanCheckBoxEntity } from '../../../../entidades/forms-captura/select-boolean-checkbox.entity';
-import { getFieldPayloadValue, setFieldPayloadValue } from '../../../../utilidades/field-value.util';
+import {
+  getFieldPayloadValue,
+  setFieldPayloadValue,
+} from '../../../../utilidades/field-value.util';
 
 @Component({
   selector: 'frm-select-boolean-check-box',
   imports: [MatCheckboxModule, MatInputModule, MatFormFieldModule, FormsModule],
   templateUrl: './select-boolean-check-box.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './select-boolean-check-box.component.scss',
 })
 export class SelectBooleanCheckBoxComponent {

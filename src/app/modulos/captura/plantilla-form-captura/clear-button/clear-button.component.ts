@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { ClearButtonEntity } from '../../../../entidades/forms-captura/clear-button.entity';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
   selector: 'app-clear-button',
   imports: [MatIconModule, MatButtonModule],
   templateUrl: './clear-button.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './clear-button.component.scss',
 })
 export class ClearButtonComponent {
@@ -21,12 +22,11 @@ export class ClearButtonComponent {
   }
 
   public click() {
-    console.debug(
-      'Click en Clear Button. Accion:',
-      this.clearButtonEntity?.expresionLogicaFiltro,
-    );
-    if(this.verFormularioCmp?.modo === 'diligenciar') {
-      console.debug('El formulario está en modo diligenciar. Se recargará el formulario para reflejar los cambios realizados.');
+    console.debug('Click en Clear Button. Accion:', this.clearButtonEntity?.expresionLogicaFiltro);
+    if (this.verFormularioCmp?.modo === 'diligenciar') {
+      console.debug(
+        'El formulario está en modo diligenciar. Se recargará el formulario para reflejar los cambios realizados.',
+      );
       this.verFormularioCmp.limpiarFormulario();
     }
   }

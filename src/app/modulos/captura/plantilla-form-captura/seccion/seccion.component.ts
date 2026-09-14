@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { SeccionEntity } from '../../../../entidades/forms-captura/seccion.entity';
 import { MatCardModule } from '@angular/material/card';
 import { FormsModule } from '@angular/forms';
@@ -25,6 +25,7 @@ import { ComponentesComponent } from '../componentes/componentes.component';
     ComponentesComponent,
   ],
   templateUrl: './seccion.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './seccion.component.scss',
 })
 export class SeccionComponent {

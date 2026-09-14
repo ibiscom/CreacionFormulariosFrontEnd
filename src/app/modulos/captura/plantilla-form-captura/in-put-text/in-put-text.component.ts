@@ -1,12 +1,16 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { MatFormField, MatInputModule } from '@angular/material/input';
 import { InPutTextEntity } from '../../../../entidades/forms-captura/in-put-text.entity';
-import { getFieldPayloadValue, setFieldPayloadValue } from '../../../../utilidades/field-value.util';
+import {
+  getFieldPayloadValue,
+  setFieldPayloadValue,
+} from '../../../../utilidades/field-value.util';
 @Component({
   selector: 'frm-in-put-text',
   imports: [MatFormField, MatInputModule],
   templateUrl: './in-put-text.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './in-put-text.component.scss',
 })
 export class InPutTextComponent {
@@ -87,6 +91,4 @@ export class InPutTextComponent {
     // Compatibilidad con payloads donde valor llega como tipo básico.
     (this.inPutTextEntity as any).valor = nuevoValor;
   }
-
-
 }

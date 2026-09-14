@@ -1,15 +1,19 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { InPutTextAreaEntity } from '../../../../entidades/forms-captura/in-put-text-area.entity';
-import { getFieldPayloadValue, setFieldPayloadValue } from '../../../../utilidades/field-value.util';
+import {
+  getFieldPayloadValue,
+  setFieldPayloadValue,
+} from '../../../../utilidades/field-value.util';
 
 @Component({
   selector: 'frm-in-put-text-area',
   imports: [MatInputModule, MatFormFieldModule, FormsModule],
   templateUrl: './in-put-text-area.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './in-put-text-area.component.scss',
 })
 export class InPutTextAreaComponent {
@@ -56,10 +60,10 @@ export class InPutTextAreaComponent {
   }
 
   public get matLabelClasses(): string {
-      return this.obtenerColumnClasses()[0] ?? '';
-   }
+    return this.obtenerColumnClasses()[0] ?? '';
+  }
 
-    private obtenerColumnClasses(): string[] {
+  private obtenerColumnClasses(): string[] {
     const columnClasses = this.inPutTextAreaEntity?.columnClasses;
 
     if (!columnClasses) {

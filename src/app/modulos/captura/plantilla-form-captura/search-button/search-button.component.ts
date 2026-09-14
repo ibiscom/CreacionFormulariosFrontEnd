@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { SearchButtonEntity } from '../../../../entidades/forms-captura/search-button.entity';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { MatInputModule } from '@angular/material/input';
@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
   selector: 'frm-search-button',
   imports: [MatInputModule, MatButtonModule, MatIconModule],
   templateUrl: './search-button.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './search-button.component.scss',
 })
 export class SearchButtonComponent {
@@ -22,6 +23,9 @@ export class SearchButtonComponent {
   }
 
   public click() {
-    console.debug('Click en Search Button. Accion:', this.searchButtonEntity?.expresionLogicaFiltro);
+    console.debug(
+      'Click en Search Button. Accion:',
+      this.searchButtonEntity?.expresionLogicaFiltro,
+    );
   }
 }

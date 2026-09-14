@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { SeparadorEntity } from '../../../../entidades/forms-captura/separador.entity';
 
@@ -6,6 +6,7 @@ import { SeparadorEntity } from '../../../../entidades/forms-captura/separador.e
   selector: 'frm-separador',
   imports: [],
   templateUrl: './separador.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './separador.component.scss',
 })
 export class SeparadorComponent {

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ComponenteBaseEntity } from '../../../entidades/forms-captura/componente-base.entity';
 import { ComponentesEntity } from '../../../entidades/forms-captura/componentes.entity';
@@ -54,6 +54,7 @@ import { TableDetailsComponent } from '../../captura/plantilla-form-captura/tabl
     TableDetailsComponent,
   ],
   templateUrl: './diligenciar-form-detalle.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './diligenciar-form-detalle.component.scss',
 })
 export class DiligenciarFormDetalleComponent {

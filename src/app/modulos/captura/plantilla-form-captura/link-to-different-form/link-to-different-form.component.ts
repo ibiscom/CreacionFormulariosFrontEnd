@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
@@ -9,6 +9,7 @@ import { getFieldPayloadValue } from '../../../../utilidades/field-value.util';
   selector: 'frm-link-to-different-form',
   imports: [MatButtonModule, FormsModule],
   templateUrl: './link-to-different-form.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './link-to-different-form.component.scss',
 })
 export class LinkToDifferentFormComponent {

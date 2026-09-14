@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { LabelEntity } from '../../../../entidades/forms-captura/label-entity';
 import { getFieldPayloadValue } from '../../../../utilidades/field-value.util';
@@ -7,6 +7,7 @@ import { getFieldPayloadValue } from '../../../../utilidades/field-value.util';
   selector: 'frm-label',
   imports: [],
   templateUrl: './label.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './label.component.scss',
 })
 export class LabelComponent {

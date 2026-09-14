@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ComponenteBaseEntity } from '../../../entidades/forms-captura/componente-base.entity';
 import { ComponentesEntity } from '../../../entidades/forms-captura/componentes.entity';
@@ -52,6 +52,7 @@ import { SeccionesFormularioEntity } from '../../../entidades/forms-captura/secc
     MailComponent,
   ],
   templateUrl: './plantilla-form-consulta.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './plantilla-form-consulta.component.scss',
 })
 export class PlantillaFormConsultaComponent {

@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, inject, PLATFORM_ID } from '@angular/core';
+import { Component, inject, PLATFORM_ID, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { PlantillaFormularioHtmComponent } from '../plantilla-formulario-htm/plantilla-formulario-htm.component';
@@ -11,6 +11,7 @@ import { ParamsFormHTMEntity } from '../../../entidades/htm/params-form-htm.enti
   selector: 'htm-invocar-componente-captura',
   imports: [FormsModule, PlantillaFormularioHtmComponent],
   templateUrl: './invocar-componente-captura.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './invocar-componente-captura.component.scss',
 })
 export class InvocarComponenteCapturaComponent {
@@ -19,11 +20,10 @@ export class InvocarComponenteCapturaComponent {
   field1 = '';
   field8 = '';
   field9 = '';
-  
 
   validationStatus = '';
 
-  public idFormulario?: ParamsFormHTMEntity = undefined;    
+  public idFormulario?: ParamsFormHTMEntity = undefined;
 
   public isFormularioReady = false;
 
@@ -33,10 +33,9 @@ export class InvocarComponenteCapturaComponent {
 
   private readonly blockedPasswords = new Set(['password', 'PASSWORD', '1234567', '0123456']);
 
-  
   public constructor(
     private route: ActivatedRoute,
-    private invocarComponenteCapturaService: InvocarComponenteCapturaService
+    private invocarComponenteCapturaService: InvocarComponenteCapturaService,
   ) {
     var idFormularioEnc = this.route.snapshot.paramMap.get('id') ?? '';
     this.idFormulario = this.decodeHTMFormParams(idFormularioEnc);
@@ -71,7 +70,7 @@ export class InvocarComponenteCapturaComponent {
       },
     });
   }
-  
+
   get isPasswordShort(): boolean {
     return this.field8.length > 0 && this.field8.length < 7;
   }
@@ -105,7 +104,6 @@ export class InvocarComponenteCapturaComponent {
     // Punto de extension: enviar datos al backend o continuar el flujo.
   }
 
-
   private decodeHTMFormParams(idFormularioEnc: string): ParamsFormHTMEntity | undefined {
     if (!idFormularioEnc) {
       return undefined;
@@ -137,7 +135,7 @@ export class InvocarComponenteCapturaComponent {
 
     const workflowEntries = Object.entries(rawWorkflow as Record<string, unknown>);
     const workflowAsStrings = Object.fromEntries(
-      workflowEntries.map(([key, value]) => [key, String(value ?? '')])
+      workflowEntries.map(([key, value]) => [key, String(value ?? '')]),
     );
 
     return {
@@ -174,8 +172,8 @@ export class InvocarComponenteCapturaComponent {
     const paddingLength = (4 - (base64Value.length % 4)) % 4;
     return `${base64Value}${'='.repeat(paddingLength)}`;
   }
-  
-    private lastHeight = 0;
+
+  private lastHeight = 0;
 
   ngAfterViewInit(): void {
     this.enviarAltura();
@@ -194,7 +192,7 @@ export class InvocarComponenteCapturaComponent {
       document.body?.scrollHeight ?? 0,
       document.documentElement?.scrollHeight ?? 0,
       document.body?.offsetHeight ?? 0,
-      document.documentElement?.offsetHeight ?? 0
+      document.documentElement?.offsetHeight ?? 0,
     );
 
     const nextHeight = Math.ceil(height);
@@ -208,9 +206,9 @@ export class InvocarComponenteCapturaComponent {
     window.parent.postMessage(
       {
         type: 'iframe-height',
-        height: nextHeight
+        height: nextHeight,
       },
-      '*'
+      '*',
     );
   }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,6 +22,7 @@ import { ListaFormulariosConsultaService } from './lista-forms-consulta.service'
     FormsModule,
   ],
   templateUrl: './lista-forms-consulta.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './lista-forms-consulta.component.scss',
 })
 export class ListaFormsConsultaComponent {
@@ -52,11 +53,11 @@ export class ListaFormsConsultaComponent {
   public pageChanged($event: PageEvent) {
     console.debug('Method not implemented.');
   }
-  
+
   public verReporte() {
     console.debug('Method not implemented.');
   }
-  
+
   public consultarFormularios() {
     this.listaFormulariosConsultaService.getFormularios(this.filtroFormulario).subscribe({
       next: (response) => {
@@ -78,12 +79,11 @@ export class ListaFormsConsultaComponent {
   public eliminar(_t48: any) {
     console.debug('Method not implemented.');
   }
- 
+
   public consultarFormulario(row: any) {
- this.router.navigate([`/consulta/consultar-form-consulta/${row?.name}`]);
+    this.router.navigate([`/consulta/consultar-form-consulta/${row?.name}`]);
   }
- 
- 
+
   public editar(_t27: any) {
     console.debug('Method not implemented.');
   }

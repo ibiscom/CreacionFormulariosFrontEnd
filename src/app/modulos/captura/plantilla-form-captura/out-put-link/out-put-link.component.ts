@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { OutPutLinkEntity } from '../../../../entidades/forms-captura/out-put-link.entity';
 import { MatButton, MatButtonModule } from '@angular/material/button';
@@ -9,6 +9,7 @@ import { getFieldPayloadValue } from '../../../../utilidades/field-value.util';
   selector: 'frm-out-put-link',
   imports: [MatButtonModule, FormsModule],
   templateUrl: './out-put-link.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './out-put-link.component.scss',
 })
 export class OutPutLinkComponent {

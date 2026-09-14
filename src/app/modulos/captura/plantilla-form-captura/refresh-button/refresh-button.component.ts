@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,6 +9,7 @@ import { RefreshButtonEntity } from '../../../../entidades/forms-captura/refresh
   selector: 'frm-refresh-button',
   imports: [MatInputModule, MatButtonModule, MatIconModule],
   templateUrl: './refresh-button.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './refresh-button.component.scss',
 })
 export class RefreshButtonComponent {
@@ -26,8 +27,10 @@ export class RefreshButtonComponent {
       'Click en Refresh Button. Accion:',
       this.refreshButtonEntity?.expresionLogicaFiltro,
     );
-    if(this.verFormularioCmp?.modo === 'diligenciar') {
-      console.debug('El formulario está en modo diligenciar. Se recargará el formulario para reflejar los cambios realizados.');
+    if (this.verFormularioCmp?.modo === 'diligenciar') {
+      console.debug(
+        'El formulario está en modo diligenciar. Se recargará el formulario para reflejar los cambios realizados.',
+      );
       this.verFormularioCmp.consultarFormulario();
     }
   }

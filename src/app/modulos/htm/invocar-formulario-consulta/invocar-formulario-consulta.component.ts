@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { PlantillaFormularioConsultaNormalHtmComponent } from '../plantilla-formulario-consulta-normal-htm/plantilla-formulario-consulta-normal-htm.component';
@@ -10,6 +10,7 @@ import { InvocarFormularioConsultaService } from './invocar-formulario-consulta.
   selector: 'app-invocar-formulario-consulta',
   imports: [FormsModule, PlantillaFormularioConsultaNormalHtmComponent],
   templateUrl: './invocar-formulario-consulta.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './invocar-formulario-consulta.component.scss',
 })
 export class InvocarFormularioConsultaComponent {
@@ -17,7 +18,7 @@ export class InvocarFormularioConsultaComponent {
   field8 = '';
   field9 = '';
 
-  public idFormulario?: ParamsFormConsultaHTMEntity = undefined;    
+  public idFormulario?: ParamsFormConsultaHTMEntity = undefined;
 
   public isFormularioReady = false;
 
@@ -25,14 +26,14 @@ export class InvocarFormularioConsultaComponent {
 
   public formularioConsultaHtm: FormularioJSONEntity = {} as FormularioJSONEntity;
 
-
   validationStatus = '';
-
 
   private readonly blockedPasswords = new Set(['password', 'PASSWORD', '1234567', '0123456']);
 
-  constructor(private readonly route: ActivatedRoute,
-              private invocarFormularioConsultaService: InvocarFormularioConsultaService) {
+  constructor(
+    private readonly route: ActivatedRoute,
+    private invocarFormularioConsultaService: InvocarFormularioConsultaService,
+  ) {
     var idFormularioEnc = this.route.snapshot.paramMap.get('id');
     this.idFormulario = this.decodeHTMInfoFormParams(idFormularioEnc);
   }
@@ -47,19 +48,20 @@ export class InvocarFormularioConsultaComponent {
       return;
     }
 
-
     this.isFormularioReady = false;
-    this.invocarFormularioConsultaService.obtenerFormularioConsultaHtm(this.idFormulario).subscribe({
-      next: (response) => {
-        console.log('Formulario Consulta HTM obtenido:', response, response.respuesta);
-        this.formularioConsultaHtm = response.respuesta;
-        this.isFormularioReady = true;
-        this.authenticated = true;
-      },
-      error: (error) => {
-        console.error('Error al obtener el formulario HTM:', error);
-      },
-    });
+    this.invocarFormularioConsultaService
+      .obtenerFormularioConsultaHtm(this.idFormulario)
+      .subscribe({
+        next: (response) => {
+          console.log('Formulario Consulta HTM obtenido:', response, response.respuesta);
+          this.formularioConsultaHtm = response.respuesta;
+          this.isFormularioReady = true;
+          this.authenticated = true;
+        },
+        error: (error) => {
+          console.error('Error al obtener el formulario HTM:', error);
+        },
+      });
   }
 
   get isPasswordShort(): boolean {
@@ -95,9 +97,10 @@ export class InvocarFormularioConsultaComponent {
     // Punto de extension: enviar datos al backend o continuar el flujo.
   }
 
-
-  private decodeHTMInfoFormParams(idFormularioEnc?: string | null): ParamsFormConsultaHTMEntity | undefined {
-    if (!idFormularioEnc || idFormularioEnc === null ) {
+  private decodeHTMInfoFormParams(
+    idFormularioEnc?: string | null,
+  ): ParamsFormConsultaHTMEntity | undefined {
+    if (!idFormularioEnc || idFormularioEnc === null) {
       return undefined;
     }
 
@@ -127,7 +130,7 @@ export class InvocarFormularioConsultaComponent {
 
     const workflowEntries = Object.entries(rawWorkflow as Record<string, unknown>);
     const workflowAsStrings = Object.fromEntries(
-      workflowEntries.map(([key, value]) => [key, String(value ?? '')])
+      workflowEntries.map(([key, value]) => [key, String(value ?? '')]),
     );
 
     return {
@@ -164,7 +167,4 @@ export class InvocarFormularioConsultaComponent {
     const paddingLength = (4 - (base64Value.length % 4)) % 4;
     return `${base64Value}${'='.repeat(paddingLength)}`;
   }
-
-
-
 }

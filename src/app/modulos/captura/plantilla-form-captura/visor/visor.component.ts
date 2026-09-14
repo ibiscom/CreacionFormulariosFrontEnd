@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { FormularioJSONEntity } from '../../../../entidades/forms-captura/formulario-json.entity';
 import { FormsModule } from '@angular/forms';
@@ -8,6 +8,7 @@ import { FormularioComponent } from '../formulario/formulario.component';
   selector: 'frm-visor',
   imports: [FormsModule, FormularioComponent],
   templateUrl: './visor.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './visor.component.scss',
 })
 export class VisorComponent {

@@ -1,15 +1,19 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { SelectOneRadioEntity } from '../../../../entidades/forms-captura/select-one-radio.entity';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { getFieldPayloadValue, setFieldPayloadValue } from '../../../../utilidades/field-value.util';
+import {
+  getFieldPayloadValue,
+  setFieldPayloadValue,
+} from '../../../../utilidades/field-value.util';
 
 @Component({
   selector: 'frm-select-one-radio',
   imports: [FormsModule, MatFormFieldModule, MatRadioModule],
   templateUrl: './select-one-radio.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './select-one-radio.component.scss',
 })
 export class SelectOneRadioComponent implements OnChanges {
@@ -54,7 +58,7 @@ export class SelectOneRadioComponent implements OnChanges {
     }
 
     const fromItems = this.fromItems(entity['items']);
-    if (  fromItems.length > 0) {
+    if (fromItems.length > 0) {
       return fromItems;
     }
 
@@ -206,8 +210,6 @@ export class SelectOneRadioComponent implements OnChanges {
       .filter(Boolean);
   }
 
-  
-  
   public get matLabelClasses(): string {
     return this.obtenerColumnClasses()[0] ?? '';
   }
@@ -218,7 +220,6 @@ export class SelectOneRadioComponent implements OnChanges {
     return classes[1] ?? classes[0] ?? '';
   }
 
-  
   private obtenerColumnClasses(): string[] {
     const columnClasses = this.selectOneRadioEntity?.columnClasses;
 

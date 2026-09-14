@@ -1,11 +1,12 @@
-import { Component, Input } from '@angular/core';
-import { PlantillaFormCapturaComponent } from "../plantilla-form-captura/plantilla-form-captura.component";
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { PlantillaFormCapturaComponent } from '../plantilla-form-captura/plantilla-form-captura.component';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-ver-form-captura',
   imports: [PlantillaFormCapturaComponent],
   templateUrl: './ver-form-captura.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './ver-form-captura.component.scss',
 })
 export class VerFormCapturaComponent {
@@ -15,7 +16,8 @@ export class VerFormCapturaComponent {
   constructor(private route: ActivatedRoute) {
     this.idFormulario = this.route.snapshot.paramMap.get('id') || 'Formulario sin ID';
     if (this.idFormulario === 'Formulario sin ID') {
-      var mensajeError:string = 'No se proporcionó un ID de formulario. Verifique la ruta y los parámetros.';
+      var mensajeError: string =
+        'No se proporcionó un ID de formulario. Verifique la ruta y los parámetros.';
       console.error(mensajeError);
       throw new Error(mensajeError);
     }

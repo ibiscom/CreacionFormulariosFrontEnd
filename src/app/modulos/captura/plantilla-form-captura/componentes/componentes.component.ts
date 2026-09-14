@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { InPutTextComponent } from '../in-put-text/in-put-text.component';
 import { SearchButtonComponent } from '../search-button/search-button.component';
@@ -54,6 +54,7 @@ import { ComponenteBaseEntity } from '../../../../entidades/forms-captura/compon
     ListaCompuestaComponent,
   ],
   templateUrl: './componentes.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './componentes.component.scss',
 })
 export class ComponentesComponent {
@@ -62,7 +63,11 @@ export class ComponentesComponent {
   @Input() public isModeling = false;
   @Input() public sectionKey = '';
   @Output() public componenteSeleccionado = new EventEmitter<string>();
-  @Output() public componenteReordenado = new EventEmitter<{ sourceKey: string; targetKey: string; sectionKey: string }>();
+  @Output() public componenteReordenado = new EventEmitter<{
+    sourceKey: string;
+    targetKey: string;
+    sectionKey: string;
+  }>();
 
   public activeDropTargetKey = '';
 
@@ -150,7 +155,10 @@ export class ComponentesComponent {
   }
 
   public onComponentDragLeave(targetKey: string, event: DragEvent): void {
-    if (event.relatedTarget && (event.relatedTarget as Node).parentElement?.closest('.component-render-wrapper')) {
+    if (
+      event.relatedTarget &&
+      (event.relatedTarget as Node).parentElement?.closest('.component-render-wrapper')
+    ) {
       return;
     }
 

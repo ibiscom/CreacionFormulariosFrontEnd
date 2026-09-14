@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,6 +21,7 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
   ],
   templateUrl: './lista-forms-captura.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './lista-forms-captura.component.scss',
 })
 export class ListaFormsCapturaComponent {
@@ -51,11 +52,11 @@ export class ListaFormsCapturaComponent {
   public pageChanged($event: PageEvent) {
     console.debug('Method not implemented.');
   }
-  
+
   public verReporte() {
     console.debug('Method not implemented.');
   }
-  
+
   public consultarFormularios() {
     this.listaFormulariosService.getFormularios(this.filtroFormulario).subscribe({
       next: (response) => {
@@ -77,15 +78,13 @@ export class ListaFormsCapturaComponent {
   public eliminar(_t48: any) {
     console.debug('Method not implemented.');
   }
- 
-  public consultarFormulario(_t41: any) {
 
-  }
- 
+  public consultarFormulario(_t41: any) {}
+
   public diligenciar(row: any) {
     this.router.navigate([`/captura/diligenciar-form-captura/${row?.name}`]);
   }
- 
+
   public editar(_t27: any) {
     console.debug('Method not implemented.');
   }

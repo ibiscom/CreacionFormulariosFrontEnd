@@ -6,6 +6,7 @@ import {
   OnInit,
   OnDestroy,
   ElementRef,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -20,6 +21,7 @@ import { getFieldPayloadValue } from '../../../../utilidades/field-value.util';
   imports: [CKEditorModule, MatFormFieldModule, MatInputModule],
   templateUrl: './in-put-rich-text.component.html',
   styleUrl: './in-put-rich-text.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: { ngSkipHydration: '' },
 })
 export class InPutRichTextComponent implements OnInit, OnDestroy {

@@ -1,16 +1,20 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { SelectOneListBoxEntity } from '../../../../entidades/forms-captura/select-one-list-box.entity';
 import { PlantillaFormCapturaComponent } from '../plantilla-form-captura.component';
 import { MatSelectModule } from '@angular/material/select';
-import { getFieldPayloadValue, setFieldPayloadValue } from '../../../../utilidades/field-value.util';
+import {
+  getFieldPayloadValue,
+  setFieldPayloadValue,
+} from '../../../../utilidades/field-value.util';
 
 @Component({
   selector: 'frm-select-one-list-box',
   imports: [MatOptionModule, MatFormFieldModule, FormsModule, MatSelectModule],
   templateUrl: './select-one-list-box.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './select-one-list-box.component.scss',
 })
 export class SelectOneListBoxComponent implements OnChanges {
@@ -49,7 +53,11 @@ export class SelectOneListBoxComponent implements OnChanges {
   }
 
   public get selectOneListBoxEntityVisible(): boolean {
-    return !!(this.selectOneListBoxEntity && (this.selectOneListBoxEntity.visible === true || this.selectOneListBoxEntity.visible === 'true'));
+    return !!(
+      this.selectOneListBoxEntity &&
+      (this.selectOneListBoxEntity.visible === true ||
+        this.selectOneListBoxEntity.visible === 'true')
+    );
   }
 
   private resolveOptions(): Array<{ label: string; value: string }> {
@@ -59,7 +67,7 @@ export class SelectOneListBoxComponent implements OnChanges {
     }
 
     const fromItems = this.fromItems(entity['items']);
-    if (  fromItems.length > 0) {
+    if (fromItems.length > 0) {
       return fromItems;
     }
 
@@ -215,7 +223,6 @@ export class SelectOneListBoxComponent implements OnChanges {
       .filter(Boolean);
   }
 
-    
   public get matLabelClasses(): string {
     return this.obtenerColumnClasses()[0] ?? '';
   }
@@ -226,7 +233,6 @@ export class SelectOneListBoxComponent implements OnChanges {
     return classes[1] ?? classes[0] ?? '';
   }
 
-  
   private obtenerColumnClasses(): string[] {
     const columnClasses = this.selectOneListBoxEntity?.columnClasses;
 
@@ -239,5 +245,4 @@ export class SelectOneListBoxComponent implements OnChanges {
       .map((cssClass) => cssClass.trim())
       .filter((cssClass) => cssClass.length > 0);
   }
-
 }
