@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { SeleccionTablaComponent } from './modulos/seleccion-tabla/seleccion-tabla/seleccion-tabla.component';
+import { CrearPlantillaComponent } from './modulos/plantillas/crear-plantilla/crear-plantilla/crear-plantilla.component';
 import { ListaFormsCapturaComponent } from './modulos/captura/lista-forms-captura/lista-forms-captura.component';
 import { VerFormCapturaComponent } from './modulos/captura/ver-form-captura/ver-form-captura.component';
 import { DiligenciarFormCapturaComponent } from './modulos/captura/diligenciar-form-captura/diligenciar-form-captura.component';
@@ -7,6 +9,7 @@ import { PlantillaFormularioNormalHtmComponent } from './modulos/htm/plantilla-f
 import { PlantillaFormularioHtmComponent } from './modulos/htm/plantilla-formulario-htm/plantilla-formulario-htm.component';
 import { ListaFormsConsultaComponent } from './modulos/consulta/lista-forms-consulta/lista-forms-consulta.component';
 import { ConsultarFormConsultaComponent } from './modulos/consulta/consultar-form-consulta/consultar-form-consulta.component';
+import { ModelarFormConsultaComponent } from './modulos/consulta/modelar-form-consulta/modelar-form-consulta/modelar-form-consulta.component';
 import { PlantillaFormularioConsultaHtmComponent } from './modulos/htm/plantilla-formulario-consulta-htm/plantilla-formulario-consulta-htm.component';
 import { InvocarComponenteCapturaComponent } from './modulos/htm/invocar-componente-captura/invocar-componente-captura.component';
 import { InvocarFormularioConsultaComponent } from './modulos/htm/invocar-formulario-consulta/invocar-formulario-consulta.component';
@@ -18,6 +21,25 @@ export const routes: Routes = [
     path: '',
     redirectTo: 'captura',
     pathMatch: 'full',
+  },
+  {
+    path: 'seleccion-tabla',
+    component: SeleccionTablaComponent,
+  },
+  {
+    path: 'plantillas',
+    children: [
+      {
+        path: '',
+        redirectTo: 'crear-plantilla',
+        pathMatch: 'full',
+      },
+      {
+        path: 'crear-plantilla',
+        component: CrearPlantillaComponent,
+        children: [],
+      },
+    ],
   },
   {
     path: 'captura',
@@ -65,6 +87,11 @@ export const routes: Routes = [
       {
         path: 'consultar-form-consulta/:id',
         component: ConsultarFormConsultaComponent,
+        children: [],
+      },
+      {
+        path: 'modelar-form-consulta',
+        component: ModelarFormConsultaComponent,
         children: [],
       },
     ]

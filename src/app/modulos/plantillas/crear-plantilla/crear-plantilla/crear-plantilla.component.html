@@ -1,0 +1,369 @@
+<section class="plantilla-shell">
+  <header class="zona-titulo">
+    <h2>Crear plantilla</h2>
+  </header>
+
+  @if (mensajes.length > 0) {
+    <div class="message-stack">
+      @for (mensaje of mensajes; track mensaje) {
+        <p class="message-item">{{ mensaje }}</p>
+      }
+    </div>
+  }
+
+  <div class="plantilla-layout">
+    <div class="panel editor-panel">
+      <h3>Contenido de la plantilla</h3>
+      @if (isBrowser && editor) {
+        <ckeditor
+          [config]="editorConfig"
+          [editor]="$any(editor)"
+          [data]="html"
+          (change)="html = $any($event).editor.getData()"
+        />
+      } @else {
+        <textarea class="editor-fallback" [(ngModel)]="html"></textarea>
+      }
+    </div>
+
+    <aside class="plantilla-sidebar">
+      <div class="panel">
+        <div class="panel-title-row">
+          <h3>Variables del formulario</h3>
+          <button type="button" (click)="nuevaBusqueda()">Nueva búsqueda</button>
+        </div>
+
+        <label>
+          Tipo de formulario
+          <div class="radio-row">
+            @for (tipo of tipoFormValues; track tipo) {
+              <label class="inline-check">
+                <input
+                  type="radio"
+                  name="tipoForm"
+                  [value]="tipo"
+                  [ngModel]="tipoForm"
+                  (ngModelChange)="escucharCambioTipo($event)"
+                />
+                {{ tipo }}
+              </label>
+            }
+          </div>
+        </label>
+
+        <label>
+          Formulario
+          <select [ngModel]="nombreFormulario" (ngModelChange)="cambiarFormulario($event)">
+            <option value="">Seleccione un formulario</option>
+            @for (formulario of listaFormularios; track formulario) {
+              <option [value]="formulario">{{ formulario }}</option>
+            }
+          </select>
+        </label>
+
+        <label>
+          Campo
+          <select [(ngModel)]="idComponente">
+            <option value="">Seleccione un campo</option>
+            @for (componente of listaComponentes; track componente) {
+              <option [value]="componente">{{ componente }}</option>
+            }
+          </select>
+        </label>
+
+        @if (idNotEmpty) {
+          <label>
+            ID campo
+            <input type="text" [ngModel]="idComponente" disabled />
+          </label>
+          <button type="button" (click)="insertarVariable(idComponente)">Insertar campo en la plantilla</button>
+        }
+
+        <label>
+          Método
+          <select [ngModel]="metodoSeleccionado" (ngModelChange)="cambiarMetodo($event)">
+            <option value="">Seleccione un método</option>
+            @for (metodo of listaMetodosRetornanMap; track metodo) {
+              <option [value]="metodo">{{ metodo }}</option>
+            }
+          </select>
+        </label>
+
+        @if (metodoNotEmpty) {
+          <label>
+            Variables disponibles
+            <select [(ngModel)]="variableSeleccionada">
+              <option value="">Seleccione una variable</option>
+              @for (variable of listaVariablesMap; track variable) {
+                <option [value]="variable">{{ variable }}</option>
+              }
+            </select>
+          </label>
+          @if (variableSeleccionada) {
+            <button type="button" (click)="insertarVariable(variableSeleccionada)">
+              Insertar variable en la plantilla
+            </button>
+          }
+        }
+
+        <label>
+          Serie
+          <select [(ngModel)]="serieSeleccionada">
+            <option value="">Seleccione una serie</option>
+            @for (serie of listaSeries; track serie) {
+              <option [value]="serie">{{ serie }}</option>
+            }
+          </select>
+        </label>
+
+        <label>
+          Tipo de documento
+          <select [(ngModel)]="tipoDocumentoSeleccionado">
+            <option value="">Seleccione un tipo</option>
+            @for (tipo of listaTiposDoc; track tipo) {
+              <option [value]="tipo">{{ tipo }}</option>
+            }
+          </select>
+        </label>
+      </div>
+
+      <div class="panel">
+        <h3>Documento</h3>
+
+        <label>
+          Orientación de página
+          <select [(ngModel)]="tipoHoja">
+            @for (tipo of tiposHoja; track tipo.valor) {
+              <option [value]="tipo.valor">{{ tipo.etiqueta }}</option>
+            }
+          </select>
+        </label>
+
+        <div class="opciones-row">
+          <label class="inline-check">
+            <input type="checkbox" [(ngModel)]="generarPDF" />
+            ¿Permitir plantilla PDF?
+          </label>
+          <label class="inline-check">
+            <input type="checkbox" [(ngModel)]="permitirFirma" />
+            ¿Permitir firmar?
+          </label>
+          <label class="inline-check">
+            <input type="checkbox" [(ngModel)]="generarWord" />
+            ¿Permitir plantilla word?
+          </label>
+        </div>
+
+        <label>
+          Etiqueta
+          <input type="text" [(ngModel)]="nombreCarta" />
+        </label>
+
+        <label>
+          Descripción
+          <textarea [(ngModel)]="descripcionCarta"></textarea>
+        </label>
+
+        <div class="acciones-row">
+          <button type="button" (click)="generarPlantilla()">Generar</button>
+          <button type="button" (click)="abrirVentanaConfiguracion()">Configurar página</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Plantillas actuales</h3>
+        @if (cartas.length > 0) {
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>¿Eliminar?</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (carta of cartas; track carta.idCarta) {
+                <tr>
+                  <td>
+                    <button type="button" class="carta-link" (click)="escucharListaCartas(carta)">
+                      {{ carta.nombreCarta }}
+                    </button>
+                  </td>
+                  <td>{{ carta.descripcionCarta }}</td>
+                  <td><button type="button" (click)="eliminarCarta(carta)">Eliminar</button></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        } @else {
+          <p>El formulario seleccionado no tiene plantillas.</p>
+        }
+
+        <div class="acciones-row">
+          <button type="button" class="save-button" (click)="guardarCarta()">
+            {{ editandoCarta ? 'Guardar cambios' : 'Guardar' }}
+          </button>
+          <button type="button" (click)="limpiarCampos()">Limpiar</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  @if (mostrarVentanaConfiguracion) {
+    <div class="modal-backdrop">
+      <div class="modal-window">
+        <div class="modal-header">
+          <h3>Definir características de la página</h3>
+          <button type="button" (click)="cerrarVentanaConfiguracion()">×</button>
+        </div>
+
+        <div class="modal-body">
+          <label>
+            Tamaño de página
+            <select [ngModel]="tamanoCarta" (ngModelChange)="cambiarTamanoPagina($event)">
+              @for (tamano of tamanosPagina; track tamano.nombre) {
+                <option [value]="tamano.nombre">{{ tamano.nombre }}</option>
+              }
+            </select>
+          </label>
+
+          <div class="margenes-grid">
+            <label>
+              Margen arriba
+              <select [(ngModel)]="margenArriba">
+                @for (margen of maxMargenAlto; track margen) {
+                  <option [value]="margen">{{ margen }} px</option>
+                }
+              </select>
+            </label>
+            <label>
+              Margen abajo
+              <select [(ngModel)]="margenAbajo">
+                @for (margen of maxMargenAlto; track margen) {
+                  <option [value]="margen">{{ margen }} px</option>
+                }
+              </select>
+            </label>
+            <label>
+              Margen derecho
+              <select [(ngModel)]="margenDerecha">
+                @for (margen of maxMargenAncho; track margen) {
+                  <option [value]="margen">{{ margen }} px</option>
+                }
+              </select>
+            </label>
+            <label>
+              Margen izquierdo
+              <select [(ngModel)]="margenIzquierda">
+                @for (margen of maxMargenAncho; track margen) {
+                  <option [value]="margen">{{ margen }} px</option>
+                }
+              </select>
+            </label>
+          </div>
+
+          <div class="property-section">
+            <h4>Ajustar encabezado</h4>
+            <label class="inline-check">
+              <input type="checkbox" [(ngModel)]="utilizaEncabezadoExistente" />
+              ¿Utilizar encabezado existente?
+            </label>
+
+            @if (utilizaEncabezadoExistente) {
+              <label>
+                Nombre encabezado
+                <select [(ngModel)]="nombreEncabezado">
+                  <option value="">Seleccione una imagen</option>
+                  @for (imagen of imagenesExistentes; track imagen) {
+                    <option [value]="imagen">{{ imagen }}</option>
+                  }
+                </select>
+              </label>
+            } @else {
+              <label>
+                Nombre encabezado
+                <input type="text" [(ngModel)]="nombreEncabezado" />
+              </label>
+              <label>
+                Seleccionar la imagen del encabezado
+                <input type="file" accept="image/*" (change)="seleccionarImagenEncabezado($event)" />
+              </label>
+            }
+
+            <label>
+              Ajustar ancho de la imagen del encabezado
+              <select [(ngModel)]="anchoEncabezado">
+                <option value="0">Sin ajuste</option>
+                @for (escala of porcentajesEscala; track escala) {
+                  <option [value]="escala">{{ escala }}%</option>
+                }
+              </select>
+            </label>
+            <label>
+              Ajustar altura de la imagen del encabezado
+              <select [(ngModel)]="altoEncabezado">
+                <option value="0">Sin ajuste</option>
+                @for (escala of porcentajesEscala; track escala) {
+                  <option [value]="escala">{{ escala }}%</option>
+                }
+              </select>
+            </label>
+          </div>
+
+          <div class="property-section">
+            <h4>Ajustar pie de página</h4>
+            <label class="inline-check">
+              <input type="checkbox" [(ngModel)]="utilizaPiePaginaExistente" />
+              ¿Utilizar pie de página existente?
+            </label>
+
+            @if (utilizaPiePaginaExistente) {
+              <label>
+                Nombre pie de página
+                <select [(ngModel)]="nombrePiePagina">
+                  <option value="">Seleccione una imagen</option>
+                  @for (imagen of imagenesExistentes; track imagen) {
+                    <option [value]="imagen">{{ imagen }}</option>
+                  }
+                </select>
+              </label>
+            } @else {
+              <label>
+                Nombre pie de página
+                <input type="text" [(ngModel)]="nombrePiePagina" />
+              </label>
+              <label>
+                Seleccionar la imagen del pie de página
+                <input type="file" accept="image/*" (change)="seleccionarImagenPiePagina($event)" />
+              </label>
+            }
+
+            <label>
+              Ajustar ancho de la imagen del pie de página
+              <select [(ngModel)]="anchoPiePagina">
+                <option value="0">Sin ajuste</option>
+                @for (escala of porcentajesEscala; track escala) {
+                  <option [value]="escala">{{ escala }}%</option>
+                }
+              </select>
+            </label>
+            <label>
+              Ajustar altura de la imagen del pie de página
+              <select [(ngModel)]="altoPiePagina">
+                <option value="0">Sin ajuste</option>
+                @for (escala of porcentajesEscala; track escala) {
+                  <option [value]="escala">{{ escala }}%</option>
+                }
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="save-button" (click)="guardarCambiosConfiguracion()">Aceptar</button>
+          <button type="button" (click)="cerrarVentanaConfiguracion()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  }
+</section>

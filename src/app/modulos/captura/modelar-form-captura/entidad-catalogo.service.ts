@@ -42,6 +42,14 @@ const CATALOGO_ENTIDADES: EntidadCatalogoEntity[] = [
     ],
   },
   {
+    nombre: 'TipoDocumento',
+    columnas: [
+      { nombre: 'id', javaType: 'java.lang.Integer', obligatorio: true, esLlavePrimaria: true, esLlaveForanea: false },
+      { nombre: 'codigo', javaType: 'java.lang.String', obligatorio: true, esLlavePrimaria: false, esLlaveForanea: false },
+      { nombre: 'descripcion', javaType: 'java.lang.String', obligatorio: false, esLlavePrimaria: false, esLlaveForanea: false },
+    ],
+  },
+  {
     nombre: 'FormPlusDetalle',
     columnas: [
       { nombre: 'id', javaType: 'java.lang.Integer', obligatorio: true, esLlavePrimaria: true, esLlaveForanea: false },
@@ -101,5 +109,45 @@ export class EntidadCatalogoService {
       .map((columna) => columna.entidadRelacionada as string);
 
     return of([principal.nombre, ...Array.from(new Set(relacionadas))]).pipe(delay(this.latenciaSimuladaMs));
+  }
+
+  /**
+   * Métodos de la entidad que retornan Integer: alimentan "Método validación y
+   * selección" del LinkToDifferentForm (metodosRetornanInteger del bean legado).
+   */
+  public getMetodosValidacionSeleccion(nombreEntidad: string): Observable<string[]> {
+    const entidad = CATALOGO_ENTIDADES.find((item) => item.nombre === nombreEntidad);
+    if (!entidad) {
+      return of([]).pipe(delay(this.latenciaSimuladaMs));
+    }
+
+    const metodos = entidad.columnas
+      .filter((columna) => columna.javaType === 'java.lang.Integer')
+      .map((columna) => `get${columna.nombre.charAt(0).toUpperCase()}${columna.nombre.slice(1)}`);
+
+    return of([`seleccionarFormulario${entidad.nombre}`, ...metodos]).pipe(delay(this.latenciaSimuladaMs));
+  }
+
+  /** Todas las entidades del catálogo: alimenta la tabla de la pantalla de selección. */
+  public getEntidades(): Observable<EntidadCatalogoEntity[]> {
+    return of(CATALOGO_ENTIDADES).pipe(delay(this.latenciaSimuladaMs));
+  }
+
+  /**
+   * Entidades referenciadas por cualquier llave foránea de la entidad dada, sin
+   * limitarse a las relaciones 1:1 (keyEntidadesRelacionadas del bean legado).
+   */
+  public getEntidadesRelacionadas(nombreEntidad: string): Observable<EntidadCatalogoEntity[]> {
+    const entidad = CATALOGO_ENTIDADES.find((item) => item.nombre === nombreEntidad);
+    const nombresRelacionados = Array.from(
+      new Set(
+        (entidad?.columnas ?? [])
+          .filter((columna) => columna.esLlaveForanea && columna.entidadRelacionada)
+          .map((columna) => columna.entidadRelacionada as string),
+      ),
+    );
+
+    const relacionadas = CATALOGO_ENTIDADES.filter((item) => nombresRelacionados.includes(item.nombre));
+    return of(relacionadas).pipe(delay(this.latenciaSimuladaMs));
   }
 }

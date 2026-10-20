@@ -494,3 +494,33 @@ button {
   padding: 0.6rem 0.9rem;
   border-top: 1px solid #e0e0e0;
 }
+
+/* Camino de atributos del componente Mail (panelSeries de rutas del legado). */
+.ruta-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.4rem 0.5rem;
+  margin-bottom: 0.5rem;
+  background: #f3f6f8;
+  border-radius: 4px;
+  min-height: 2rem;
+}
+
+.ruta-tramo {
+  background: none;
+  border: none;
+  color: #0d47a1;
+  padding: 0.1rem 0.2rem;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.ruta-tramo:hover {
+  background: #dceeff;
+}
+
+.ruta-separador {
+  color: #607d8b;
+}

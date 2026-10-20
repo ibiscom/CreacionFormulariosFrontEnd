@@ -1216,6 +1216,7 @@
   }
 
   @if (mostrarVentanaConfiguracionMail) {
+    @let mailSeleccionado = getMailSeleccionado();
     <div class="modal-backdrop">
       <div class="modal-window">
         <div class="modal-header">
@@ -1223,31 +1224,130 @@
           <button type="button" (click)="cerrarVentanaConfiguracionMail()">×</button>
         </div>
         <div class="modal-body">
+          <h4>Parámetros mensaje</h4>
+          @if (mensajesMail.length > 0) {
+            <div class="message-stack">
+              @for (mensajeMail of mensajesMail; track mensajeMail) {
+                <p class="message-item message-item--warn">{{ mensajeMail }}</p>
+              }
+            </div>
+          }
+
           <label>
             Parámetro
             <select [(ngModel)]="tipoParametroMail">
-              @for (tipo of tiposParametroMail; track tipo) {
-                <option [value]="tipo">{{ tipo }}</option>
+              @for (tipo of tiposParametroMail; track tipo.valor) {
+                <option [value]="tipo.valor">{{ tipo.etiqueta }}</option>
               }
             </select>
           </label>
-          <p class="ruta-actual">Ruta actual: <strong>{{ getRutaMailActual().join(' → ') || 'sin ruta' }}</strong></p>
-          <div class="entidad-principal-row">
-            <label>
-              Atributo
-              <select [(ngModel)]="atributoRutaSeleccionado">
-                <option value="">[Seleccione un atributo]</option>
-                @for (atributo of atributosRuta; track atributo) {
-                  <option [value]="atributo">{{ atributo }}</option>
-                }
-              </select>
-            </label>
-            <button type="button" (click)="agregarRutaMail()">Agregar</button>
-            <button type="button" (click)="eliminarUltimoTramoRutaMail()">Quitar último</button>
+
+          <div class="ruta-breadcrumb">
+            @for (tramo of getRutaMailActual(); track $index) {
+              <button type="button" class="ruta-tramo" (click)="seleccionarTramoRutaMail($index)">
+                {{ tramo.nombreAtributo }}
+              </button>
+              @if (!$last) {
+                <span class="ruta-separador">{{ tramo.separador }}</span>
+              }
+            }
           </div>
+
+          @if (isHayAtributosRuta()) {
+            <div class="entidad-principal-row">
+              <label>
+                Atributo
+                <select [(ngModel)]="atributoRutaSeleccionado">
+                  <option value="">[Seleccione un atributo]</option>
+                  @for (atributo of atributosRuta; track atributo) {
+                    <option [value]="atributo">{{ atributo }}</option>
+                  }
+                </select>
+              </label>
+              <button type="button" (click)="agregarRutaMail()">Agregar</button>
+            </div>
+          } @else {
+            <p>La entidad principal no tiene atributos disponibles para construir la ruta.</p>
+          }
+
+          <table class="data-table">
+            <tbody>
+              @for (tipo of tiposParametroMail; track tipo.valor) {
+                <tr>
+                  <th>{{ tipo.etiqueta }}:</th>
+                  <td>{{ getRutaMailTexto(tipo.valor) }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+
+          @if (mailSeleccionado) {
+            <div class="property-section">
+              <label>
+                ¿Permitir modificar parámetros?
+                <select
+                  [ngModel]="mailSeleccionado.permiteModificarParametros ?? 'false'"
+                  (ngModelChange)="updateSelectedComponentProperty('permiteModificarParametros', $event)"
+                >
+                  <option value="true">Sí</option>
+                  <option value="false">No</option>
+                </select>
+              </label>
+              <label>
+                ¿Utiliza plantilla HTML?
+                <select
+                  [ngModel]="mailSeleccionado.utilizaPlantillaHTML ?? 'false'"
+                  (ngModelChange)="updateSelectedComponentProperty('utilizaPlantillaHTML', $event)"
+                >
+                  <option value="true">Sí</option>
+                  <option value="false">No</option>
+                </select>
+              </label>
+              <label>
+                ¿Permitir envío de correo manualmente?
+                <select
+                  [ngModel]="mailSeleccionado.permitirEnvioManual ?? 'false'"
+                  (ngModelChange)="updateSelectedComponentProperty('permitirEnvioManual', $event)"
+                >
+                  <option value="true">Sí</option>
+                  <option value="false">No</option>
+                </select>
+              </label>
+              <label>
+                ¿Permitir adjuntar archivos desde la interfaz de envío de correo?
+                <select
+                  [ngModel]="mailSeleccionado.permiteAdjuntarArchivos ?? 'false'"
+                  (ngModelChange)="updateSelectedComponentProperty('permiteAdjuntarArchivos', $event)"
+                >
+                  <option value="true">Sí</option>
+                  <option value="false">No</option>
+                </select>
+              </label>
+              <label>
+                ¿Permitir que las plantillas generadas por el FG sean agregadas como archivos adjuntos al correo?
+                <select
+                  [ngModel]="mailSeleccionado.agregarPlantillasFormMail ?? 'false'"
+                  (ngModelChange)="updateSelectedComponentProperty('agregarPlantillasFormMail', $event)"
+                >
+                  <option value="true">Sí</option>
+                  <option value="false">No</option>
+                </select>
+              </label>
+              <label>
+                En caso de que no haya envío manual ¿Obligar el envío automático?
+                <select
+                  [ngModel]="mailSeleccionado.permitirEnvioAutomatico ?? 'false'"
+                  (ngModelChange)="updateSelectedComponentProperty('permitirEnvioAutomatico', $event)"
+                >
+                  <option value="true">Sí</option>
+                  <option value="false">No</option>
+                </select>
+              </label>
+            </div>
+          }
         </div>
         <div class="modal-footer">
-          <button type="button" class="save-button" (click)="guardarRutasParametrosMail()">Guardar</button>
+          <button type="button" class="save-button" (click)="guardarRutasParametrosMail()">Aceptar</button>
           <button type="button" (click)="cerrarVentanaConfiguracionMail()">Cancelar</button>
         </div>
       </div>
@@ -1255,20 +1355,37 @@
   }
 
   @if (mostrarVentanaConfLinkToDifferentForm) {
+    @let linkSeleccionado = getLinkSeleccionado();
     <div class="modal-backdrop">
       <div class="modal-window">
         <div class="modal-header">
-          <h3>Configuración LinkToDifferentForm</h3>
+          <h3>Configuración del componente Link To Different Form</h3>
           <button type="button" (click)="cerrarVentanaConfiguracionLink()">×</button>
         </div>
         <div class="modal-body">
+          @if (linkSeleccionado) {
+            <label>
+              Método validación y selección
+              <select
+                [ngModel]="linkSeleccionado.nombreRutina ?? ''"
+                (ngModelChange)="updateSelectedComponentProperty('nombreRutina', $event)"
+              >
+                <option value="">Seleccione un método</option>
+                @for (metodo of metodosValidacionSeleccion; track metodo) {
+                  <option [value]="metodo">{{ metodo }}</option>
+                }
+              </select>
+            </label>
+          }
+
           <label>
-            Tipo de formulario
+            Tipo formulario
             <select [(ngModel)]="tipoFormularioEscogido">
               <option value="captura">Captura</option>
               <option value="consulta">Consulta</option>
             </select>
           </label>
+
           @if (tipoFormularioEscogido === 'consulta') {
             <label>
               Formulario consulta
@@ -1290,29 +1407,40 @@
               </select>
             </label>
           }
-          <button type="button" (click)="agregarFormularioLink()">Agregar formulario</button>
+          <button type="button" (click)="agregarFormularioLink()">Agregar</button>
 
-          @if (formulariosLinkAgregados.length > 0) {
-            <ul class="list">
-              @for (nombre of formulariosLinkAgregados; track nombre) {
-                <li>
-                  {{ nombre }}
-                  <button type="button" (click)="eliminarFormularioLink(nombre)">Eliminar</button>
-                </li>
-              }
-            </ul>
+          <h4>Opciones de formularios</h4>
+          @if (getClavesFormulariosLink().length > 0) {
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Opción</th>
+                  <th>Tipo formulario</th>
+                  <th>Nombre formulario</th>
+                  <th>¿Eliminar?</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (clave of getClavesFormulariosLink(); track clave) {
+                  <tr>
+                    <td>{{ getPosicionFormularioLink(clave) }}</td>
+                    <td>{{ isFormularioConsultaLink(clave) ? 'Consulta' : 'Captura' }}</td>
+                    <td>{{ getNombreFormularioLink(clave) }}</td>
+                    <td><button type="button" (click)="eliminarFormularioLink(clave)">Eliminar</button></td>
+                  </tr>
+                }
+              </tbody>
+            </table>
           } @else {
             <p>No hay formularios agregados al link.</p>
           }
         </div>
         <div class="modal-footer">
-          <button type="button" class="save-button" (click)="guardarFormulariosLink()">Guardar</button>
-          <button type="button" (click)="cerrarVentanaConfiguracionLink()">Cancelar</button>
+          <button type="button" class="save-button" (click)="cerrarVentanaConfiguracionLink()">Aceptar</button>
         </div>
       </div>
     </div>
   }
-
   @if (mostrarVentanaOrganizacionSecciones) {
     <div class="modal-backdrop">
       <div class="modal-window">

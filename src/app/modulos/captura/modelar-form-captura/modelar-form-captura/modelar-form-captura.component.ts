@@ -8,10 +8,14 @@ import { EntidadCatalogoEntity } from '../../../../entidades/forms-captura/entid
 import { ColumnaEntidadEntity } from '../../../../entidades/forms-captura/columna-entidad.entity';
 import { ValidacionExpresionRegularEntity } from '../../../../entidades/forms-captura/validacion-expresion-regular.entity';
 import { ObservadorComponenteEntity } from '../../../../entidades/forms-captura/observador-componente.entity';
+import { MailEntity } from '../../../../entidades/forms-captura/mail.entity';
+import { RutaMailEntity } from '../../../../entidades/forms-captura/ruta-mail.entity';
+import { LinkToDifferentFormEntity } from '../../../../entidades/forms-captura/link-to-different-form';
 import { ComponentesComponent } from '../../plantilla-form-captura/componentes/componentes.component';
 import { PlantillaFormCapturaService } from '../../plantilla-form-captura/plantilla-form-captura.service';
 import { EntidadCatalogoService } from '../entidad-catalogo.service';
 import { ModeladorCatalogoService } from '../modelador-catalogo.service';
+import { SeleccionTablaService } from '../../../seleccion-tabla/seleccion-tabla.service';
 import { MessageUtil } from '../../../../utilidades/message.util';
 
 @Component({
@@ -73,20 +77,20 @@ export class ModelarFormCapturaComponent implements OnInit {
   public mostrarVentanaConfiguracionMail = false;
   public tipoParametroMail = 'Destinos';
   public readonly tiposParametroMail = [
-    'Destinos',
-    'DestinosCC',
-    'DestinosCCO',
-    'Asunto',
-    'Mensaje',
+    { valor: 'Destinos', etiqueta: 'Destinos' },
+    { valor: 'DestinosCC', etiqueta: 'Destinos CC' },
+    { valor: 'DestinosCCO', etiqueta: 'Destinos CCO' },
+    { valor: 'Asunto', etiqueta: 'Asunto' },
+    { valor: 'Mensaje', etiqueta: 'Mensaje' },
   ];
-  public mapaRutasMail: Record<string, string[]> = {};
   public atributoRutaSeleccionado = '';
+  public mensajesMail: string[] = [];
 
   public mostrarVentanaConfLinkToDifferentForm = false;
   public tipoFormularioEscogido = 'captura';
   public nombreFormularioLink = '';
   public nombreFormularioConsultaLink = '';
-  public formulariosLinkAgregados: string[] = [];
+  public metodosValidacionSeleccion: string[] = [];
 
   public mostrarVentanaAyuda = false;
   public mostrarVentanaOrganizacionSecciones = false;
@@ -110,6 +114,7 @@ export class ModelarFormCapturaComponent implements OnInit {
     private plantillaFormCapturaService: PlantillaFormCapturaService,
     private entidadCatalogoService: EntidadCatalogoService,
     private modeladorCatalogoService: ModeladorCatalogoService,
+    private seleccionTablaService: SeleccionTablaService,
   ) {}
   public formulario: FormularioJSONEntity = this.createDefaultForm();
   public selectedSectionKey = '';
@@ -179,6 +184,13 @@ export class ModelarFormCapturaComponent implements OnInit {
       this.tiposOrdenamientoTabla = tipos;
       this.cdr.detectChanges();
     });
+
+    // La pantalla de selección de tabla deja aquí la entidad escogida (sessionMap del legado).
+    const seleccion = this.seleccionTablaService.consumirSeleccion();
+    if (seleccion) {
+      this.nombreEntidadPrincipalStaged = seleccion.entidadPrincipal.nombre;
+      this.cambiarEntidadPrincipal();
+    }
   }
 
   public cambiarEntidadPrincipal(): void {
@@ -1566,64 +1578,151 @@ export class ModelarFormCapturaComponent implements OnInit {
 
   // ---------------------------------------------------------------- Configuración de Mail
 
+  /** Parámetro del mensaje -> campo de ruta en MailEntity (Mail.java). */
+  private readonly campoRutaPorParametro: Record<string, keyof MailEntity> = {
+    Destinos: 'rutaDestinos',
+    DestinosCC: 'rutaDestinosCC',
+    DestinosCCO: 'rutaDestinosCCO',
+    Asunto: 'rutaAsunto',
+    Mensaje: 'rutaPlantillaMensaje',
+  };
+
+  public getMailSeleccionado(): MailEntity | null {
+    const selected = this.getSelectedComponent();
+    return this.isMailComponent(selected) ? (selected as MailEntity) : null;
+  }
+
   public abrirVentanaConfiguracionMail(): void {
+    const mail = this.getMailSeleccionado();
+    if (!mail) {
+      return;
+    }
+
+    // La raíz de toda ruta es la entidad principal del formulario.
     this.tiposParametroMail.forEach((tipo) => {
-      if (!this.mapaRutasMail[tipo]) {
-        this.mapaRutasMail[tipo] = this.formulario.entidadPrincipal
-          ? [this.formulario.entidadPrincipal]
-          : [];
+      const campo = this.campoRutaPorParametro[tipo.valor];
+      const rutaActual = mail[campo] as RutaMailEntity[] | undefined;
+      if (!rutaActual || rutaActual.length === 0) {
+        (mail as unknown as Record<string, unknown>)[campo] = [this.createRutaRaiz()];
       }
     });
+
+    this.mensajesMail = [];
     this.mostrarVentanaConfiguracionMail = true;
+  }
+
+  private createRutaRaiz(): RutaMailEntity {
+    return {
+      nombreAtributo: this.formulario.entidadPrincipal,
+      separador: '.',
+      nombreClaseAtributo: this.formulario.entidadPrincipal,
+      javaType: 'false',
+    };
   }
 
   public cerrarVentanaConfiguracionMail(): void {
     this.mostrarVentanaConfiguracionMail = false;
   }
 
-  public getRutaMailActual(): string[] {
-    return this.mapaRutasMail[this.tipoParametroMail] ?? [];
+  public getRutaMail(tipoParametro: string): RutaMailEntity[] {
+    const mail = this.getMailSeleccionado();
+    if (!mail) {
+      return [];
+    }
+    return (mail[this.campoRutaPorParametro[tipoParametro]] as RutaMailEntity[] | undefined) ?? [];
+  }
+
+  public getRutaMailActual(): RutaMailEntity[] {
+    return this.getRutaMail(this.tipoParametroMail);
+  }
+
+  /** Texto de la ruta: los tramos se unen con el separador, salvo el último. */
+  public getRutaMailTexto(tipoParametro: string): string {
+    const ruta = this.getRutaMail(tipoParametro);
+    return ruta
+      .map((tramo, indice) => (indice === ruta.length - 1 ? tramo.nombreAtributo : `${tramo.nombreAtributo}${tramo.separador}`))
+      .join('');
+  }
+
+  private setRutaMail(tipoParametro: string, ruta: RutaMailEntity[]): void {
+    const mail = this.getMailSeleccionado();
+    if (!mail) {
+      return;
+    }
+    (mail as unknown as Record<string, unknown>)[this.campoRutaPorParametro[tipoParametro]] = ruta;
   }
 
   public agregarRutaMail(): void {
-    if (!this.atributoRutaSeleccionado) {
+    if (!this.atributoRutaSeleccionado || this.atributoRutaSeleccionado === '--') {
       return;
     }
-    this.mapaRutasMail = {
-      ...this.mapaRutasMail,
-      [this.tipoParametroMail]: [...this.getRutaMailActual(), this.atributoRutaSeleccionado],
+
+    const tramo: RutaMailEntity = {
+      nombreAtributo: this.atributoRutaSeleccionado,
+      separador: '.',
+      nombreClaseAtributo: '',
+      javaType: 'false',
     };
+    this.setRutaMail(this.tipoParametroMail, [...this.getRutaMailActual(), tramo]);
     this.atributoRutaSeleccionado = '';
   }
 
-  public eliminarUltimoTramoRutaMail(): void {
+  /** Al pulsar un tramo del camino, el legado recorta la ruta hasta ese punto. */
+  public seleccionarTramoRutaMail(indice: number): void {
     const ruta = this.getRutaMailActual();
-    if (ruta.length <= 1) {
+    if (indice < 0 || indice >= ruta.length) {
       return;
     }
-    this.mapaRutasMail = { ...this.mapaRutasMail, [this.tipoParametroMail]: ruta.slice(0, -1) };
+    this.setRutaMail(this.tipoParametroMail, ruta.slice(0, indice + 1));
   }
 
+  public isHayAtributosRuta(): boolean {
+    return this.atributosRuta.length > 0;
+  }
+
+  /** revisarRutas del bean: Destinos/CC/CCO esperan HashMap<String,String>; Asunto y Mensaje, String. */
   public guardarRutasParametrosMail(): void {
-    const selected = this.getSelectedComponent();
-    if (!selected) {
+    const mail = this.getMailSeleccionado();
+    if (!mail) {
       return;
     }
-    selected.mapaAtributos = JSON.stringify(this.mapaRutasMail);
+
+    this.mensajesMail = this.tiposParametroMail
+      .filter((tipo) => this.getRutaMail(tipo.valor).length <= 1)
+      .map((tipo) => `Debe definir la ruta del parámetro ${tipo.etiqueta}`);
+
+    if (this.mensajesMail.length > 0) {
+      return;
+    }
+
     this.mostrarVentanaConfiguracionMail = false;
     this.addMensaje('Parámetros del correo guardados en el componente.');
   }
 
   // ---------------------------------------------------------------- Configuración LinkToDifferentForm
 
-  public abrirVentanaConfiguracionLink(): void {
+  public getLinkSeleccionado(): LinkToDifferentFormEntity | null {
     const selected = this.getSelectedComponent();
-    this.formulariosLinkAgregados = selected?.nombreFormulario
-      ? selected.nombreFormulario
-          .split(',')
-          .map((item) => item.trim())
-          .filter(Boolean)
-      : [];
+    return this.isLinkToDifferentFormComponent(selected) ? (selected as LinkToDifferentFormEntity) : null;
+  }
+
+  public abrirVentanaConfiguracionLink(): void {
+    const link = this.getLinkSeleccionado();
+    if (!link) {
+      return;
+    }
+
+    link.nombresFormularios = link.nombresFormularios ?? [];
+    link.tipoFormulario = link.tipoFormulario ?? [];
+    link.posicionFormulario = link.posicionFormulario ?? {};
+
+    this.entidadCatalogoService
+      .getMetodosValidacionSeleccion(this.formulario.entidadPrincipal)
+      .subscribe((metodos) => {
+        this.metodosValidacionSeleccion = metodos;
+        this.cdr.detectChanges();
+      });
+
     this.mostrarVentanaConfLinkToDifferentForm = true;
   }
 
@@ -1631,27 +1730,78 @@ export class ModelarFormCapturaComponent implements OnInit {
     this.mostrarVentanaConfLinkToDifferentForm = false;
   }
 
+  /** getListaClaves del legado: la clave es "<nombreFormulario><esConsulta>". */
+  public getClavesFormulariosLink(): string[] {
+    const link = this.getLinkSeleccionado();
+    const posiciones = link?.posicionFormulario ?? {};
+    return Object.keys(posiciones).sort((a, b) => Number(posiciones[a]) - Number(posiciones[b]));
+  }
+
+  public getPosicionFormularioLink(clave: string): string {
+    return this.getLinkSeleccionado()?.posicionFormulario?.[clave] ?? '';
+  }
+
+  public getNombreFormularioLink(clave: string): string {
+    const link = this.getLinkSeleccionado();
+    const posicion = Number(link?.posicionFormulario?.[clave] ?? -1);
+    return link?.nombresFormularios?.[posicion] ?? '';
+  }
+
+  public isFormularioConsultaLink(clave: string): boolean {
+    const link = this.getLinkSeleccionado();
+    const posicion = Number(link?.posicionFormulario?.[clave] ?? -1);
+    return link?.tipoFormulario?.[posicion] === 'true';
+  }
+
   public agregarFormularioLink(): void {
-    const nombre =
-      this.tipoFormularioEscogido === 'consulta'
-        ? this.nombreFormularioConsultaLink
-        : this.nombreFormularioLink;
-    if (!nombre || this.formulariosLinkAgregados.includes(nombre)) {
+    const link = this.getLinkSeleccionado();
+    if (!link) {
       return;
     }
-    this.formulariosLinkAgregados = [...this.formulariosLinkAgregados, nombre];
-  }
 
-  public eliminarFormularioLink(nombre: string): void {
-    this.formulariosLinkAgregados = this.formulariosLinkAgregados.filter((item) => item !== nombre);
-  }
-
-  public guardarFormulariosLink(): void {
-    const selected = this.getSelectedComponent();
-    if (selected) {
-      selected.nombreFormulario = this.formulariosLinkAgregados.join(',');
+    const esConsulta = this.tipoFormularioEscogido === 'consulta';
+    const nombre = esConsulta ? this.nombreFormularioConsultaLink : this.nombreFormularioLink;
+    if (!nombre) {
+      return;
     }
-    this.mostrarVentanaConfLinkToDifferentForm = false;
+
+    const clave = `${nombre}${esConsulta}`;
+    if (link.posicionFormulario?.[clave] !== undefined) {
+      return;
+    }
+
+    const posicion = (link.nombresFormularios ?? []).length;
+    link.nombresFormularios = [...(link.nombresFormularios ?? []), nombre];
+    link.tipoFormulario = [...(link.tipoFormulario ?? []), esConsulta ? 'true' : 'false'];
+    link.posicionFormulario = { ...(link.posicionFormulario ?? {}), [clave]: String(posicion) };
+  }
+
+  public eliminarFormularioLink(clave: string): void {
+    const link = this.getLinkSeleccionado();
+    if (!link?.posicionFormulario) {
+      return;
+    }
+
+    const posicion = Number(link.posicionFormulario[clave]);
+    if (Number.isNaN(posicion)) {
+      return;
+    }
+
+    const nombres = (link.nombresFormularios ?? []).filter((_, indice) => indice !== posicion);
+    const tipos = (link.tipoFormulario ?? []).filter((_, indice) => indice !== posicion);
+
+    // Las posiciones posteriores se desplazan al eliminar un elemento de la lista.
+    const posiciones: { [clave: string]: string } = {};
+    Object.entries(link.posicionFormulario)
+      .filter(([claveActual]) => claveActual !== clave)
+      .forEach(([claveActual, valor]) => {
+        const actual = Number(valor);
+        posiciones[claveActual] = String(actual > posicion ? actual - 1 : actual);
+      });
+
+    link.nombresFormularios = nombres;
+    link.tipoFormulario = tipos;
+    link.posicionFormulario = posiciones;
   }
 
   // ---------------------------------------------------------------- Ayuda y organización de secciones

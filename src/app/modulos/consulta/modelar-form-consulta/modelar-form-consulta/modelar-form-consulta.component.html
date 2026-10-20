@@ -1,0 +1,1132 @@
+<section class="designer-shell">
+  <header class="designer-header">
+    <h2>Diseño del formulario de consulta</h2>
+    <label class="header-field">
+      Nombre formulario
+      <input type="text" [(ngModel)]="formulario.nombreUnicoFormulario" />
+    </label>
+  </header>
+
+  <div class="designer-actions">
+    <button type="button" class="save-button" (click)="guardarFormulario()">Guardar formulario</button>
+    <button type="button" (click)="limpiarCampos()">Limpiar</button>
+  </div>
+
+  <div class="designer-layout">
+    <aside class="designer-sidebar">
+      <div class="panel">
+        <h3>Acciones del formulario</h3>
+        <label>
+          ¿Permitir nuevo?
+          <select [ngModel]="formulario.nuevo" (ngModelChange)="updateFormProperty('nuevo', $event)">
+            <option value="true">Sí</option>
+            <option value="false">No</option>
+          </select>
+        </label>
+        <label>
+          ¿Permitir edición?
+          <select [ngModel]="formulario.edicion" (ngModelChange)="updateFormProperty('edicion', $event)">
+            <option value="true">Sí</option>
+            <option value="false">No</option>
+          </select>
+        </label>
+        <label>
+          ¿Permitir eliminar?
+          <select [ngModel]="formulario.eliminable" (ngModelChange)="updateFormProperty('eliminable', $event)">
+            <option value="true">Sí</option>
+            <option value="false">No</option>
+          </select>
+        </label>
+        <label>
+          ¿Es diligenciable?
+          <select [ngModel]="formulario.diligenciable" (ngModelChange)="updateFormProperty('diligenciable', $event)">
+            <option value="true">Sí</option>
+            <option value="false">No</option>
+          </select>
+        </label>
+        <label>
+          ¿Permitir consulta?
+          <select [ngModel]="formulario.consultable" (ngModelChange)="updateFormProperty('consultable', $event)">
+            <option value="true">Sí</option>
+            <option value="false">No</option>
+          </select>
+        </label>
+        <label>
+          Mostrar plantillas
+          <select
+            [ngModel]="formulario.plantillasMostrables"
+            (ngModelChange)="updateFormProperty('plantillasMostrables', $event)"
+          >
+            <option value="true">Sí</option>
+            <option value="false">No</option>
+          </select>
+        </label>
+        <label>
+          ¿Permitir gráficas?
+          <select
+            [ngModel]="formulario.permitirGraficas ?? 'false'"
+            (ngModelChange)="updateFormProperty('permitirGraficas', $event)"
+          >
+            <option value="true">Sí</option>
+            <option value="false">No</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="panel">
+        <h3>Entidad principal</h3>
+        <div class="entidad-principal-row">
+          <label>
+            Entidad
+            <select [(ngModel)]="nombreEntidadPrincipalStaged">
+              <option value="">Seleccione una entidad</option>
+              @for (nombre of nombresEntidadesPrincipales; track nombre) {
+                <option [value]="nombre">{{ nombre }}</option>
+              }
+            </select>
+          </label>
+          <button type="button" (click)="cambiarEntidadPrincipal()">Cambiar</button>
+        </div>
+        @if (formulario.entidadPrincipal) {
+          <p class="entidad-principal-actual">
+            Entidad principal actual: <strong>{{ formulario.entidadPrincipal }}</strong>
+          </p>
+        }
+      </div>
+
+      <div class="panel">
+        <h3>Atributos</h3>
+        @if (entidadPrincipalCatalogo) {
+          <details class="entidad-atributos" open>
+            <summary>{{ entidadPrincipalCatalogo.nombre }}</summary>
+            <ul class="atributos-list">
+              @for (columna of entidadPrincipalCatalogo.columnas; track columna.nombre) {
+                @if (isColumnaVisibleEnAtributos(columna)) {
+                  <li>
+                    <button
+                      type="button"
+                      class="atributo-link"
+                      [class.active]="isAtributoSeleccionado(entidadPrincipalCatalogo.nombre, columna.nombre)"
+                      [title]="getTipoDatoTitulo(columna)"
+                      (click)="columna.esLlaveForanea ? abrirVentanaSeleccionEntidad(entidadPrincipalCatalogo.nombre, columna) : seleccionarColumnaEntidad(entidadPrincipalCatalogo.nombre, columna)"
+                    >
+                      <span class="atributo-icono">{{ getTipoDatoIcono(columna) }}</span>
+                      {{ columna.nombre }}
+                    </button>
+                    @if (columna.obligatorio) {
+                      <span class="atributo-obligatorio">*</span>
+                    }
+                  </li>
+                }
+              }
+            </ul>
+          </details>
+          @for (entidadRelacionada of entidadesRelacionadasCatalogo; track entidadRelacionada.nombre) {
+            <details class="entidad-atributos">
+              <summary>{{ entidadRelacionada.nombre }}</summary>
+              <ul class="atributos-list">
+                @for (columna of entidadRelacionada.columnas; track columna.nombre) {
+                  @if (isColumnaVisibleEnAtributos(columna)) {
+                    <li>
+                      <button
+                        type="button"
+                        class="atributo-link"
+                        [class.active]="isAtributoSeleccionado(entidadRelacionada.nombre, columna.nombre)"
+                        [title]="getTipoDatoTitulo(columna)"
+                        (click)="columna.esLlaveForanea ? abrirVentanaSeleccionEntidad(entidadRelacionada.nombre, columna) : seleccionarColumnaEntidad(entidadRelacionada.nombre, columna)"
+                      >
+                        <span class="atributo-icono">{{ getTipoDatoIcono(columna) }}</span>
+                        {{ columna.nombre }}
+                      </button>
+                      @if (columna.obligatorio) {
+                        <span class="atributo-obligatorio">*</span>
+                      }
+                    </li>
+                  }
+                }
+              </ul>
+            </details>
+          }
+          @if (atributoSeleccionado) {
+            <p class="atributo-seleccionado-hint">
+              Atributo listo para asignar al próximo componente:
+              <strong>{{ atributoSeleccionado.entidad }}.{{ atributoSeleccionado.columna }}</strong>
+            </p>
+          }
+        } @else {
+          <p>Seleccione una entidad principal para ver sus atributos.</p>
+        }
+      </div>
+
+      <div class="panel">
+        <h3>Consultas</h3>
+        <label>
+          Formulario
+          <select
+            [ngModel]="formulario.nombreFormularioVisualizacion ?? ''"
+            (ngModelChange)="updateFormProperty('nombreFormularioVisualizacion', $event)"
+          >
+            <option value="">Seleccione un formulario</option>
+            @for (nombre of formulariosDisponibles; track nombre) {
+              <option [value]="nombre">{{ nombre }}</option>
+            }
+          </select>
+        </label>
+
+        @if (mensajeColumna) {
+          <p class="message-item message-item--warn">{{ mensajeColumna }}</p>
+        }
+
+        <div class="property-section">
+          <h4>Nombres de columnas</h4>
+          <label>
+            Nombre de la columna
+            <input type="text" [(ngModel)]="nombreColumnaConsulta" placeholder="Título a mostrar (opcional)" />
+          </label>
+
+          <div class="entidad-principal-row">
+            <label>
+              Atributos
+              <select [(ngModel)]="atributoSeleccionadoColumna">
+                <option value="">Seleccione un atributo</option>
+                @for (columna of getColumnasEntidadPrincipal(); track columna) {
+                  <option [value]="columna">{{ columna }}</option>
+                }
+              </select>
+            </label>
+            <button type="button" (click)="agregarColumnaResultado()">Agregar</button>
+          </div>
+
+          <div class="entidad-principal-row">
+            <label>
+              Atributo foráneo
+              <select [(ngModel)]="nombreColumnaRelacionSeleccionada">
+                <option value="">Seleccione un atributo foráneo</option>
+                @for (columna of getColumnasForaneasPrincipal(); track columna) {
+                  <option [value]="columna">{{ columna }}</option>
+                }
+              </select>
+            </label>
+            <label>
+              Columna
+              <select [(ngModel)]="atributoForaneoSeleccionado">
+                <option value="">Seleccione una columna</option>
+                @for (columna of getColumnasAtributoForaneo(); track columna) {
+                  <option [value]="columna">{{ columna }}</option>
+                }
+              </select>
+            </label>
+            <button type="button" (click)="agregarColumnaForanea()">Agregar</button>
+          </div>
+        </div>
+
+        <div class="property-section">
+          <h4>Orden de títulos de columnas</h4>
+          @if (getColumnasOrganizadas().length > 0) {
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Columna</th>
+                  <th>Título</th>
+                  <th>Formato</th>
+                  <th>Orden</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (columna of getColumnasOrganizadas(); track columna) {
+                  <tr>
+                    <td>{{ columna }}</td>
+                    <td>
+                      <input
+                        type="text"
+                        [ngModel]="getTituloColumna(columna)"
+                        (ngModelChange)="setTituloColumna(columna, $event)"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        [ngModel]="getFormatoColumna(columna)"
+                        (ngModelChange)="setFormatoColumna(columna, $event)"
+                      />
+                    </td>
+                    <td class="orden-cell">
+                      <button type="button" title="Subir" (click)="moverColumnaResultado(columna, -1)">↑</button>
+                      <button type="button" title="Bajar" (click)="moverColumnaResultado(columna, 1)">↓</button>
+                      <button type="button" title="Eliminar" (click)="eliminarColumnaResultado(columna)">×</button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          } @else {
+            <p>La consulta aún no tiene columnas de resultado.</p>
+          }
+          <label>
+            Filas por página
+            <input type="number" [ngModel]="formulario.pageSize ?? '10'" (ngModelChange)="updateFormProperty('pageSize', $event)" />
+          </label>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title-row">
+          <h3>Secciones</h3>
+          <button type="button" (click)="addSection()">Agregar</button>
+        </div>
+        @if (getSectionEntries().length > 0) {
+          <ul class="list">
+            @for (section of getSectionEntries(); track section.key) {
+              <li [class.active]="section.key === selectedSectionKey" (click)="selectSection(section.key)">
+                {{ section.value.titulo }}
+              </li>
+            }
+          </ul>
+        } @else {
+          <p>No hay secciones todavía.</p>
+        }
+      </div>
+
+      @if (selectedSectionKey) {
+        @let selectedSection = formulario.seccionesFormularioConsulta[selectedSectionKey];
+        @if (selectedSection) {
+          <div class="panel">
+            <div class="panel-title-row">
+              <h3>Propiedades de la sección</h3>
+              <button type="button" (click)="removeSelectedSection()">Eliminar</button>
+            </div>
+            <label>
+              Título sección
+              <input
+                type="text"
+                [ngModel]="selectedSection.titulo"
+                (ngModelChange)="updateSelectedSectionProperty('titulo', $event)"
+              />
+            </label>
+            <label>
+              Descripción
+              <textarea
+                [ngModel]="selectedSection.descripcion"
+                (ngModelChange)="updateSelectedSectionProperty('descripcion', $event)"
+              ></textarea>
+            </label>
+            <label>
+              ¿Sección expandida?
+              <select
+                [ngModel]="selectedSection.expandido"
+                (ngModelChange)="updateSelectedSectionProperty('expandido', $event)"
+              >
+                <option value="true">Sí</option>
+                <option value="false">No</option>
+              </select>
+            </label>
+            <label>
+              ¿Mostrar lista de filtros?
+              <select
+                [ngModel]="selectedSection.mostrarListaCondiciones ?? 'false'"
+                (ngModelChange)="updateSelectedSectionProperty('mostrarListaCondiciones', $event)"
+              >
+                <option value="true">Sí</option>
+                <option value="false">No</option>
+              </select>
+            </label>
+          </div>
+        }
+
+        <div class="panel">
+          <div class="panel-title-row">
+            <h3>Componentes</h3>
+            <button type="button" (click)="addComponentToSelectedSection()">Agregar</button>
+          </div>
+          <label>
+            Tipo de componente
+            <select [(ngModel)]="selectedComponentType">
+              @for (type of componentTypes; track type) {
+                <option [value]="type">{{ type }}</option>
+              }
+            </select>
+          </label>
+          @if (getComponentEntries(selectedSectionKey).length > 0) {
+            <ul class="list">
+              @for (component of getComponentEntries(selectedSectionKey); track component.key) {
+                <li
+                  [class.active]="component.key === selectedComponentKey"
+                  (click)="selectComponent(component.key)"
+                >
+                  {{ component.value.nombre || component.key }}
+                </li>
+              }
+            </ul>
+          } @else {
+            <p>La sección aún no tiene componentes.</p>
+          }
+        </div>
+      }
+
+      @if (selectedSectionKey && selectedComponentKey) {
+        @let selectedComponent = getSelectedComponent();
+        @if (selectedComponent) {
+          <div class="panel">
+            <div class="panel-title-row">
+              <h3>Propiedades del componente</h3>
+              <button type="button" (click)="removeSelectedComponent()">Eliminar</button>
+            </div>
+
+            <div class="property-section">
+              <h4>Generales</h4>
+              @if (isComponenteLigadoAColumna(selectedComponent)) {
+                <label>
+                  Asignado a <span class="atributo-obligatorio">*</span>
+                  <input type="text" [ngModel]="selectedComponent.idColumna ?? ''" disabled />
+                </label>
+              } @else {
+                <label>
+                  Identificador <span class="atributo-obligatorio">*</span>
+                  <input
+                    type="text"
+                    [ngModel]="selectedComponent.id ?? ''"
+                    (ngModelChange)="updateSelectedComponentProperty('id', $event)"
+                  />
+                </label>
+              }
+              <label>
+                Tipo de componente <span class="atributo-obligatorio">*</span>
+                <input type="text" [ngModel]="selectedComponent.tipoComponente" disabled />
+              </label>
+              <label>
+                Estilo del componente
+                <select
+                  [ngModel]="selectedComponent.claseEstilo"
+                  (ngModelChange)="updateSelectedComponentProperty('claseEstilo', $event)"
+                >
+                  <option value="">Sin estilo</option>
+                  @for (estilo of estilosComponente; track estilo) {
+                    <option [value]="estilo">{{ estilo }}</option>
+                  }
+                </select>
+              </label>
+              <label>
+                Etiqueta <span class="atributo-obligatorio">*</span>
+                <input
+                  type="text"
+                  [ngModel]="selectedComponent.nombre"
+                  (ngModelChange)="updateSelectedComponentProperty('nombre', $event)"
+                />
+              </label>
+              <label>
+                Descripción
+                <textarea
+                  [ngModel]="selectedComponent.descripcion"
+                  (ngModelChange)="updateSelectedComponentProperty('descripcion', $event)"
+                ></textarea>
+              </label>
+              @if (isInputLikeComponent(selectedComponent)) {
+                <label>
+                  Solo lectura
+                  <select
+                    [ngModel]="selectedComponent.readOnly"
+                    (ngModelChange)="updateSelectedComponentProperty('readOnly', $event)"
+                  >
+                    <option value="true">Sí</option>
+                    <option value="false">No</option>
+                  </select>
+                </label>
+                <label>
+                  Obligatorio
+                  <select
+                    [ngModel]="selectedComponent.obligatorio"
+                    (ngModelChange)="updateSelectedComponentProperty('obligatorio', $event)"
+                  >
+                    <option value="true">Sí</option>
+                    <option value="false">No</option>
+                  </select>
+                </label>
+                <label>
+                  ¿Es filtro?
+                  <select
+                    [ngModel]="selectedComponent.filtro"
+                    (ngModelChange)="updateSelectedComponentProperty('filtro', $event)"
+                  >
+                    <option value="true">Sí</option>
+                    <option value="false">No</option>
+                  </select>
+                </label>
+              }
+              @if (isDateOrTextComponent(selectedComponent)) {
+                <label>
+                  Formato de fecha
+                  <input
+                    type="text"
+                    [ngModel]="selectedComponent.formato ?? ''"
+                    (ngModelChange)="updateSelectedComponentProperty('formato', $event)"
+                  />
+                </label>
+                <label>
+                  Formato moneda
+                  <input
+                    type="text"
+                    [ngModel]="selectedComponent.formatoMoneda ?? ''"
+                    (ngModelChange)="updateSelectedComponentProperty('formatoMoneda', $event)"
+                  />
+                </label>
+              }
+              @if (isRadioButtonComponent(selectedComponent)) {
+                <label>
+                  Orientación
+                  <select
+                    [ngModel]="selectedComponent.orientacion ?? 'lineDirection'"
+                    (ngModelChange)="updateSelectedComponentProperty('orientacion', $event)"
+                  >
+                    <option value="lineDirection">Horizontal</option>
+                    <option value="pageDirection">Vertical</option>
+                  </select>
+                </label>
+              }
+              @if (isLinkLikeComponent(selectedComponent)) {
+                <label>
+                  URL
+                  <input
+                    type="text"
+                    [ngModel]="selectedComponent.valor?.['value'] ?? ''"
+                    (ngModelChange)="updateSelectedComponentValue($event)"
+                  />
+                </label>
+              }
+            </div>
+
+            @if (isLinkToAFormComponent(selectedComponent)) {
+              <div class="property-section">
+                <h4>Vínculo a formulario</h4>
+                <label>
+                  Atributos a transportar
+                  <select
+                    multiple
+                    size="5"
+                    [ngModel]="selectedComponent.atributosSeleccionadosTransportar ?? []"
+                    (ngModelChange)="updateSelectedComponentArrayProperty('atributosSeleccionadosTransportar', $event)"
+                  >
+                    @for (columna of getColumnasEntidadPrincipal(); track columna) {
+                      <option [value]="columna">{{ columna }}</option>
+                    }
+                  </select>
+                </label>
+                <label>
+                  Tipo de vínculo
+                  <select
+                    [ngModel]="selectedComponent.mostrarLink ?? 'false'"
+                    (ngModelChange)="updateSelectedComponentProperty('mostrarLink', $event)"
+                  >
+                    <option value="true">Link</option>
+                    <option value="false">Botón</option>
+                  </select>
+                </label>
+                <label>
+                  ¿Utiliza imagen?
+                  <select
+                    [ngModel]="selectedComponent.utilizaImagen ?? 'false'"
+                    (ngModelChange)="updateSelectedComponentProperty('utilizaImagen', $event)"
+                  >
+                    <option value="true">Sí</option>
+                    <option value="false">No</option>
+                  </select>
+                </label>
+                <label>
+                  Ubicación imagen
+                  <input
+                    type="text"
+                    [ngModel]="selectedComponent.ubicacionImagen ?? ''"
+                    (ngModelChange)="updateSelectedComponentProperty('ubicacionImagen', $event)"
+                  />
+                </label>
+                <label>
+                  ¿Se dirige a un formulario de consulta?
+                  <select
+                    [ngModel]="selectedComponent.dirigeFormularioConsulta ?? 'false'"
+                    (ngModelChange)="updateSelectedComponentProperty('dirigeFormularioConsulta', $event)"
+                  >
+                    <option value="true">Sí</option>
+                    <option value="false">No</option>
+                  </select>
+                </label>
+                @if (selectedComponent.dirigeFormularioConsulta === 'true') {
+                  <label>
+                    Formulario consulta
+                    <select
+                      [ngModel]="selectedComponent.valor?.['value'] ?? ''"
+                      (ngModelChange)="updateSelectedComponentValue($event)"
+                    >
+                      <option value="">Seleccione un formulario</option>
+                      @for (nombre of formulariosConsultaDisponibles; track nombre) {
+                        <option [value]="nombre">{{ nombre }}</option>
+                      }
+                    </select>
+                  </label>
+                } @else {
+                  <label>
+                    Formulario
+                    <select
+                      [ngModel]="selectedComponent.valor?.['value'] ?? ''"
+                      (ngModelChange)="updateSelectedComponentValue($event)"
+                    >
+                      <option value="">Seleccione un formulario</option>
+                      @for (nombre of formulariosDisponibles; track nombre) {
+                        <option [value]="nombre">{{ nombre }}</option>
+                      }
+                    </select>
+                  </label>
+                }
+              </div>
+            }
+
+            @if (isLinkToDifferentFormComponent(selectedComponent)) {
+              <div class="property-section">
+                <h4>Configuración avanzada</h4>
+                <button type="button" (click)="abrirVentanaConfiguracionLink()">Configurar LinkToDifferentForm</button>
+              </div>
+            }
+
+            @if (isListBoxCustomizedComponent(selectedComponent)) {
+              <div class="property-section">
+                <h4>Lista personalizada</h4>
+                <label>
+                  Nombre lista
+                  <select
+                    [ngModel]="selectedComponent.nombreAtributoLista ?? ''"
+                    (ngModelChange)="updateSelectedComponentProperty('nombreAtributoLista', $event)"
+                  >
+                    <option value="">Seleccione un atributo</option>
+                    @for (atributo of atributosTipoLista; track atributo) {
+                      <option [value]="atributo">{{ atributo }}</option>
+                    }
+                  </select>
+                </label>
+                <label>
+                  Atributo selección
+                  <select
+                    [ngModel]="selectedComponent.nombreAtributoSeleccionado ?? ''"
+                    (ngModelChange)="updateSelectedComponentProperty('nombreAtributoSeleccionado', $event)"
+                  >
+                    <option value="">Seleccione un atributo</option>
+                    @for (atributo of atributosRuta; track atributo) {
+                      <option [value]="atributo">{{ atributo }}</option>
+                    }
+                  </select>
+                </label>
+              </div>
+            }
+
+            @if (isButtonLikeComponent(selectedComponent)) {
+              <div class="property-section">
+                <h4>Acción</h4>
+                <label>
+                  Entidad
+                  <select
+                    [ngModel]="selectedComponent.nombreEntidad ?? ''"
+                    (ngModelChange)="updateSelectedComponentProperty('nombreEntidad', $event)"
+                  >
+                    <option value="">Seleccione una entidad</option>
+                    @for (nombre of nombresEntidadesRelacionadas; track nombre) {
+                      <option [value]="nombre">{{ nombre }}</option>
+                    }
+                  </select>
+                </label>
+                <label>
+                  ¿Utiliza imagen?
+                  <select
+                    [ngModel]="selectedComponent.utilizaImagen ?? 'false'"
+                    (ngModelChange)="updateSelectedComponentProperty('utilizaImagen', $event)"
+                  >
+                    <option value="true">Sí</option>
+                    <option value="false">No</option>
+                  </select>
+                </label>
+                <label>
+                  Ubicación imagen
+                  <input
+                    type="text"
+                    [ngModel]="selectedComponent.ubicacionImagen ?? ''"
+                    (ngModelChange)="updateSelectedComponentProperty('ubicacionImagen', $event)"
+                  />
+                </label>
+              </div>
+            }
+
+            <div class="property-section">
+              <h4>Tamaño del componente</h4>
+              <div class="layout-grid">
+                <label>
+                  Ancho
+                  <select
+                    [ngModel]="getSelectedComponentWidth('container')"
+                    (ngModelChange)="updateSelectedComponentLayout('containerWidth', $event)"
+                  >
+                    @for (width of widthOptions; track width) {
+                      <option [value]="width">{{ width }}%</option>
+                    }
+                  </select>
+                </label>
+                <label>
+                  Alto
+                  <select
+                    [ngModel]="getSelectedComponentHeight('container')"
+                    (ngModelChange)="updateSelectedComponentLayout('containerHeight', $event)"
+                  >
+                    @for (height of heightOptions; track height) {
+                      <option [value]="height">{{ height === 'Normal' ? height : height + 'px' }}</option>
+                    }
+                  </select>
+                </label>
+                <label>
+                  Ancho etiqueta
+                  <select
+                    [ngModel]="getSelectedComponentColumnWidth('label')"
+                    (ngModelChange)="updateSelectedComponentLayout('labelWidth', $event)"
+                  >
+                    @for (width of widthOptions; track width) {
+                      <option [value]="width">{{ width }}%</option>
+                    }
+                  </select>
+                </label>
+                <label>
+                  Ancho campo
+                  <select
+                    [ngModel]="getSelectedComponentColumnWidth('field')"
+                    (ngModelChange)="updateSelectedComponentLayout('fieldColumnWidth', $event)"
+                  >
+                    @for (width of widthOptions; track width) {
+                      <option [value]="width">{{ width }}%</option>
+                    }
+                  </select>
+                </label>
+              </div>
+              <h4>Tamaño del campo</h4>
+              <div class="layout-grid">
+                <label>
+                  Ancho
+                  <select
+                    [ngModel]="getSelectedComponentWidth('field')"
+                    (ngModelChange)="updateSelectedComponentLayout('fieldWidth', $event)"
+                  >
+                    @for (width of widthOptions; track width) {
+                      <option [value]="width">{{ width }}%</option>
+                    }
+                  </select>
+                </label>
+                <label>
+                  Alto
+                  <select
+                    [ngModel]="getSelectedComponentHeight('field')"
+                    (ngModelChange)="updateSelectedComponentLayout('fieldHeight', $event)"
+                  >
+                    @for (height of heightOptions; track height) {
+                      <option [value]="height">{{ height === 'Normal' ? height : height + 'px' }}</option>
+                    }
+                  </select>
+                </label>
+              </div>
+            </div>
+
+            @if (isListLikeComponent(selectedComponent)) {
+              <div class="property-section">
+                <h4>Observadores</h4>
+                @if (mensajesObservadores.length > 0) {
+                  <div class="message-stack">
+                    @for (mensajeObservador of mensajesObservadores; track mensajeObservador) {
+                      <p class="message-item message-item--warn">{{ mensajeObservador }}</p>
+                    }
+                  </div>
+                }
+                <label>
+                  Observador
+                  <select [(ngModel)]="idObservadorSeleccionado">
+                    <option value="">Seleccione un componente</option>
+                    @for (entry of getItemsListasDesplegables(); track entry.key) {
+                      <option [value]="entry.key">{{ entry.value.nombre || entry.key }}</option>
+                    }
+                  </select>
+                </label>
+                <label>
+                  Atributo de relación
+                  <select [(ngModel)]="nombreColumnaDeRelacionSeleccionada">
+                    <option value="">Seleccione una columna</option>
+                    @for (columna of getItemsColumnasDeRelacion(); track columna) {
+                      <option [value]="columna">{{ columna }}</option>
+                    }
+                  </select>
+                </label>
+                <button type="button" (click)="asignarObservador()">Agregar observador</button>
+
+                @if (getObservadoresComponente().length > 0) {
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Nombre</th>
+                        <th>Atributo de unión</th>
+                        <th>¿Eliminar?</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (observador of getObservadoresComponente(); track observador.claveComponente) {
+                        <tr>
+                          <td>{{ observador.nombre }}<br /><small>{{ observador.idColumna }}</small></td>
+                          <td>{{ observador.atributoUnion }}</td>
+                          <td>
+                            <button type="button" (click)="eliminarObservador(observador.claveComponente)">
+                              Eliminar
+                            </button>
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                }
+              </div>
+            }
+
+            <div class="property-section">
+              <h4>Validaciones</h4>
+              @if (mensajeValidaciones) {
+                <p class="message-item">{{ mensajeValidaciones }}</p>
+              }
+              <label>
+                Nombre
+                <input type="text" [(ngModel)]="validacionExp.nombre" />
+              </label>
+              <label>
+                Valor de ejemplo
+                <input type="text" [(ngModel)]="validacionExp.ejemplo" />
+              </label>
+              <label>
+                Valor de prueba
+                <input type="text" [(ngModel)]="validacionExp.entrada" />
+              </label>
+              <label>
+                Mensaje de error
+                <input type="text" [(ngModel)]="validacionExp.mensajeValidacion" />
+              </label>
+              <label>
+                Expresión regular
+                <textarea [(ngModel)]="validacionExp.expresion"></textarea>
+              </label>
+              <div class="validation-token-row">
+                <button type="button" (click)="probarValidacion()">Probar</button>
+                <button type="button" (click)="agregarValidacion()">Agregar</button>
+                <button type="button" (click)="cargarValidacionesBD()">Cargar de BD</button>
+                <button type="button" (click)="guardarValidacionesBD()">Guardar en BD</button>
+              </div>
+
+              @if (getValidacionesComponente().length > 0) {
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Ejemplo</th>
+                      <th>Expresión</th>
+                      <th>¿Eliminar?</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (validacion of getValidacionesComponente(); track validacion.nombre) {
+                      <tr>
+                        <td>{{ validacion.nombre }}</td>
+                        <td>{{ validacion.ejemplo }}</td>
+                        <td class="expresion-cell">{{ validacion.expresion }}</td>
+                        <td><button type="button" (click)="eliminarValidacion(validacion.nombre)">Eliminar</button></td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              } @else {
+                <p>El componente no tiene validaciones de expresión regular.</p>
+              }
+            </div>
+          </div>
+        }
+      }
+
+      <div class="panel">
+        <div class="panel-title-row">
+          <h3>Texto de ayuda</h3>
+          <button type="button" (click)="abrirVentanaAyuda()">Editar ayuda</button>
+        </div>
+        @if (formulario.htmlAyuda) {
+          <p class="ayuda-preview">{{ formulario.htmlAyuda }}</p>
+        } @else {
+          <p>El formulario no tiene texto de ayuda.</p>
+        }
+      </div>
+    </aside>
+
+    <main class="designer-main">
+      <div class="panel">
+        <h3>Zona de diseño</h3>
+        <label>
+          Título
+          <input type="text" [(ngModel)]="formulario.titulo" />
+        </label>
+        <label>
+          Descripción del formulario
+          <textarea [(ngModel)]="formulario.descripcion"></textarea>
+        </label>
+
+        <div class="palette">
+          <h4>Paleta de componentes</h4>
+          <div class="component-palette">
+            @for (type of componentTypes; track type) {
+              <button
+                type="button"
+                class="palette-item"
+                draggable="true"
+                (dragstart)="dragComponent(type, $event)"
+              >
+                {{ type }}
+              </button>
+            }
+          </div>
+        </div>
+
+        <div class="preview-card">
+          @if (mensajes.length > 0) {
+            <div class="message-stack">
+              @for (message of mensajes; track message) {
+                <p class="message-item">{{ message }}</p>
+              }
+            </div>
+          }
+          <h4>{{ formulario.titulo || 'Sin título' }}</h4>
+          <p>{{ formulario.descripcion || 'Sin descripción' }}</p>
+
+          @for (section of getSectionEntries(); track section.key) {
+            <div
+              class="section-card"
+              [class.section-card--active-drop]="isDraggingOverSection(section.key)"
+              (dragover)="onSectionDragOver(section.key, $event)"
+              (dragleave)="onSectionDragLeave(section.key)"
+              (drop)="dropComponent(section.key, $event)"
+            >
+              <div class="section-title-row">
+                <h5>{{ section.value.titulo }}</h5>
+                <span class="drop-hint">Suelta aquí</span>
+              </div>
+              <p>{{ section.value.descripcion }}</p>
+              <div class="component-list">
+                @if (getComponentEntries(section.key).length > 0) {
+                  <frm-componentes
+                    [componentes]="section.value.componentesIzq"
+                    [isModeling]="true"
+                    [sectionKey]="section.key"
+                    (componenteSeleccionado)="selectComponent($event, section.key)"
+                    (componenteReordenado)="reorderComponent($event)"
+                  ></frm-componentes>
+                } @else {
+                  <div class="empty-drop-zone">Arrastra un componente aquí</div>
+                }
+              </div>
+            </div>
+          }
+
+          @if (getColumnasOrganizadas().length > 0) {
+            <div class="section-card">
+              <h5>Resultado de la consulta</h5>
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    @for (columna of getColumnasOrganizadas(); track columna) {
+                      <th>{{ getTituloColumna(columna) || columna }}</th>
+                    }
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    @for (columna of getColumnasOrganizadas(); track columna) {
+                      <td class="preview-celda">{{ columna }}</td>
+                    }
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          }
+        </div>
+      </div>
+    </main>
+  </div>
+
+  @if (mostrarVentanaSeleccionEntidad && entidadForaneaSeleccionada) {
+    <div class="modal-backdrop">
+      <div class="modal-window">
+        <div class="modal-header">
+          <h3>{{ entidadForaneaSeleccionada.nombre }}</h3>
+          <button type="button" (click)="mostrarVentanaSeleccionEntidad = false">×</button>
+        </div>
+        <div class="modal-body">
+          @if (mensajeCondiciones) {
+            <p class="message-item message-item--warn">{{ mensajeCondiciones }}</p>
+          }
+          <h4>Columnas mostrables</h4>
+          <ul class="atributos-list">
+            @for (columna of entidadForaneaSeleccionada.columnas; track columna.nombre) {
+              <li>
+                <label class="inline-check">
+                  <input type="checkbox" [(ngModel)]="columnasMostrablesSeleccionadas[columna.nombre]" />
+                  <span class="atributo-icono">{{ getTipoDatoIcono(columna) }}</span>
+                  {{ columna.nombre }}
+                </label>
+                <button type="button" title="Agregar condición" (click)="agregarCondicionEntidad(columna)">+</button>
+              </li>
+            }
+          </ul>
+
+          @if (condicionesEntidad.length > 0) {
+            <h4>Condiciones</h4>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Atributo</th>
+                  <th>Id condición</th>
+                  <th>Operador</th>
+                  <th>Valor</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (condicion of condicionesEntidad; track condicion.identificador) {
+                  <tr>
+                    <td>{{ condicion.atributo }}</td>
+                    <td>{{ condicion.identificador }}</td>
+                    <td>
+                      <select [(ngModel)]="condicion.operador">
+                        @for (operador of operadoresCondiciones; track operador) {
+                          <option [value]="operador">{{ operador }}</option>
+                        }
+                      </select>
+                    </td>
+                    <td><input type="text" [(ngModel)]="condicion.valor" /></td>
+                    <td>
+                      <button type="button" (click)="eliminarCondicionEntidad(condicion.identificador)">Eliminar</button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
+
+          <label>
+            WHERE
+            <textarea [(ngModel)]="whereEntidad" placeholder="Ej: -nombre1- AND -activo1-"></textarea>
+          </label>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="save-button" (click)="cerrarVentanaSeleccionEntidad()">Aceptar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (mostrarVentanaAyuda) {
+    <div class="modal-backdrop">
+      <div class="modal-window">
+        <div class="modal-header">
+          <h3>Texto de ayuda</h3>
+          <button type="button" (click)="cerrarVentanaAyuda()">×</button>
+        </div>
+        <div class="modal-body">
+          <label>
+            Contenido de ayuda
+            <textarea rows="10" [(ngModel)]="formulario.htmlAyuda"></textarea>
+          </label>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="save-button" (click)="cerrarVentanaAyuda()">Aceptar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (mostrarVentanaConfLinkToDifferentForm) {
+    @let linkSeleccionado = getLinkSeleccionado();
+    <div class="modal-backdrop">
+      <div class="modal-window">
+        <div class="modal-header">
+          <h3>Configuración LinkToDifferentForm</h3>
+          <button type="button" (click)="cerrarVentanaConfiguracionLink()">×</button>
+        </div>
+        <div class="modal-body">
+          @if (linkSeleccionado) {
+            <label>
+              Método validación y selección
+              <select
+                [ngModel]="linkSeleccionado.nombreRutina ?? ''"
+                (ngModelChange)="updateSelectedComponentProperty('nombreRutina', $event)"
+              >
+                <option value="">Seleccione un método</option>
+                @for (metodo of metodosValidacionSeleccion; track metodo) {
+                  <option [value]="metodo">{{ metodo }}</option>
+                }
+              </select>
+            </label>
+          }
+
+          <label>
+            Tipo formulario
+            <select [(ngModel)]="tipoFormularioEscogido">
+              <option value="captura">Captura</option>
+              <option value="consulta">Consulta</option>
+            </select>
+          </label>
+
+          @if (tipoFormularioEscogido === 'consulta') {
+            <label>
+              Formulario consulta
+              <select [(ngModel)]="nombreFormularioConsultaLink">
+                <option value="">Seleccione un formulario</option>
+                @for (nombre of formulariosConsultaDisponibles; track nombre) {
+                  <option [value]="nombre">{{ nombre }}</option>
+                }
+              </select>
+            </label>
+          } @else {
+            <label>
+              Formulario
+              <select [(ngModel)]="nombreFormularioLink">
+                <option value="">Seleccione un formulario</option>
+                @for (nombre of formulariosDisponibles; track nombre) {
+                  <option [value]="nombre">{{ nombre }}</option>
+                }
+              </select>
+            </label>
+          }
+          <button type="button" (click)="agregarFormularioLink()">Agregar</button>
+
+          <h4>Opciones de formularios</h4>
+          @if (getClavesFormulariosLink().length > 0) {
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Opción</th>
+                  <th>Tipo formulario</th>
+                  <th>Nombre formulario</th>
+                  <th>¿Eliminar?</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (clave of getClavesFormulariosLink(); track clave) {
+                  <tr>
+                    <td>{{ getPosicionFormularioLink(clave) }}</td>
+                    <td>{{ isFormularioConsultaLink(clave) ? 'Consulta' : 'Captura' }}</td>
+                    <td>{{ getNombreFormularioLink(clave) }}</td>
+                    <td><button type="button" (click)="eliminarFormularioLink(clave)">Eliminar</button></td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          } @else {
+            <p>No hay formularios agregados al link.</p>
+          }
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="save-button" (click)="cerrarVentanaConfiguracionLink()">Aceptar</button>
+        </div>
+      </div>
+    </div>
+  }
+</section>

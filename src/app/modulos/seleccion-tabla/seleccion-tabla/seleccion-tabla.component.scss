@@ -1,0 +1,294 @@
+.seleccion-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.zona-titulo {
+  background: #3399cc;
+  color: #fff;
+  border-radius: 6px;
+  padding: 0.6rem 1rem;
+  text-align: center;
+}
+
+.zona-titulo h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.zona-subtitulo {
+  margin: 0 0 0.5rem;
+  padding: 0.35rem 0.6rem;
+  background: #3399cc;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+.panel {
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  padding: 0.75rem;
+  background: #fff;
+}
+
+.instruccion {
+  margin: 0 0 0.75rem;
+  font-size: 0.9rem;
+  color: #37474f;
+}
+
+.pagina-row {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.pagina-row label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.pagina-row input {
+  width: 64px;
+  text-align: center;
+  border: 1px solid #c6c6c6;
+  border-radius: 4px;
+  padding: 0.3rem;
+  font: inherit;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.data-table th,
+.data-table td {
+  border: 1px solid #e0e0e0;
+  padding: 0.4rem 0.6rem;
+  text-align: center;
+}
+
+.data-table th {
+  background: #f1f5f9;
+}
+
+.fila-activa {
+  background: #dceeff;
+}
+
+.entidad-link {
+  background: none;
+  border: none;
+  color: #0d47a1;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0.2rem 0.35rem;
+  border-radius: 4px;
+  font: inherit;
+}
+
+.entidad-link:hover {
+  background: #f3f6f8;
+}
+
+.entidad-link.active {
+  background: #dceeff;
+  font-weight: 600;
+}
+
+.paginador {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  margin-top: 0.6rem;
+}
+
+.paginador button {
+  border: 1px solid #1976d2;
+  background: #1976d2;
+  color: #fff;
+  border-radius: 4px;
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+  font: inherit;
+}
+
+.paginador button:disabled {
+  background: #cfd8dc;
+  border-color: #cfd8dc;
+  cursor: default;
+}
+
+.paginador-estado {
+  font-size: 0.85rem;
+  color: #37474f;
+  padding: 0 0.4rem;
+}
+
+.zona-detalle {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.lista-relacionadas,
+.lista-atributos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.lista-relacionadas li,
+.lista-atributos li {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.2rem;
+  border-bottom: 1px solid #c5e9f7;
+}
+
+.atributo-icono {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #607d8b;
+  border: 1px solid #cfd8dc;
+  border-radius: 3px;
+  padding: 0.05rem 0.3rem;
+}
+
+.atributo-obligatorio {
+  color: #c62828;
+  font-weight: 700;
+}
+
+.zona-acciones {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.save-button {
+  border: 1px solid #2e7d32;
+  background: #2e7d32;
+  color: #fff;
+  border-radius: 4px;
+  font-weight: 600;
+  padding: 0.55rem 0.9rem;
+  cursor: pointer;
+  font-size: inherit;
+}
+
+.message-item {
+  margin: 0;
+  padding: 0.45rem 0.6rem;
+  border-radius: 6px;
+  background: #f1f8e9;
+  color: #33691e;
+  font-size: 0.9rem;
+}
+
+.message-item--warn {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+@media (max-width: 760px) {
+  .zona-detalle {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.controles-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 0.6rem;
+}
+
+.control-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.control-inline input {
+  border: 1px solid #c6c6c6;
+  border-radius: 4px;
+  padding: 0.3rem;
+  font: inherit;
+}
+
+.control-inline input[type='number'] {
+  width: 64px;
+  text-align: center;
+}
+
+.control-filtro input {
+  min-width: 200px;
+}
+
+.controles-row > button {
+  border: 1px solid #1976d2;
+  background: #1976d2;
+  color: #fff;
+  border-radius: 4px;
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+  font: inherit;
+}
+
+.reporte-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e8ecef;
+}
+
+.reporte-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.reporte-opciones {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.inline-check {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.reporte-row button {
+  border: 1px solid #1976d2;
+  background: #1976d2;
+  color: #fff;
+  border-radius: 4px;
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+  font: inherit;
+}

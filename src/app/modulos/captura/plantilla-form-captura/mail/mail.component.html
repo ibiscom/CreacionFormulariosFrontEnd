@@ -1,4 +1,125 @@
-<div [style]="mailEntity!.styleContenedor">
-  <mat-label>{{ mailEntity?.nombre }}</mat-label>
-  <input type="button" [style]="mailEntity?.style" (click)="enviarMail()" />
+<div [style]="mailEntity!.styleContenedor" [class]="mailEntity?.styleClassContenedor">
+  <div class="mail-resumen">
+    <span class="mail-titulo">{{ mailEntity?.nombre }}</span>
+    <button
+      type="button"
+      class="mail-boton"
+      [style]="mailEntity?.style"
+      [title]="mailEntity?.descripcion"
+      (click)="abrirInformacionMail()"
+    >
+      Ver información correo
+    </button>
+  </div>
+
+  @if (abiertoPopup) {
+    <div class="mail-backdrop">
+      <div class="mail-ventana">
+        <div class="mail-ventana-header">
+          <span class="mail-titulo">{{ mailEntity?.nombre }}</span>
+          <button type="button" (click)="cerrarInformacionMail()">×</button>
+        </div>
+
+        <div class="mail-ventana-body">
+          @if (mensajes.length > 0) {
+            <div class="mail-mensajes">
+              @for (mensaje of mensajes; track mensaje) {
+                <p class="mail-mensaje">{{ mensaje }}</p>
+              }
+            </div>
+          }
+
+          <label class="mail-campo">
+            Para:
+            <input
+              type="text"
+              [ngModel]="mailEntity?.cadenaDestinos ?? ''"
+              (ngModelChange)="actualizarParametro('cadenaDestinos', $event)"
+              [readonly]="!permiteModificarParametros"
+            />
+          </label>
+
+          <label class="mail-campo">
+            CC:
+            <input
+              type="text"
+              [ngModel]="mailEntity?.cadenaDestinosCC ?? ''"
+              (ngModelChange)="actualizarParametro('cadenaDestinosCC', $event)"
+              [readonly]="!permiteModificarParametros"
+            />
+          </label>
+
+          <label class="mail-campo">
+            CCO
+            <input
+              type="text"
+              [ngModel]="mailEntity?.cadenaDestinosCCO ?? ''"
+              (ngModelChange)="actualizarParametro('cadenaDestinosCCO', $event)"
+              [readonly]="!permiteModificarParametros"
+            />
+          </label>
+
+          <label class="mail-campo">
+            Asunto:
+            <input
+              type="text"
+              [ngModel]="mailEntity?.asunto ?? ''"
+              (ngModelChange)="actualizarParametro('asunto', $event)"
+              [readonly]="!permiteModificarParametros"
+            />
+          </label>
+
+          @if (utilizaPlantillaHTML) {
+            @if (isBrowser && editor) {
+              <ckeditor
+                [config]="editorConfig"
+                [editor]="$any(editor)"
+                [data]="mailEntity?.plantillaMensaje ?? ''"
+                [disabled]="!permiteModificarParametros"
+                (change)="actualizarParametro('plantillaMensaje', $any($event).editor.getData())"
+              />
+            } @else {
+              <textarea
+                class="mail-mensaje-editor"
+                [ngModel]="mailEntity?.plantillaMensaje ?? ''"
+                (ngModelChange)="actualizarParametro('plantillaMensaje', $event)"
+                [readonly]="!permiteModificarParametros"
+              ></textarea>
+            }
+          } @else {
+            <textarea
+              class="mail-mensaje-editor"
+              [ngModel]="mailEntity?.plantillaMensaje ?? ''"
+              (ngModelChange)="actualizarParametro('plantillaMensaje', $event)"
+              [readonly]="!permiteModificarParametros"
+            ></textarea>
+          }
+
+          @if (permiteAdjuntarArchivos) {
+            <div class="mail-adjuntos">
+              <span class="mail-subtitulo">Adjuntar archivos</span>
+              <input type="file" multiple (change)="agregarArchivos($event)" />
+
+              @if (archivosAdjuntos.length > 0) {
+                <ul class="mail-adjuntos-lista">
+                  @for (nombreArchivo of archivosAdjuntos; track nombreArchivo) {
+                    <li>
+                      <span>{{ nombreArchivo }}</span>
+                      <button type="button" (click)="eliminarArchivo(nombreArchivo)">Eliminar</button>
+                    </li>
+                  }
+                </ul>
+              }
+            </div>
+          }
+        </div>
+
+        @if (permitirEnvioManual) {
+          <div class="mail-ventana-footer">
+            <button type="button" class="mail-boton-enviar" (click)="enviarMail()">Enviar</button>
+          </div>
+        }
+      </div>
+    </div>
+  }
 </div>

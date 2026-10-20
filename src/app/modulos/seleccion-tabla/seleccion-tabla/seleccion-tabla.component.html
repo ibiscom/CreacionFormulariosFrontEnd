@@ -1,0 +1,154 @@
+<section class="seleccion-shell">
+  <header class="zona-titulo">
+    <h2>Entidades de la base de datos</h2>
+  </header>
+
+  @if (mensaje) {
+    <p class="message-item message-item--warn">{{ mensaje }}</p>
+  }
+
+  <div class="panel">
+    <p class="instruccion">Seleccione la entidad a la cual desea realizarle un formulario</p>
+
+    <div class="controles-row">
+      <label class="control-inline">
+        Filas por página
+        <input
+          type="number"
+          min="1"
+          max="100"
+          [ngModel]="entidadListSize"
+          (ngModelChange)="cambiarTamanoPagina($event)"
+        />
+      </label>
+
+      <label class="control-inline control-filtro">
+        Filtro entidad
+        <input type="text" [(ngModel)]="filtro" (keyup.enter)="buscarEntidad()" />
+      </label>
+      <button type="button" title="Buscar entidad" (click)="buscarEntidad()">Buscar</button>
+    </div>
+
+    @if (entidades.length > 0) {
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Nombre de la entidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (entidad of getEntidadesPagina(); track entidad.nombre) {
+            <tr [class.fila-activa]="isEntidadSeleccionada(entidad)">
+              <td>
+                <button type="button" class="entidad-link" (click)="escucharEntidadSeleccionada(entidad)">
+                  {{ entidad.nombre }}
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      @if (totalPaginas > 1) {
+        <div class="paginador">
+          <button type="button" title="Primera" [disabled]="paginaActual === 0" (click)="irAPagina(0)">«</button>
+          <button type="button" title="Anterior" [disabled]="paginaActual === 0" (click)="irAPagina(paginaActual - 1)">
+            ‹
+          </button>
+          <span class="paginador-estado">Página {{ paginaActual + 1 }} de {{ totalPaginas }}</span>
+          <button
+            type="button"
+            title="Siguiente"
+            [disabled]="paginaActual >= totalPaginas - 1"
+            (click)="irAPagina(paginaActual + 1)"
+          >
+            ›
+          </button>
+          <button
+            type="button"
+            title="Última"
+            [disabled]="paginaActual >= totalPaginas - 1"
+            (click)="irAPagina(totalPaginas - 1)"
+          >
+            »
+          </button>
+        </div>
+      }
+    } @else {
+      <p>No hay entidades disponibles en el catálogo.</p>
+    }
+  </div>
+
+  <div class="zona-detalle">
+    <div class="panel">
+      @if (zonaTablasRelacionadas && entidadEscogida) {
+        <h3 class="zona-subtitulo">Entidades relacionadas con: {{ entidadEscogida.nombre }}</h3>
+        <p class="instruccion">Seleccione una entidad para consultar sus atributos.</p>
+
+        @if (entidadesRelacionadas.length > 0) {
+          <ul class="lista-relacionadas">
+            @for (entidadRelacionada of entidadesRelacionadas; track entidadRelacionada.nombre) {
+              <li>
+                <button
+                  type="button"
+                  class="entidad-link"
+                  [class.active]="isEntidadRelacionadaSeleccionada(entidadRelacionada)"
+                  title="Haga clic para consultar los atributos de esta tabla"
+                  (click)="escucharEntidadRelacionadaSeleccionada(entidadRelacionada)"
+                >
+                  {{ entidadRelacionada.nombre }}
+                </button>
+                @if (isRelacionObligatoria(entidadRelacionada)) {
+                  <span class="atributo-obligatorio" title="Es una llave foránea obligatoria">*</span>
+                }
+              </li>
+            }
+          </ul>
+        } @else {
+          <p>La entidad seleccionada no tiene entidades relacionadas.</p>
+        }
+
+        @if (zonaPermitirReporte) {
+          <div class="reporte-row">
+            <span class="reporte-label">Permitir reporte</span>
+            <div class="reporte-opciones">
+              @for (opcion of permitirReporteOpciones; track opcion) {
+                <label class="inline-check">
+                  <input type="radio" name="permitirReporte" [value]="opcion" [(ngModel)]="esReport" />
+                  {{ opcion }}
+                </label>
+              }
+            </div>
+            <button type="button" (click)="registrarReporteFormulario()">Registrar</button>
+          </div>
+        }
+      } @else {
+        <p>Seleccione una entidad de la lista para ver sus relaciones.</p>
+      }
+    </div>
+
+    <div class="panel">
+      @if (zonaColumnasEntidadRelacionada && entidadRelacionadaEscogida) {
+        <h3 class="zona-subtitulo">Atributos de: {{ entidadRelacionadaEscogida.nombre }}</h3>
+        <ul class="lista-atributos">
+          @for (columna of columnasEntidadRelacionada; track columna.nombre) {
+            <li>
+              <span class="atributo-icono">{{ getTipoDatoIcono(columna) }}</span>
+              {{ columna.nombre }}
+              @if (columna.obligatorio) {
+                <span class="atributo-obligatorio">*</span>
+              }
+            </li>
+          }
+        </ul>
+      } @else {
+        <p>Seleccione una entidad relacionada para ver sus atributos.</p>
+      }
+    </div>
+  </div>
+
+  <div class="zona-acciones">
+    <button type="button" class="save-button" (click)="crearFormularioCaptura()">Crear formulario captura</button>
+    <button type="button" class="save-button" (click)="crearFormularioConsulta()">Crear formulario consulta</button>
+  </div>
+</section>
